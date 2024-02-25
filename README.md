@@ -17,17 +17,17 @@ you are rate limited by ip, so you can only install this on a few phones/servers
 i will never update the phone/ directory, as there is no reason to, the second you turn it on it will update itself with the server.
 
 ### server side
-files/ is just the phones filesystem, so it will look the same as it.
-programs/ is for updating, its all the related files, and the version. the phone will check if there is a newer version and auto update.
-store/ is for the app store
-bank/ is all bank accounts
+files/ is just the phones filesystem, so it will look the same as it.<br />
+programs/ is for updating, its all the related files, and the version. the phone will check if there is a newer version and auto update.<br />
+store/ is for the app store<br />
+bank/ is all bank accounts<br />
 
 ### client side
-apps/ is how the phone lists all apps in the main apps menu
-data/ is for anything you need to save, bank accounts, color choices, anything settings wise for the most part
-files/ is where all lua files are, and files/settings/ is for any of the settings menus
-settingData/ is for any custom settings menu you make for your app, its the same as apps/ but displays in the settings app
-uninstall/ is the uninstall scripts, its just a list of any files the phone should delete if you want to uninstall your app.
+apps/ is how the phone lists all apps in the main apps menu<br />
+data/ is for anything you need to save, bank accounts, color choices, anything settings wise for the most part<br />
+files/ is where all lua files are, and files/settings/ is for any of the settings menus<br />
+settingData/ is for any custom settings menu you make for your app, its the same as apps/ but displays in the settings app<br />
+uninstall/ is the uninstall scripts, its just a list of any files the phone should delete if you want to uninstall your app.<br />
 
 # examples of files
 ## client side
