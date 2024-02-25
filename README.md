@@ -9,9 +9,9 @@ pastebin run EzLeKNHy
 you are rate limited by ip, so you can only install this on a few phones/servers per hour. this is just because of githubs api limit (per ip).
 
 # photos
-![rando image](images/phone1.png)
-![other rando image](images/phone2.png)
-![another rando image](images/phone3.png)
+![rando image](photos/phone1.png)
+![other rando image](photos/phone2.png)
+![another rando image](photos/phone3.png)
 
 # creating an app
 i will never update the phone/ directory, as there is no reason to, the second you turn it on it will update itself with the server.
