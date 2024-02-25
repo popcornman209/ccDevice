@@ -4,7 +4,7 @@ An expandable phone in computer craft. creating apps is below the images. now up
 # setup
 to install just run the below code on the device, it will bring you through the steps.
 ```
-pastebin run EzLeKNHy
+pastebin run BArsqw2G
 ```
 you are rate limited by ip, so you can only install this on a few phones/servers per hour. this is just because of githubs api limit (per ip).
 
