@@ -2,7 +2,7 @@
 An expandable phone in computer craft. creating apps is below the images. now updated to use websockets instead of an in game server.
 
 # setup
-to install just run the below code on the phone/server, it will bring you through the steps.
+to install just run the below code on the device, it will bring you through the steps.
 ```
 pastebin run EzLeKNHy
 ```
