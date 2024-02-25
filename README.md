@@ -1,5 +1,5 @@
-# ccPhone 2
-An expandable phone in computer craft. creating apps is below the images. now updated to use websockets instead of an in game server.
+# ccDevice
+An expandable device system in computer craft. creating apps is below the images. now updated to use websockets instead of an in game server.
 
 # setup
 to install just run the below code on the device, it will bring you through the steps.
@@ -22,7 +22,7 @@ programs/ is for updating, its all the related files, and the version. the phone
 store/ is for the app store<br />
 bank/ is all bank accounts<br />
 
-### client side
+### phones
 apps/ is how the phone lists all apps in the main apps menu<br />
 data/ is for anything you need to save, bank accounts, color choices, anything settings wise for the most part<br />
 files/ is where all lua files are, and files/settings/ is for any of the settings menus<br />
