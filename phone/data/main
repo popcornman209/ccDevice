@@ -2,9 +2,8 @@
   bgColor = 128,
   txtColor = 1,
   autoUpdate = true,
-  devMode = true,
+  devMode = false,
   device = "phone",
-  address = "ws://127.0.0.1:42069/",
   pass = false,
   buttonColor = 32768,
 }
