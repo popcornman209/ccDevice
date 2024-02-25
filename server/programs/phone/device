@@ -1,0 +1,11 @@
+{
+    "id": "device",
+    "files": [
+        ["files/files/device.lua","files/device.lua"],
+        ["files/apps/device","apps/device"],
+        ["files/files/settings/device.lua","files/settings/device.lua"],
+        ["files/settingData/device","settingData/device"],
+        ["files/uninstall/device","uninstall/device"]
+    ],
+    "version": "1.0.1"
+}

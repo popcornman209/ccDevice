@@ -1,0 +1,6 @@
+{
+  name = "device",
+  file = "files/device.lua",
+  id = "device",
+  version = "1.0.1",
+}

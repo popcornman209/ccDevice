@@ -1,0 +1,6 @@
+{
+  name = "RN Spy",
+  file = "files/rnspy.lua",
+  id = "rnspy",
+  version = "1.0.1",
+}

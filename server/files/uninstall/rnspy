@@ -1,0 +1,8 @@
+{
+    name = "RN Spy",
+    files = {
+        "files/rnspy.lua",
+        "apps/rnspy",
+        "uninstall/rnspy",
+    },
+}

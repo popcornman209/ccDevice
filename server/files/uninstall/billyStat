@@ -1,0 +1,10 @@
+{
+    name = "billy stat",
+    files = {
+        "files/billyStat.lua",
+        "apps/billyStat",
+        "files/settings/billies",
+        "settingData/billies",
+        "uninstall/billyStat",
+    },
+}

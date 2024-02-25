@@ -1,0 +1,9 @@
+{
+    "id": "markets",
+    "files": [
+        ["files/files/markets.lua","files/markets.lua"],
+        ["files/apps/markets","apps/markets"],
+        ["files/uninstall/markets","uninstall/markets"]
+    ],
+    "version": "1.0.1"
+}

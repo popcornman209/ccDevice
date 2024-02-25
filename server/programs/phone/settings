@@ -1,0 +1,12 @@
+{
+    "id": "settings",
+    "files": [
+        ["files/files/settings.lua","files/settings.lua"],
+        ["files/files/settings/main.lua","files/settings/main.lua"],
+        ["files/files/settings/advanced.lua","files/settings/advanced.lua"],
+        ["files/apps/settings","apps/settings"],
+        ["files/settingData/!main","settingData/!main"],
+        ["files/settingData/advanced","settingData/advanced"]
+    ],
+    "version": "1.1.1"
+}

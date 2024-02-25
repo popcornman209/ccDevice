@@ -1,0 +1,5 @@
+{
+    "name": "RN Spy",
+    "id": "rnspy",
+    "desc": "an app that spies on all public redenet messages (the way computers talk to each other). to close the app just click the terminate button in the top left."
+}

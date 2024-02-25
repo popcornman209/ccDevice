@@ -1,0 +1,10 @@
+{
+    name = "device",
+    files = {
+        "files/device.lua",
+        "apps/device",
+        "files/settings/device",
+        "settingData/device",
+        "uninstall/device",
+    },
+}

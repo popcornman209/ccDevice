@@ -1,0 +1,6 @@
+{
+  name = "markets",
+  file = "files/markets.lua",
+  id = "markets",
+  version = "1.0.1",
+}

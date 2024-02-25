@@ -1,0 +1,8 @@
+port: 42069
+
+currency: "minecraft:diamonds"
+amountOfCurrency: 1
+priceOfCurrency: 1
+
+idMaxNumber: 10000000
+keyMaxNumber: 10000000
