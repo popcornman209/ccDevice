@@ -1,0 +1,4 @@
+{
+  address = "ws://127.0.0.1:42069/",
+  device = "phone",
+}
