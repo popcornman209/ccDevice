@@ -1,4 +1,6 @@
 resX, resY = term.getSize()
+shell.run("wget", "https://raw.githubusercontent.com/popcornman209/computerCraft-git/main/git.lua")
+
 function clear(text)
     term.setBackgroundColor(colors.black)
     term.clear()
