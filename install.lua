@@ -65,7 +65,15 @@ if choice == 1 then
     else address = "ws://127.0.0.1:42069/" end
     settings.set("address", address)
     settings.set("device", "phone")
-
     settings.save("data/serverData")
+
+    clear("enter to continue.")
+    term.setCursorPos(1,2)
+    print("phone name: ")
+    os.setComputerLabel(read())
+
+    clear("wait 2 seconds...")
+    term.setCursorPos(1,2)
+    print("restarting...")
     os.reboot()
 end
