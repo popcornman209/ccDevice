@@ -56,11 +56,13 @@ if choice == 1 then
     term.setCursorPos(1,1)
     shell.run("git", "popcornman209", "ccPhone2", "/", "phone")
 
-    clear("enter to continue.")
-    term.setCursorPos(1,2)
-    print("server ip (default: ws://127.0.0.1:42069/): ")
-    address = read()
-    if address == "" then address = "ws://127.0.0.1:42069/" end
+    choice = getChoise({"default server adress","custom..."})
+    if choice == 2 then
+        clear("enter to continue.")
+        term.setCursorPos(1,2)
+        print("server ip: ")
+        address = read()
+    else address = "ws://127.0.0.1:42069/" end
     settings.set("address", address)
     settings.set("device", "phone")
 
