@@ -56,7 +56,7 @@ if choice == 1 then
     term.setCursorPos(1,1)
     shell.run("git", "popcornman209", "ccPhone2", "/", "phone")
 
-    choice = getChoise({"default server adress","custom..."})
+    choice = getChoice({"default server adress","custom..."})
     if choice == 2 then
         clear("enter to continue.")
         term.setCursorPos(1,2)
