@@ -1,7 +1,10 @@
 port: 42069
 
-currency: "minecraft:diamonds"
-amountOfCurrency: 1
+showConnections: False
+showSpam: True
+
+currency: "minecraft:diamond"
+amountOfItem: 1
 priceOfCurrency: 1
 
 idMaxNumber: 10000000
