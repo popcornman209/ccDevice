@@ -53,7 +53,6 @@ choice = getChoice({"phone"})
 if choice == 1 then
     term.clear()
     term.setCursorPos(1,1)
-    shell.run("wget", "https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua")
 
     dirs = {
         "apps",
@@ -62,14 +61,21 @@ if choice == 1 then
         "files",
         "files/settings",
         "settingData",
-        "uninstall"
+        "uninstall",
+        "modules"
     }
     programs = {
         "os",
         "settings",
         "appStore"
     }
+    modules = {
+        {"modules/update.lua","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
+        {"modules/sha.lua","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
+    }
+    
     for i = 1,#dirs do fs.makeDir(dirs[i]) end
+    for i = 1,#modules do shell.run("wget", modules[i][2], modules[i][1]) end
 
     clear("enter to continue.")
     term.setCursorPos(1,2)
@@ -103,8 +109,10 @@ if choice == 1 then
     settings.set("device", "phone")
     settings.save("data/serverData")
 
+    require("modules/update")
+
     for i = 1,#programs do
-        os.run({fileId = programs[i], currentVersion = "", log = true, restart = false},"update.lua")
+        download(programs[i],"nil",true)
     end
 
     clear("wait 2 seconds...")
