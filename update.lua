@@ -11,34 +11,34 @@ function download(fileId, currentVersion, log, address, device)
     end
 
     prnt("connecting...", log)
-    ws = http.websocket(address)
+    local ws = http.websocket(address)
 
     if ws ~= false then 
         ws.send(os.getComputerLabel())
         ws.send("version")
         ws.send(device.."/"..fileId)
         prnt("getting newest version...", log)
-        version = ws.receive()
+        local version = ws.receive()
         if version ~= "goodbye" then
             prnt("newest version: "..version, log)
             if version ~= currentVersion then
                 ws.send("download")
                 ws.send(device.."/"..fileId)
-                paths = {}
-                data = {}
-                receiving = true
+                local paths = {}
+                local data = {}
+                local receiving = true
                 while receiving do
-                    message = ws.receive()
+                    local message = ws.receive()
                     if message ~= "complete" then
                         table.insert(data, message)
-                        path = ws.receive()
+                        local path = ws.receive()
                         table.insert(paths, path)
                     else receiving = false end
                 end
                 prnt("installing...", log)
 
                 for i = 1,table.getn(paths) do
-                    file = fs.open(paths[i],"w")
+                    local file = fs.open(paths[i],"w")
                     file.write(data[i])
                     file.close()
                     prnt("installed "..paths[i], log)
