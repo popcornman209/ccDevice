@@ -92,7 +92,11 @@ if choice == 1 then
             term.setCursorPos(1,2)
             print("could not connect!")
             os.sleep(2)
-        else connecting = false end
+        else
+            ws.send("installingPhone")
+            ws.close()
+            connecting = false
+        end
     end
 
     settings.set("address", address)
