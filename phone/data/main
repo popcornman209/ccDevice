@@ -1,9 +1,0 @@
-{
-  bgColor = 128,
-  txtColor = 1,
-  autoUpdate = true,
-  devMode = false,
-  device = "phone",
-  pass = false,
-  buttonColor = 32768,
-}
