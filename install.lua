@@ -1,5 +1,4 @@
 resX, resY = term.getSize()
-shell.run("wget", "https://raw.githubusercontent.com/popcornman209/computerCraft-git/main/git.lua")
 
 function clear(text)
     term.setBackgroundColor(colors.black)
@@ -54,26 +53,59 @@ choice = getChoice({"phone"})
 if choice == 1 then
     term.clear()
     term.setCursorPos(1,1)
-    shell.run("git", "popcornman209", "ccPhone2", "/", "phone")
+    shell.run("wget", "https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua")
 
-    choice = getChoice({"default server adress","custom..."})
-    if choice == 2 then
-        clear("enter to continue.")
-        term.setCursorPos(1,2)
-        print("server ip: ")
-        address = read()
-    else address = "ws://127.0.0.1:42069/" end
-    settings.set("address", address)
-    settings.set("device", "phone")
-    settings.save("data/serverData")
+    dirs = {
+        "apps",
+        "data",
+        "data/bankAccounts",
+        "files",
+        "files/settings",
+        "settingData",
+        "uninstall"
+    }
+    programs = {
+        "os",
+        "settings",
+        "appStore"
+    }
+    for i = 1,#dirs do fs.makeDir(dirs[i]) end
 
     clear("enter to continue.")
     term.setCursorPos(1,2)
     print("phone name: ")
     os.setComputerLabel(read())
 
+    connecting = true
+    while connecting do
+        choice = getChoice({"default server adress","custom..."})
+        if choice == 2 then
+            clear("enter to continue.")
+            term.setCursorPos(1,2)
+            print("server ip: ")
+            address = read()
+        else address = "ws://127.0.0.1:42069/" end
+
+        ws = http.websocket(address)
+        if ws == false then
+            clear("wait 2 seconds...")
+            term.setCursorPos(1,2)
+            print("could not connect!")
+            os.sleep(2)
+        else connecting = false end
+    end
+
+    settings.set("address", address)
+    settings.set("device", "phone")
+    settings.save("data/serverData")
+
+    for i = 1,#programs do
+        os.run({fileId = programs[i], currentVersion = "", log = true, restart = false},"update.lua")
+    end
+
     clear("wait 2 seconds...")
     term.setCursorPos(1,2)
     print("restarting...")
+    os.sleep(2)
     os.reboot()
 end
