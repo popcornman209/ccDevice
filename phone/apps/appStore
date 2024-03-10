@@ -1,6 +1,0 @@
-{
-  name = "app store",
-  file = "files/appStore.lua",
-  id = "appStore",
-  version = "1.1.0",
-}
