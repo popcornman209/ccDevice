@@ -4,11 +4,15 @@ function download(fileId, currentVersion, log, address, device)
     prnt("id: "..fileId, log)
     prnt("current version: "..currentVersion, log)
 
-    if address == nil or device == nil then
+    if address == nil then
         settings.load("data/serverData")
         address = settings.get("address")
+    end
+    if device == nil then
+        settings.load("data/serverData")
         device = settings.get("device")
     end
+    
 
     prnt("connecting...", log)
     local ws = http.websocket(address)
@@ -44,17 +48,18 @@ function download(fileId, currentVersion, log, address, device)
                     prnt("installed "..paths[i], log)
                 end
                 prnt("completed.", log)
-                ws.send("close")
+                ws.close()
                 prnt("disconnected", log)
                 return true, "success"
             else
                 prnt("up to date.", log)
-                ws.send("close")
+                ws.close()
                 prnt("disconnected", log)
                 return false, "up to date"
             end
         else
             prnt("failed: file doesnt exist", log)
+            ws.close()
             return false, "files doesnt exist"
         end
     else
