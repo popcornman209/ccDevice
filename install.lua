@@ -70,8 +70,8 @@ if choice == 1 then
         "appStore"
     }
     modules = {
-        {"modules/update.lua","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
-        {"modules/sha.lua","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
+        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
+        {"modules/sha","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
     }
     
     for i = 1,#dirs do fs.makeDir(dirs[i]) end
