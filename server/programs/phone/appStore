@@ -1,0 +1,8 @@
+{
+    "id": "appStore",
+    "files": [
+        ["files/files/appStore.lua","files/appStore.lua"],
+        ["files/apps/appStore","apps/appStore"]
+    ],
+    "version": "2.0.0"
+}

@@ -1,0 +1,7 @@
+{
+    "id": "update",
+    "files": [
+        ["files/modules/update.lua","modules/update.lua"]
+    ],
+    "version": "3.0.0"
+}
