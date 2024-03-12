@@ -1,4 +1,0 @@
-{
-  name = "devices",
-  file = "files/settings/device.lua",
-}

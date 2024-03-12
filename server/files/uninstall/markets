@@ -1,8 +1,0 @@
-{
-    name = "markets",
-    files = {
-        "files/markets.lua",
-        "apps/markets",
-        "uninstall/markets",
-    },
-}

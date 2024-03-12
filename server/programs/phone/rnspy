@@ -1,9 +1,0 @@
-{
-    "id": "rnspy",
-    "files": [
-        ["files/files/rnspy.lua","files/rnspy.lua"],
-        ["files/apps/rnspy","apps/rnspy"],
-        ["files/uninstall/rnspy","uninstall/rnspy"]
-    ],
-    "version": "1.0.1"
-}
