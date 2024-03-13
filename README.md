@@ -6,7 +6,7 @@ to install just run the below code on the device, it will bring you through the 
 ```
 wget run https://raw.githubusercontent.com/popcornman209/ccDevice/main/install.lua
 ```
-you are rate limited by ip, so you can only install this on a few phones/servers per hour. this is just because of githubs api limit (per ip).<br />
+run this script and it should bring you through the install process, you need a running server to connect to to complete it.
 as for the server setup, just clone the server/ directory and run server.py
 
 # photos
