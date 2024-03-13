@@ -12,7 +12,7 @@ as for the server setup, just clone the server/ directory and run server.py
 # photos
 ![rando image](photos/phone1.png)
 ![other rando image](photos/phone2.png)
-![another rando image](photos/phone3.png)
+![another rando image](photos/bank.png)
 
 # creating an app
 i will never update the phone/ directory, as there is no reason to, the second you turn it on it will update itself with the server.
