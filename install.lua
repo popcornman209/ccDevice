@@ -55,13 +55,6 @@ if choice == 1 then
     term.setCursorPos(1,1)
 
     dirs = {
-        "apps",
-        "data",
-        "data/bankAccounts",
-        "files",
-        "files/settings",
-        "settingData",
-        "uninstall",
         "modules"
     }
     programs = {
