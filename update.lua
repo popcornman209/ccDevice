@@ -26,6 +26,7 @@ function download(fileId, currentVersion, log, address, device)
                 ws.send(device.."/"..fileId)
                 local paths = {}
                 local data = {}
+                local directories = {}
                 local receiving = true
                 while receiving do
                     local message = ws.receive()
@@ -33,6 +34,15 @@ function download(fileId, currentVersion, log, address, device)
                         table.insert(data, message)
                         local path = ws.receive()
                         table.insert(paths, path)
+                        prnt("downloaded "..path, log)
+                    else receiving = false end
+                end
+                local receiving = true
+                while receiving do
+                    local message = ws.receive()
+                    if message ~= "complete" then
+                        fs.makeDir(message)
+                        prnt("making dir "..message, log)
                     else receiving = false end
                 end
                 prnt("installing...", log)
