@@ -24,10 +24,13 @@ while quit == false do
             write = write,
             getSetting = getSetting,
             pass = pass,
+            passType = passType,
             enterNum = enterNum,
             getChoice = getChoice,
             download = download,
-            digestStr = digestStr
+            digestStr = digestStr,
+            enterPass = enterPass,
+            shell = shell
         }
         os.run(env,file)
         if devMode then os.sleep(1) end

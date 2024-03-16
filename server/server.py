@@ -54,6 +54,14 @@ async def echo(websocket):
                             await websocket.send(data)
                             await websocket.send(file[1])
                             prnt("sending "+file[0],"spam", deviceName)
+                        else:
+                            prnt("File: %s does not exist!"%(file[0]),"err", deviceName)
+                            await websocket.send("goodbye")
+                            return
+                    await websocket.send("complete")
+                    for directory in info["directories"]:
+                        await websocket.send(directory)
+                        prnt("sending directory "+directory,"spam", deviceName)
                     await websocket.send("complete")
                     prnt("updated "+message,"norm", deviceName)
                 else:
@@ -119,7 +127,7 @@ async def echo(websocket):
                         details["name"] = name
                         with open("bank/"+id,"w") as f:
                             f.write(str(details))
-                        prnt("changed account %s name."%(id),"norm", deviceName)
+                        prnt("changed account %s name to %s."%(id,name),"norm", deviceName)
                     else:
                         await websocket.send("invalid")
                         prnt("attemped to get balance: wrong key","err", deviceName)

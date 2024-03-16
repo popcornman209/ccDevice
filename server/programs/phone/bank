@@ -5,5 +5,8 @@
         ["files/apps/bank","apps/bank"],
         ["files/uninstall/bank","uninstall/bank"]
     ],
+    "directories": [
+        "data/bankAccounts"
+    ],
     "version": "2.0.0"
 }

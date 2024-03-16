@@ -66,13 +66,39 @@ while going do
     elseif x == 19 and y == 11 then sec = sec+1
 
     elseif x >= 8 and x <= 19 and y == 14 then
-        if pass ~= false then input = digestStr(enterNum("enter orgininal pass:",true,false)) end
-        if input == pass or pass == false then
-            entered1 = enterNum("enter new pass:",true,false)
-            entered2 = enterNum("verify new pass:",true,false)
+        if enterPass(pass,passType) then
+            choice = getChoice({"pin","pass","none"}, "type of pass:", true)
+            if choice == 1 then
+                entered1 = enterNum("enter new pin:",true,false)
+                entered2 = enterNum("verify new pin:",true,false)
+                passTypeTemp = "pin"
+            elseif choice == 2 then
+                term.setBackgroundColor(bgColor)
+                term.clear()
+                write("enter new pass:",2)
+                term.setCursorPos(1,3)
+                entered1 = read("*")
+                term.clear()
+                write("verify new pass:",2)
+                term.setCursorPos(1,3)
+                entered2 = read("*")
+                passTypeTemp = "pass"
+            else
+                entered1 = ""
+                entered2 = ""
+            end
+
             if entered1 == entered2 then
                 pass = digestStr(entered1)
-                if entered1 == "" then pass = false end
+                passType = passTypeTemp
+                if entered1 == "" then
+                    pass = ""
+                    passType = "none"
+                end
+            else
+                term.clear()
+                write("passwords do not match!",2)
+                os.sleep(2)
             end
         end
         drawMenu()
@@ -87,6 +113,7 @@ while going do
             settings.set("txtColor",colorList[txt])
             settings.set("buttonColor",colorList[sec])
             settings.set("pass",pass)
+            settings.set("passType",passType)
             settings.save("data/main")
             write("saved, restart to apply.",20)
         end

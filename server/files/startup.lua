@@ -18,10 +18,11 @@ buttonColor = getSetting("buttonColor",colors.blue)
 devMode = getSetting("devMode",false)
 autoUpdate = getSetting("autoUpdate",true)
 pass = getSetting("pass",false)
+passType = getSetting("passType","none")
 settings.save("data/main")
 
-require("modules/update")
-require("modules/sha")
+require("/modules/update")
+require("/modules/sha")
 
 if autoUpdate then
     download("update",updateVersion,true)
@@ -40,6 +41,21 @@ function write(text, y)
             term.write(temp)
         end
     end
+end
+
+function enterPass(pass,passType)
+    if passType == "pin" then
+        input = enterNum("enter pin:",true,false)
+        if digestStr(input) == pass then return true
+        else return false end
+    elseif passType == "pass" then
+        term.setBackgroundColor(bgColor)
+        term.clear()
+        write("enter pass:",2)
+        term.setCursorPos(1,3)
+        if digestStr(read("*")) == pass then return true
+        else return false end
+    elseif passType == "none" then return true end
 end
 
 function enterNum(text, blur, decimal)
@@ -152,7 +168,7 @@ function getChoice(choices, text, clickable, back, add)
                 choice = (y+scroll-3)/2
                 if choice == math.ceil(choice) and choice >= 1 and choice <= #choices then return choice end 
             end
-        end
+        elseif event == "terminate" and back then return "back" end
     end
 end
 
@@ -182,33 +198,28 @@ while going2 do
     os.startTimer(0)
     while going do
         event, button, x, y = os.pullEventRaw()
-        if event == "mouse_click" then 
-            if x <= 17 and x >= 10 and y == 19 then going = false
-            elseif x == 1 and y == 20 then
-                term.setBackgroundColor(colors.black)
-                term.clear()
-                term.setCursorPos(1,1)
-                term.setTextColor(colors.yellow)
-                term.write(os.version())
-                term.setTextColor(colors.white)
-                term.setCursorPos(1,2)
-                print('type "startup" or reboot to exit.')
-                return
-            end
+        if (event == "mouse_click" and x == 1 and y == 20) or event == "terminate" then
+            term.setBackgroundColor(colors.black)
+            term.clear()
+            term.setCursorPos(1,1)
+            term.setTextColor(colors.yellow)
+            term.write(os.version())
+            term.setTextColor(colors.white)
+            term.setCursorPos(1,2)
+            print('type "startup" or reboot to exit.')
+            return
+        elseif event == "mouse_click" then 
+            if x <= 17 and x >= 10 and y == 19 then going = false end 
         elseif event == "key" then
             if button == 32 or button == 257 then going = false end
         elseif event == "timer" then
             time = "  "..textutils.formatTime(os.time())
             term.setCursorPos(27-#time,1)
             term.write(time)
-            clock = os.startTimer(0.85)
+            clock = os.startTimer(0.83)
         end
     end
-    if pass == false then going2 = false
-    else
-        input = enterNum("enter pass:",true,false)
-        if digestStr(input) == pass then going2 = false end
-    end
+    if enterPass(pass,passType) then going2 = false end
 end
 while true do
     apps = fs.list("apps/")
@@ -234,11 +245,14 @@ while true do
         write = write,
         getSetting = getSetting,
         pass = pass,
+        passType = passType,
         enterNum = enterNum,
         getChoice = getChoice,
         serverAddress = serverAddress,
         download = download,
-        digestStr = digestStr
+        digestStr = digestStr,
+        enterPass = enterPass,
+        shell = shell
     }
     os.run(env,file)
     if devMode then os.sleep(1) end

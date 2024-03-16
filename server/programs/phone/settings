@@ -8,5 +8,6 @@
         ["files/settingData/!main","settingData/!main"],
         ["files/settingData/advanced","settingData/advanced"]
     ],
+    "directories": [],
     "version": "1.3.1"
 }
