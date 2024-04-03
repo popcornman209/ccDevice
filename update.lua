@@ -4,9 +4,12 @@ function download(fileId, currentVersion, log, address, device)
     prnt("id: "..fileId, log)
     prnt("current version: "..currentVersion, log)
 
-    if address == nil or device == nil then
+    if address == nil then
         settings.load("data/serverData")
-        address = settings.get("address")
+        address = settings.get("servers").main
+    end
+    if device == nil  then
+        settings.load("data/serverData")
         device = settings.get("device")
     end
 
@@ -53,6 +56,10 @@ function download(fileId, currentVersion, log, address, device)
                     file.close()
                     prnt("installed "..paths[i], log)
                 end
+                settings.clear()
+                settings.load("data/mirrors")
+                settings.set(fileId,address)
+                settings.save("data/mirrors")
                 prnt("completed.", log)
                 ws.send("close")
                 prnt("disconnected", log)
