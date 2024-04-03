@@ -93,12 +93,12 @@ if choice == 1 then
             os.sleep(2)
         else
             ws.send("installingPhone")
-            ws.close()
+            ws.send("close")
             connecting = false
         end
     end
 
-    settings.set("address", address)
+    settings.set("servers", {main=address})
     settings.set("device", "phone")
     settings.save("data/serverData")
 
