@@ -2,6 +2,10 @@ function prnt(str, log) if log then print(str) end end
 
 function download(fileId, currentVersion, log, address, device)
     prnt("id: "..fileId, log)
+    if fileId == "update" then
+        device = "all"
+        currentVersion = "3.0.0"
+    end
     prnt("current version: "..currentVersion, log)
 
     if address == nil then
