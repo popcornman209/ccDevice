@@ -49,7 +49,7 @@ function getChoice(choices)
 end
 
 
-choice = getChoice({"phone"})
+choice = getChoice({"phone","computer"})
 if choice == 1 then
     term.clear()
     term.setCursorPos(1,1)
@@ -107,6 +107,73 @@ if choice == 1 then
     for i = 1,#programs do
         download(programs[i],"nil",true)
     end
+
+    clear("wait 2 seconds...")
+    term.setCursorPos(1,2)
+    print("restarting...")
+    os.sleep(2)
+    os.reboot()
+elseif choice == 2 then
+    term.clear()
+    term.setCursorPos(1,1)
+
+    dirs = {
+        "modules"
+    }
+    programs = {
+        "bootLoader",
+        "apt",
+        "CraftOS"
+    }
+    modules = {
+        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
+        {"modules/sha","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
+    }
+    
+    for i = 1,#dirs do fs.makeDir(dirs[i]) end
+    for i = 1,#modules do shell.run("wget", modules[i][2], modules[i][1]) end
+
+    clear("enter to continue.")
+    term.setCursorPos(1,2)
+    print("device name: ")
+    os.setComputerLabel(read())
+
+    connecting = true
+    while connecting do
+        choice = getChoice({"default server adress","custom..."})
+        if choice == 2 then
+            clear("enter to continue.")
+            term.setCursorPos(1,2)
+            print("server ip: ")
+            address = read()
+        else address = "ws://127.0.0.1:42069/" end
+
+        ws = http.websocket(address)
+        if ws == false then
+            clear("wait 2 seconds...")
+            term.setCursorPos(1,2)
+            print("could not connect!")
+            os.sleep(2)
+        else
+            ws.send("installingPhone")
+            ws.send("close")
+            connecting = false
+        end
+    end
+
+    settings.set("servers", {main=address})
+    settings.set("device", "computer")
+    settings.save("data/serverData")
+
+    require("modules/update")
+
+    for i = 1,#programs do
+        download(programs[i],"nil",true,address,"all")
+    end
+
+    settings.clear()
+    settings.set('[ "shell.allow_disk_startup" ]',false)
+    settings.save(".settings")
 
     clear("wait 2 seconds...")
     term.setCursorPos(1,2)
