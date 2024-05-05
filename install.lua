@@ -170,10 +170,11 @@ elseif choice == 2 then
     for i = 1,#programs do
         download(programs[i],"nil",true,address,"all")
     end
-
-    settings.clear()
-    settings.set('[ "shell.allow_disk_startup" ]',false)
-    settings.save(".settings")
+    
+    settingData = '{\n\t[ "shell.allow_disk_startup" ] = false,\n}'
+    file = fs.open(".settings","w")
+    file.write(settingData)
+    file.close()
 
     clear("wait 2 seconds...")
     term.setCursorPos(1,2)
