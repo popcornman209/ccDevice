@@ -1,0 +1,17 @@
+{
+    "id": "os",
+    "files": [
+        ["files/phone/startup.lua","startup.lua"]
+    ],
+    "directories": [
+        "apps",
+        "data",
+        "data/bankAccounts",
+        "files",
+        "files/settings",
+        "settingData",
+        "uninstall",
+        "modules"
+    ],
+    "version": "1.4.4"
+}

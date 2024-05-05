@@ -1,0 +1,10 @@
+{
+    name = "NAS Storage",
+    files = {
+        "bin/findChest.lua",
+        "boot/CCDevice_NAS",
+        "modules/nasFunctions",
+        "programs/nas",
+        "uninstall/nas",
+    },
+}

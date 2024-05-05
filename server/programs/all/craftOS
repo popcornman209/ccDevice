@@ -1,0 +1,10 @@
+{
+    "id": "apt",
+    "files": [
+        ["files/all/fileSystem/boot/CraftOS","boot/CraftOS.lua"]
+    ],
+    "directories": [
+        "boot"
+    ],
+    "version": "1.0.0"
+}

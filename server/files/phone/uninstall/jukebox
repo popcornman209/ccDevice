@@ -1,0 +1,8 @@
+{
+    name = "Jukebox",
+    files = {
+        "files/jukebox.lua",
+        "apps/jukebox",
+        "uninstall/jukebox",
+    },
+}

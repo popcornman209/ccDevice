@@ -1,0 +1,10 @@
+{
+    "id": "jukebox",
+    "files": [
+        ["files/phone/files/jukebox.lua","files/jukebox.lua"],
+        ["files/phone/apps/jukebox","apps/jukebox"],
+        ["files/phone/uninstall/jukebox","uninstall/jukebox"]
+    ],
+    "directories": [],
+    "version": "1.0.0"
+}

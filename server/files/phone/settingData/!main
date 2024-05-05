@@ -1,0 +1,4 @@
+{
+  name = "main",
+  file = "files/settings/main.lua",
+}

@@ -1,0 +1,13 @@
+term.clear()
+term.setTextColor(colors.yellow)
+term.setCursorPos(1,1)
+print(os.version())
+term.setTextColor(colors.white) -- draw the logo
+
+local completion = require "cc.shell.completion"
+shell.setPath(shell.path()..":/bin") -- autocompletes all files in /bin
+shell.setCompletionFunction("bin/apt.lua", completion.build({ completion.choice, { "install", "update", "remove", "search" } })) -- apt autocompletion
+
+if settings.get("motd.enable") then -- motd
+    shell.run("motd")
+end

@@ -1,0 +1,8 @@
+{
+    name = "banking",
+    files = {
+        "files/bank.lua",
+        "apps/bank",
+        "uninstall/bank",
+    },
+}

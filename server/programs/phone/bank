@@ -1,0 +1,12 @@
+{
+    "id": "bank",
+    "files": [
+        ["files/phone/files/bank.lua","files/bank.lua"],
+        ["files/phone/apps/bank","apps/bank"],
+        ["files/phone/uninstall/bank","uninstall/bank"]
+    ],
+    "directories": [
+        "data/bankAccounts"
+    ],
+    "version": "2.0.0"
+}
