@@ -48,7 +48,7 @@ the name of the file is the id, and the rest is fairly self explanatory. the adm
   version = "1.0.0",
 }
 ```
-the file is what will run when you open the app
+the file is what will run when you open the app<br />
 id is the id used by the app pretty much everywhere, its used for updating. same with the version variable
 
 ### settingData/
