@@ -22,9 +22,10 @@ function drawMenu()
     write("background color:", 4)
     write("text color:", 7)
     write("secondary color:", 10)
+    write("notifications:", 13)
     term.setBackgroundColor(buttonColor)
-    paintutils.drawBox(8,14,19,14)
-    write("password", 14)
+    paintutils.drawBox(8,16,19,16)
+    write("password", 16)
     term.setBackgroundColor(colors.lime)
     if bgColor == colors.green then term.setBackgroundColor(colors.green) end
     paintutils.drawBox(8,19,19,19)
@@ -55,6 +56,10 @@ while going do
     paintutils.drawBox(8,5,18,5,colorList[bg])
     paintutils.drawBox(8,8,18,8,colorList[txt])
     paintutils.drawBox(8,11,18,11,colorList[sec])
+
+    paintutils.drawBox(9,14,17,14,buttonColor)
+    write(tostring(notifications).." ",14)
+
     event, button, x, y = os.pullEvent("mouse_click")
     if x == 1 and y == 1 then going = false
 
@@ -64,8 +69,9 @@ while going do
     elseif x == 19 and y == 8 then txt = txt+1
     elseif x == 7 and y == 11 then sec = sec-1
     elseif x == 19 and y == 11 then sec = sec+1
+    elseif x >= 9 and x <= 17 and y == 14 then notifications = notifications == false
 
-    elseif x >= 8 and x <= 19 and y == 14 then
+    elseif x >= 8 and x <= 19 and y == 16 then
         if enterPass(pass,passType) then
             choice = getChoice({"pin","pass","none"}, "type of pass:", true)
             if choice == 1 then
@@ -114,6 +120,7 @@ while going do
             settings.set("buttonColor",colorList[sec])
             settings.set("pass",pass)
             settings.set("passType",passType)
+            settings.set("notifications",notifications)
             settings.save("data/main")
             write("saved, restart to apply.",20)
         end
