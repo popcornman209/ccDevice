@@ -52,15 +52,15 @@ if ws ~= false then
                     write("create a display name:",1)
                     term.setCursorPos(1,2)
                     displayName = read()
+
                     ws.send("bank-create")
                     ws.send(displayName)
 
-                    id = ws.receive()
-                    key = ws.receive()
+                    accountD = textutils.unserialiseJSON(ws.receive(), {parse_null = true})
             
                     settings.clear()
-                    settings.set("id", id)
-                    settings.set("key", key)
+                    settings.set("id", accountD["id"])
+                    settings.set("key", accountD["key"])
                     settings.save("data/bankAccounts/"..displayName)
                     account = displayName
                     going = false
@@ -82,15 +82,16 @@ if ws ~= false then
                 term.clear()
 
                 ws.send("bank-load")
-                ws.send(id)
-                ws.send(key)
-                balance = ws.receive()
-                if balance ~= "invalid login info!" then
-                    name = ws.receive()
+                message = {id=id, key=key}
+                ws.send(textutils.serialiseJSON(message))
+
+                accountStr = ws.receive()
+                if accountStr ~= "invalid login info!" then
+                    accountData = textutils.unserialiseJSON(accountStr)
                     term.setCursorPos(1,20)
-                    term.write("id: "..id)
-                    write("hello "..name.."!",2)
-                    write("balance: $"..balance,3)
+                    term.write("id: "..key)
+                    write("hello "..accountData["name"].."!",2)
+                    write("balance: $"..accountData["balance"],3)
                     
                     term.setBackgroundColor(colors.red)
                     if bgColor == colors.red then term.setBackgroundColor(colors.brown) end
@@ -111,22 +112,26 @@ if ws ~= false then
                         term.setBackgroundColor(bgColor)
                         term.clear()
                         term.setCursorPos(1,1)
-                        term.write("$"..balance)
+                        term.write("$"..accountData["balance"])
                         write("reciever id:", 2)
                         term.setCursorPos(2,3)
                         reciever = read()
                         term.clear()
                         term.setCursorPos(1,1)
-                        term.write("$"..balance)
+                        term.write("$"..accountData["balance"])
                         write("amount:", 2)
                         term.setCursorPos(2,3)
                         amount = read()
 
                         ws.send("bank-transfer")
-                        ws.send(id)
-                        ws.send(key)
-                        ws.send(reciever)
-                        ws.send(amount)
+                        message = {
+                            id=id,
+                            key=key,
+                            reciever=reciever,
+                            amount=tonumber(amount)
+                        }
+                        ws.send(textutils.serialiseJSON(message))
+                        
                         success = ws.receive()
                         if success == "success" then
                             term.setBackgroundColor(bgColor)
@@ -176,9 +181,13 @@ if ws ~= false then
                                 write("new name: ", 2)
                                 term.setCursorPos(2,3)
                                 ws.send("bank-nameChange")
-                                ws.send(id)
-                                ws.send(key)
-                                ws.send(read())
+                                message = {
+                                    id=id,
+                                    key=key,
+                                    name=read()
+                                }
+                                ws.send(textutils.serialiseJSON(message))
+
                                 if ws.receive() ~= "success" then
                                     term.setBackgroundColor(bgColor)
                                     term.clear()
@@ -195,17 +204,7 @@ if ws ~= false then
                             end
                         end
                     elseif x >= 4 and x <= 22 and y == 9 then
-                        ws.send("bank-transactions")
-                        ws.send(id)
-                        ws.send(key)
-                        receiving = true
-                        transactions = {}
-                        while receiving do
-                            message = ws.receive()
-                            if message == "complete" then receiving = false
-                            else table.insert(transactions,message) end
-                        end
-                        getChoice(transactions,"transactions:",false,"<")
+                        getChoice(accountData["transactions"],"transactions:",false,"<")
                     elseif x == 1 and y == 1 then
                         quit = true
                         going = false
