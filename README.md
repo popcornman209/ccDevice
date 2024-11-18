@@ -34,12 +34,6 @@ uninstall/ is the uninstall scripts, its just a list of any files the phone shou
 
 # examples of files
 ## client side
-### bank accounts
-```
-{'name': 'Hello_human', 'key': '9565876', 'balance': 0, 'admin': False}
-```
-the name of the file is the id, and the rest is fairly self explanatory. the admin feature decides weather you have infinite money or not, you need this for the atm's.
-
 ### apps/
 ```
 {
