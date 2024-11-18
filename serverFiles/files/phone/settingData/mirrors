@@ -1,0 +1,4 @@
+{
+  name = "mirrors",
+  file = "files/settings/mirrors.lua",
+}

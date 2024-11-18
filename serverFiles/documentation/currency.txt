@@ -1,0 +1,26 @@
+--currency api documentation--
+
+terms:
+    currency: item id, ex "minecraft:diamond"
+    amountOfItem: amount of item you get for price
+    priceOfItem: price of the amount of item described above
+    itemValue: amountOfItem/priceOfItem
+
+api uses:
+    currency-get: get currency item, diamonds as default
+    currency-convertTo: converts money to amount of item (currency)
+    currency-convertFrom: converts item (currency) to amount of money
+
+
+steps to use as client:
+connect to websocket
+    send "currency-get"
+        recieve currency
+
+    send "convertTo"
+        send amount of money to convert
+        recive amount of item its worth
+    
+    send "convertFrom"
+        send amount of item to convert
+        recive amount of money its worth

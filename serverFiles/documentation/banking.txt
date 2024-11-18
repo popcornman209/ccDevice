@@ -1,0 +1,59 @@
+--banking api documentation--
+
+terms:
+    id: random numbers, the username of an account
+    key: private key, also random numbers but is used for identification and should be kept private
+    admin account: has infinite balance, for atm's primarily
+
+api uses:
+    bank-create: creating bank accounts
+    bank-load: loading bank account information
+    bank-nameChange: changing bank account name
+    bank-transfer: transfering money between accounts
+    bank-transactions: viewing bank account transactions
+
+
+steps to use as client:
+connect to websocket
+    send "bank-create"
+        send account name
+        recieve account id
+        recieve account key
+
+    send "bank-load"
+        send account id
+        send account key
+        if valid login
+            recieve balance (999999 if admin account)
+            recieve account name
+        else
+            recieve "invalid login info!"
+
+    send "bank-nameChange"
+        send account id
+        send account key
+        send new account name
+        if valid login 
+            recieve "success"
+        else
+            recieve "invalid login info!"
+
+    send "bank-transfer"
+        send account id
+        send account key
+        send reciever id
+        send amount to send
+        if all info valid:
+            recieve "success"
+        else
+            recieve reasoning behind failure
+
+    send "bank-transactions"
+        send account id
+        send account key
+        if info valid
+            for each transaction
+                recieve transaction
+            recieve "complete"
+        else
+            recieve "invalid login info!"

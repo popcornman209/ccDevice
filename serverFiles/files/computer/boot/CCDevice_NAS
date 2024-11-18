@@ -1,0 +1,141 @@
+settings.clear()
+if settings.load("data/nas") ==  false then error("no config found, run findChest in CraftOS to setup") end
+mainChestName = settings.get("mainChest")
+ignoreChests = settings.get("ignore")
+mainChest = peripheral.wrap(mainChestName)
+
+resX, resY = term.getSize()
+
+chests = {peripheral.find("inventory")}
+
+for i,chest in pairs(chests) do
+    if peripheral.getName(chest) == mainChestName then mainChestID = i end
+end
+if mainChestID == nil then error("main chest not connected!") end
+table.remove(chests,mainChestID)
+
+function removeChest(list,item)
+    for i,val in pairs(list) do
+        if peripheral.getName(val) == item then 
+            table.remove(list,i)
+        end
+    end
+end
+
+for i, ignore in pairs(ignoreChests) do
+    removeChest(chests,ignore)
+end
+
+require("/modules/nasFunctions")
+
+while 1 do
+    menuChoice = getChoice({"deposit","withdraw","view items","search items"},false,"CCDevice NAS")
+    if menuChoice == 1 then
+        clear("enter to continue...","Deposit")
+        term.setCursorPos(2,3)
+        print("put items in the chest and press enter...")
+        enterToContinue()
+        clear("wait...","Withdraw")
+        term.setCursorPos(2,3)
+        print("loading...")
+        for i,item in pairs(mainChest.list()) do
+            count = item["count"]
+            chest = 1
+            while count > 0 and chest <= #chests do
+                count = count-chests[chest].pullItems(mainChestName,i)
+                chest = chest + 1
+            end
+        end
+    elseif menuChoice == 2 then
+        items = getItems()
+        clear("enter to continue...","Withdraw")
+        term.setCursorPos(2,3)
+        print("search for item:")
+        term.setCursorPos(2,4)
+        search = read()
+        results = {}
+        for item,val in pairs(items) do
+            if string.find(item,search) then
+                table.insert(results,item)
+            end
+        end
+        if #results > 0 then
+            choice = getChoice(results,true,"Withdraw")
+            if choice then
+                clear("enter to continue...","Withdraw")
+                term.setCursorPos(2,3)
+                print("choose amount to withdraw (max: "..items[results[choice]]..")")
+                term.setCursorPos(2,4)
+                amount = tonumber(read())
+                if amount == nil then amount = 0 end
+                if amount < 0 then amount = 0
+                elseif amount > items[results[choice]] then amount = items[results[choice]] end
+                chest = 1
+                clear("wait...","Withdraw")
+                term.setCursorPos(2,3)
+                print("loading...")
+                chestContents = getChestContents()
+                while amount > 0 do
+                    chestContent = chestContents[chest]
+                    for i,item in pairs(chestContent) do
+                        if item["name"] == results[choice] then
+                            amount = amount-chests[chest].pushItems(mainChestName,i,amount)
+                        end
+                    end
+                    chest = chest + 1
+                end
+            end
+        else
+            clear("wait...","Withdraw")
+            term.setCursorPos(2,3)
+            print("no items found!")
+            os.sleep(1)
+        end
+    elseif menuChoice == 3 then
+        itemList = {}
+        items = getItems()
+        for item,val in pairs(items) do table.insert(itemList,item) end
+        repeat
+            choice = getChoice(itemList,true,"item list")
+            if choice then
+                clear("enter to continue...","item list")
+                term.setCursorPos(2,3)
+                print("item name: "..itemList[choice])
+                print(" item count: "..items[itemList[choice]])
+                enterToContinue()
+            end
+        until choice == false
+    elseif menuChoice == 4 then
+        items = getItems()
+        repeat
+            clear("enter to continue...","Search")
+            term.setCursorPos(2,3)
+            print("search for item ('quit' to leave):")
+            term.setCursorPos(2,4)
+            search = read()
+            if search ~= "quit" then
+                results = {}
+                for item,val in pairs(items) do
+                    if string.find(item,search) then
+                        table.insert(results,item)
+                    end
+                end
+                if #results > 0 then
+                    choice = getChoice(results,true,"Search")
+                    if choice then
+                        clear("enter to continue...","item list")
+                        term.setCursorPos(2,3)
+                        print("item name: "..results[choice])
+                        print(" item count: "..items[results[choice]])
+                        enterToContinue()
+                    end
+                else
+                    clear("wait...","Search")
+                    term.setCursorPos(2,3)
+                    print("no items found!")
+                    os.sleep(1)
+                end
+            end
+        until search == "quit"
+    end
+end

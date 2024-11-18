@@ -1,0 +1,15 @@
+{
+    "id": "settings",
+    "files": [
+        ["files/phone/files/settings.lua","files/settings.lua"],
+        ["files/phone/files/settings/main.lua","files/settings/main.lua"],
+        ["files/phone/files/settings/advanced.lua","files/settings/advanced.lua"],
+        ["files/phone/files/settings/mirrors.lua","files/settings/mirrors.lua"],
+        ["files/phone/apps/settings","apps/settings"],
+        ["files/phone/settingData/!main","settingData/!main"],
+        ["files/phone/settingData/advanced","settingData/advanced"],
+        ["files/phone/settingData/mirrors","settingData/mirrors"]
+    ],
+    "directories": [],
+    "version": "1.4.1"
+}

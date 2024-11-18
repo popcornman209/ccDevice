@@ -1,0 +1,46 @@
+--updating api documentation--
+
+terms:
+    app id: device/app, for example "all/CraftOS" or "phone/bank"
+    device: just the device being used, by default "phone","computer", and "all"
+
+api uses:
+    version: getting app version
+    download: for downloading files and directories needed
+    store: getting all devices in the store for a device
+
+
+
+steps to using as client
+connect to websocket
+    send "version"
+        send app id, ex: all/apt
+        if app exists
+            recieve version
+        else
+            recieve "goodbye"
+            connection close
+
+    send "download"
+        send app id
+        if app exists
+            for each file:
+                if file exists
+                    recieve fileData
+                    recieve fileSavePath
+                else
+                    recieve "goodbye"
+                    connection close
+            recieve "complete"
+
+            for each required directories
+                recieve folderPath
+            recieve "complete"
+
+    send "store"
+        send device
+            for each app for device
+                recieve name
+                recieve id
+                recieve description
+            recieve "complete"
