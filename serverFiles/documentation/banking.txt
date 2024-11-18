@@ -4,6 +4,15 @@ terms:
     id: random numbers, the username of an account
     key: private key, also random numbers but is used for identification and should be kept private
     admin account: has infinite balance, for atm's primarily
+    account dictionary:
+        {
+            "name": "testing",          display name for account
+            "key": "7708134",           key for account, like a password
+            "balance": 0,               account balance
+            "admin": false,             wether account is admin or not
+            "notifAccounts": [],        accounts to send notifications to
+            "transactions": []          list of transactions, all strings
+        }
 
 api uses:
     bank-create: creating bank accounts
@@ -11,6 +20,19 @@ api uses:
     bank-nameChange: changing bank account name
     bank-transfer: transfering money between accounts
     bank-transactions: viewing bank account transactions
+
+functions for other modules:
+    transferMoney(senderId,senderKey,reciverId,amount):
+        sends money between accounts
+        returns "success" if worked, otherwise will return string of reason why
+
+    createAccount(name):
+        creates bank account, name is the account display name
+        returns {"id":id,"key":key}
+
+    loadAccount(id,key):
+        loads bank account information
+        returns account dictionary if success, otherwise returns string on reason of failure
 
 
 steps to use as client:
