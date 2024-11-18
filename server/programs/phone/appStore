@@ -1,9 +1,0 @@
-{
-    "id": "appStore",
-    "files": [
-        ["files/phone/files/appStore.lua","files/appStore.lua"],
-        ["files/phone/apps/appStore","apps/appStore"]
-    ],
-    "directories": [],
-    "version": "2.0.0"
-}

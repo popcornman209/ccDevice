@@ -1,5 +1,0 @@
-{
-    id = "bootLoader",
-    version = "1.0.0",
-    device = "all",
-}

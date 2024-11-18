@@ -1,5 +1,0 @@
-{
-    id = "apt",
-    version = "1.0.0",
-    device = "all",
-}

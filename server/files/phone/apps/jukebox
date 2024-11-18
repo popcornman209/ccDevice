@@ -1,6 +1,0 @@
-{
-  name = "Jukebox",
-  file = "files/jukebox.lua",
-  id = "jukebox",
-  version = "1.0.0",
-}

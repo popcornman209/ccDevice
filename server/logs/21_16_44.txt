@@ -1,6 +1,0 @@
-could not convert string to float: 'fasdfbjlk'
------traceback-----
-Traceback (most recent call last):
-  File "c:\Users\mail\Documents\code\games\computer craft\ccPhone\server.py", line 142, in echo
-    amount = float(await websocket.recv())
-ValueError: could not convert string to float: 'fasdfbjlk'
