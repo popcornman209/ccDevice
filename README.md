@@ -21,8 +21,9 @@ i will never update the phone/ directory, as there is no reason to, the second y
 ### server side
 files/ is just the phones filesystem, so it will look the same as it.<br />
 programs/ is for updating, its all the related files, and the version. the phone will check if there is a newer version and auto update.<br />
-store/ is for the app store<br />
-bank/ is all bank accounts<br />
+modules/ is where the server modules go, this is checked by the server and implimented.<br />
+moduleFiles/store/ is for the app store<br />
+moduleFiles/bank/ is all bank accounts<br />
 
 ### phones
 apps/ is how the phone lists all apps in the main apps menu<br />
