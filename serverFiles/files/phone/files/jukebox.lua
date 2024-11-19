@@ -3,7 +3,7 @@ disks = {"13","cat","blocks","chirp","far","mall","mellohi","stal","strad","ward
 speaker = peripheral.wrap("back")
 quit = false
 while quit == false do
-    if speaker then
+    if peripheral.getType(speaker) == "speaker" then
         choice = getChoice(disks,"disk:",true,"X",string.char(16))
         if choice == "back" then
             quit = true
@@ -15,7 +15,7 @@ while quit == false do
     else
         term.setBackgroundColor(bgColor)
         term.clear()
-        write("you dont have a speaker!")
+        write("you dont have a speaker!",2)
         os.sleep(2)
         quit = true
     end
