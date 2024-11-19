@@ -16,11 +16,11 @@ as for the server setup, just clone the server/ directory and run server.py
 ![another rando image](photos/bank.png)
 
 # creating an app
-i will never update the phone/ directory, as there is no reason to, the second you turn it on it will update itself with the server.
-
 ### server side
 files/ is just the phones filesystem, so it will look the same as it.<br />
 programs/ is for updating, its all the related files, and the version. the phone will check if there is a newer version and auto update.<br />
+logs/ when the server encounters an error, it will output it and a traceback into this folder.<br />
+documentation/ for different modules/other things documentation.<br />
 modules/ is where the server modules go, this is checked by the server and implimented.<br />
 moduleFiles/store/ is for the app store<br />
 moduleFiles/bank/ is all bank accounts<br />
