@@ -1,6 +1,9 @@
 import standard, asyncio, os, json
 
-async def version(websocket,deviceName): #get app version
+async def version(args): #get app version
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
     message = await websocket.recv() #get app to check
     if os.path.exists("programs/"+message):
         standard.prnt("sending %s version"%(message),"spam", deviceName)
@@ -11,7 +14,10 @@ async def version(websocket,deviceName): #get app version
         standard.prnt("%s does not exsist, disconnecting"%("programs/"+message),"err", deviceName)
         return -1
 
-async def download(websocket,deviceName): #download app files
+async def download(args): #download app files
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
     message = await websocket.recv() #get app id
     if os.path.exists("programs/"+message): #if app exists
         with open("programs/"+message) as f:
@@ -36,7 +42,10 @@ async def download(websocket,deviceName): #download app files
         standard.prnt("%s does not exsist, disconnecting"%("programs/"+message),"err", deviceName)
         return -1
 
-async def store(websocket,deviceName): #check app store
+async def store(args): #check app store
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
     device = await websocket.recv() #get device
     if os.path.exists("moduleFiles/store/"+device):
         for file in os.listdir("moduleFiles/store/"+device): #loop through all apps for device

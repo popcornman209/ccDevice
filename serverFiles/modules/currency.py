@@ -1,14 +1,14 @@
 import standard, asyncio
 
-async def getCurrency(websocket,deviceName): await websocket.send(standard.settings["currency"])
+async def getCurrency(args): await args["websocket"].send(standard.settings["currency"])
 
-async def convertToCurrency(websocket,deviceName):
-    money = await websocket.recv()
-    await websocket.send(str(float(money)/(standard.settings["amountOfItem"]/standard.settings["priceOfItem"]))) #money/currencyPrice
+async def convertToCurrency(args):
+    money = await args["websocket"].recv()
+    await args["websocket"].send(str(float(money)/(standard.settings["amountOfItem"]/standard.settings["priceOfItem"]))) #money/currencyPrice
 
-async def convertFromCurrency(websocket,deviceName):
-    money = await websocket.recv()
-    await websocket.send(str(float(money)*(standard.settings["amountOfItem"]/standard.settings["priceOfItem"]))) #money*currencyPrice
+async def convertFromCurrency(args):
+    money = await args["websocket"].recv()
+    await args["websocket"].send(str(float(money)*(standard.settings["amountOfItem"]/standard.settings["priceOfItem"]))) #money*currencyPrice
 
 apiCalls = {
     "currency-get": getCurrency,
