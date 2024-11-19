@@ -42,7 +42,12 @@ async def echo(websocket):
                 return
             
             elif message in apiCallMethods:
-                result = await apiCallMethods[message](websocket,deviceName)
+                arguments = {
+                    "websocket": websocket,
+                    "deviceName": deviceName,
+                    "modules": modules
+                }
+                result = await apiCallMethods[message](arguments)
                 if result == -1: #error, cancell request
                     await websocket.send("goodbye")
                     return
