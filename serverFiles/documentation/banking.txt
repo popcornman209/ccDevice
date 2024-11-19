@@ -19,7 +19,6 @@ api uses:
     bank-load: loading bank account information
     bank-nameChange: changing bank account name
     bank-transfer: transfering money between accounts
-    bank-transactions: viewing bank account transactions
 
 functions for other modules:
     transferMoney(senderId,senderKey,reciverId,amount):
@@ -39,43 +38,26 @@ steps to use as client:
 connect to websocket
     send "bank-create"
         send account name
-        recieve account id
-        recieve account key
+        recieve JSON {"id":id, "key":key}
 
     send "bank-load"
-        send account id
-        send account key
+        send JSON {"id":id, "key":key}
         if valid login
-            recieve balance (999999 if admin account)
-            recieve account name
+            recieve JSON account dictionary
         else
             recieve "invalid login info!"
 
     send "bank-nameChange"
-        send account id
-        send account key
-        send new account name
+        send JSON {"id":id, "key":key, "name":newName}
+        
         if valid login 
             recieve "success"
         else
             recieve "invalid login info!"
 
     send "bank-transfer"
-        send account id
-        send account key
-        send reciever id
-        send amount to send
+        send JSON {"id":senderId, "key":senderKey, "reciever":recieverId, "amount": amountToSend}
         if all info valid:
             recieve "success"
         else
-            recieve reasoning behind failure
-
-    send "bank-transactions"
-        send account id
-        send account key
-        if info valid
-            for each transaction
-                recieve transaction
-            recieve "complete"
-        else
-            recieve "invalid login info!"
+            recieve reasoning behind failure (string)
