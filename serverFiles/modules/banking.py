@@ -36,17 +36,13 @@ def createAccount(name):
         json.dump(account,f) #saves it to account file
     return {"id":id,"key":key}
 
-def loadAccount(id,key):
+def loadAccount(id,key): #returns nothing if information invalid
     if os.path.exists("moduleFiles/bank/%s"%(id)): #check if account exists
         with open("moduleFiles/bank/%s"%(id),"r") as f:
             details = json.load(f) #load account info
         if details["key"] == key: #check account id
             if details["admin"]: details["balance"] = 999999 #if admin infinite money
             return details
-        else:
-            return "invalid login info!" #wrong key
-    else:
-        return "invalid login info!"
 
 async def WSAPIcreateBank(args): #create the bank account
     websocket = args["websocket"]
@@ -67,7 +63,7 @@ async def WSAPIaccountLoad(args): #loading account name and balance
     key = message["key"] #account key
 
     account = loadAccount(id,key)
-    if type(account) == type({}):
+    if account:
         await websocket.send(json.dumps(account)) #send account info
         standard.prnt("sent bank account %s info"%(id),"spam", deviceName)
     else:
