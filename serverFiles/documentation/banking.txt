@@ -31,7 +31,7 @@ functions for other modules:
 
     loadAccount(id,key):
         loads bank account information
-        returns account dictionary if success, otherwise returns string on reason of failure
+        returns account dictionary if success, otherwise returns nothing
 
 
 steps to use as client:
