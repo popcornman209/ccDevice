@@ -67,6 +67,7 @@ async def WSAPIaccountLoad(args): #loading account name and balance
         await websocket.send(json.dumps(account)) #send account info
         standard.prnt("sent bank account %s info"%(id),"spam", deviceName)
     else:
+        await websocket.send("invalid login info!")
         standard.prnt("attemped to get transactions: wrong id","err", deviceName)
     
 
