@@ -67,9 +67,10 @@ if ws ~= false then
                 elseif x == 1 and y == 1 then
                     going = false
                     quit = true
+                    choice = "back"
                 end
             end
-        elseif choice ~= back then account = accounts[choice] end
+        elseif choice ~= "back" then account = accounts[choice] end
     
         if choice ~= "back" then
             inAccount = true
