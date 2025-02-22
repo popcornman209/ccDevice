@@ -1,1 +1,0 @@
-os.run({shell = shell}, "/Strafe.lua")
