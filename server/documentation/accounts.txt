@@ -1,0 +1,92 @@
+--accounts api documentation--
+
+terms:
+    id: username, string
+    password: string of password, should be encrypted client side using sha256
+    account dictionary:
+        {
+            "pass":password,        account password
+            "notifications":{},     list of notifications
+            "ownedApps":[]          list of owned apps
+        }
+    notifications dictionary:
+        {
+            "notification id": {
+                "text": "text for notification",
+                "app": "app accociated with notification"
+            }
+        }
+
+api uses:
+    accounts-create: creates account
+    accounts-load: loads account information and sends to client
+    accounts-changePass: changes account password
+    accounts-sendNotif: send notification to account
+    accounts-readNotif: read notification (removes from list)
+    accounts-getNotifList: get list of notifications (better for lua interperitation)
+
+functions for other modules:
+    createAccount(username,password):
+        creates account
+        returns True or False
+
+    saveAccount(username,account):
+        saves account data
+        returns nothing
+
+    loadAccount(username,password,byPassPassword = False):
+        loads account dictionary
+        byPassPassword if true ignores password check
+        returns
+            account dicionary if success
+            False, 1 if password incorrect
+            False, 2 if username incorrect
+
+    changePassword(username,password,NewPassword):
+        changes account password
+        returns True or False
+
+    sendNotification(username,password,notification,app,byPassPassword=False):
+        sends notification to account
+        notification is text for notification
+        app is the app accociated with notification, can be set to "none" for no app
+        returns notification id
+
+    readNotification(username,password,notificationId):
+        removes notification from notifications list
+        returns True or
+            False, 1 if notification does not exist
+            False, 2 if identification failed
+
+
+steps to use as client:
+connect to websocket
+    send "accounts-create"
+        send JSON {"username":username, "password":password}
+        recive "success" or failure reason
+
+    send "accounts-load"
+        send JSON {"username":username, "password":password}
+        recieve JSON account dictionary or "failed"
+
+    send "accounts-changePass"
+        send JSON {"username":username, "password":password, "newPassword":newPass}
+        recieve "success" or "failed"
+
+    send "accounts-sendNotif"
+        send JSON {"username":username, "password":password,"notification":notification text, "app": app id or "none"}
+        recive notification id or "failed"
+
+    send "accounts-readNotif"
+        send JSON {"username":username, "password":password,"notification":notification id}
+        recieve "success" or "failed"
+
+    send "accounts-getNotifList"
+        send JSON {"username":username, "password":password}
+        recive [
+            {
+                "id": notification id,
+                "text": notif texy,
+                "app": app for notification
+            }
+        ] or "failed"

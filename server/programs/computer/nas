@@ -1,0 +1,12 @@
+{
+    "id": "nas",
+    "files": [
+        ["files/computer/boot/CCDevice_NAS","boot/CCDevice_NAS"],
+        ["files/computer/bin/findChest.lua","bin/findChest.lua"],
+        ["files/computer/modules/nasFunctions.lua","modules/nasFunctions"],
+        ["files/computer/programs/nas","programs/nas"],
+        ["files/computer/uninstall/nas","uninstall/nas"]
+    ],
+    "directories": ["data"],
+    "version": "1.0.0"
+}

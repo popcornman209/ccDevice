@@ -1,0 +1,5 @@
+{
+    "name": "NAS Storage",
+    "id": "nas",
+    "desc": "a mass storage system over a network."
+}

@@ -1,0 +1,50 @@
+--message api documentation-- (by Gloshayden)
+
+terms:
+    id: random numbers, the id of the chat
+    owner username: can be the username of an account or "" for all users in a chat
+    chats dictionary:
+        {
+            "name":name,
+            "id":id,
+            "owner":owner,
+            "users":[user],
+            "messages":[]
+        }
+
+api uses:
+    "message-addUser": Adds a user to the chat,
+    "message-createChat": creates an empty chat untill you add users,
+    "message-getChat": loads the chat for the users,
+    "message-send": sends a message to the group chat
+
+steps to use as client:
+connect to websocket
+    send "message-getChat"
+        send JSON {"username":username, "password":password,"cId":chat id}
+        if valid information
+            recieve JSON chat dicionary
+        else
+            recieve "failed"
+            
+
+    send "message-createChat"
+        send JSON {"username":username, "password":password,"displayName":chat name,"owner",owner username}
+        if valid login 
+            recieve "success"
+        else
+            recieve "failed"
+
+    send "message-send"
+        send JSON {"cId": chat id, "username":username, "password":password, "text": the message to send}
+        if all info valid:
+            recieve "success"
+        else
+            recieve "failed"
+
+    send "message-addUser"
+        send JSON {"cId": chat id, "newUser": the username of the new user, "username": owners username,"password":owners password}
+        if info valid
+            recieve "success"
+        else
+            recieve "failed"
