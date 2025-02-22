@@ -1,0 +1,6 @@
+{
+  name = "blocksapp",
+  file = "files/message.lua",
+  id = "message",
+  version = "1.0.0",
+}

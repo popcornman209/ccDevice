@@ -1,0 +1,12 @@
+{
+    "id": "message",
+    "files": [
+        ["files/phone/files/message.lua","files/message.lua"],
+        ["files/phone/apps/message","apps/message"],
+        ["files/phone/uninstall/message","uninstall/message"]
+    ],
+    "directories": [
+        "data/PhoneMessage"
+    ],
+    "version": "1.0.0"
+}
