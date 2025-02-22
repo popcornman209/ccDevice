@@ -1,8 +1,0 @@
-{
-    "id": "update",
-    "files": [
-        ["files/all/update","modules/update"]
-    ],
-    "directories": [],
-    "version": "3.0.0"
-}
