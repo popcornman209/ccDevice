@@ -28,6 +28,7 @@ for arg = 1,#args do
                 else error("no device given!") end
             elseif args[arg] == "-h" or args[arg] == "--help" then
                 print("usage:\napt [install/update/remove/list/search/view] [program]\n\ninstall: install new program\nupdate : update program, or whole system\nremove : delete a program\nlist   : list installed programs\nsearch : search available programs\nview   : view programs description\n\n-h --help  : open this menu\n-m --mirror: change mirror (main is default)\n-d --device: change device")
+                return
             end
         else
             if current == 1 then --install/update/remove
