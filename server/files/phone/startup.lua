@@ -15,8 +15,11 @@ settings.load("data/main")
 bgColor = getSetting("bgColor",colors.cyan)
 txtColor = getSetting("txtColor",colors.white)
 buttonColor = getSetting("buttonColor",colors.blue)
+
 devMode = getSetting("devMode",false)
 autoUpdate = getSetting("autoUpdate",true)
+notifications = getSetting("notifications",true)
+
 pass = getSetting("pass",false)
 passType = getSetting("passType","none")
 settings.save("data/main")
@@ -248,17 +251,23 @@ while true do
         bgColor = bgColor,
         txtColor = txtColor,
         buttonColor = buttonColor,
+
         autoUpdate = autoUpdate,
         devMode = devMode,
+        notifications = notifications,
+
         write = write,
         getSetting = getSetting,
-        pass = pass,
-        passType = passType,
         enterNum = enterNum,
         getChoice = getChoice,
+        download = download,
+
+        pass = pass,
+        passType = passType,
+
         servers = servers,
         serverAddress = servers.main,
-        download = download,
+
         digestStr = digestStr,
         enterPass = enterPass,
         shell = shell,

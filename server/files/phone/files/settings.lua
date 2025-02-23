@@ -19,15 +19,23 @@ while quit == false do
             bgColor = bgColor,
             txtColor = txtColor,
             buttonColor = buttonColor,
+    
             autoUpdate = autoUpdate,
             devMode = devMode,
+            notifications = notifications,
+    
             write = write,
             getSetting = getSetting,
-            pass = pass,
-            passType = passType,
             enterNum = enterNum,
             getChoice = getChoice,
             download = download,
+    
+            pass = pass,
+            passType = passType,
+    
+            servers = servers,
+            serverAddress = servers.main,
+    
             digestStr = digestStr,
             enterPass = enterPass,
             shell = shell,
