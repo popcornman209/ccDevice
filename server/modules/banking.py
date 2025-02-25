@@ -1,4 +1,4 @@
-import standard, asyncio, os, json, random
+import standard, os, json, random
 
 if not os.path.isdir("moduleFiles/bank"): os.mkdir("moduleFiles/bank")
 

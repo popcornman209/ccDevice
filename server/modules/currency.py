@@ -1,4 +1,4 @@
-import standard, asyncio
+import standard
 
 async def getCurrency(args): await args["websocket"].send(standard.settings["currency"])
 

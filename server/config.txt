@@ -7,9 +7,7 @@ currency: "minecraft:diamond"
 amountOfItem: 1
 priceOfItem: 1
 
-idMaxNumber: 10000000
-keyMaxNumber: 10000000
+bankIdLength: 5
+bankKeyLength: 5
 
-notificationIdMaxNum: 10000000
-
-chatIdMaxNumber: 10000000
+secureNetKeyLength: 16

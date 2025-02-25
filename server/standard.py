@@ -1,4 +1,5 @@
 from datetime import datetime
+import string,random
 
 settings = {}
 with open("config.txt","r") as f:
@@ -14,6 +15,10 @@ colors = { #terminal colors
     "spam": "\033[37m",
     "norm": "\033[0m"
 }
+
+def randString(length):
+  characters = string.ascii_letters + string.digits
+  return ''.join(random.choice(characters) for i in range(length))
 
 def prnt(message, type, device): #printing function for logs and stuff
     if type != "spam" or settings["showSpam"]:

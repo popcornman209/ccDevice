@@ -1,4 +1,4 @@
-import standard, asyncio, os, json
+import standard, os, json
 
 async def version(args): #get app version
     websocket = args["websocket"]
