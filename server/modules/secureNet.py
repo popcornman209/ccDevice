@@ -2,14 +2,23 @@ import standard, os, random
 
 if not os.path.isdir("moduleFiles/secureNet"): os.mkdir("moduleFiles/secureNet")
 
-connectedDevices = []
+activeDnsConnections = {}
 
-def registerDns(name):
-    if name not in os.listdir("moduleFiles/secureNet"):
+def registerDns(hostName):
+    if hostName not in os.listdir("moduleFiles/secureNet"):
         key = str(random.randint(0,standard.settings["secureNetKeyLength"]))
-        with open("moduleFiles/bank/"+id,"w") as f:
+        with open("moduleFiles/secureNet/"+hostName,"w") as f:
             f.write(key)
         return key
+    else: return False
+
+def connectDns(hostName, key, websocket):
+    if hostName in os.listdir("moduleFiles/secureNet"):
+        with open("moduleFiles/secureNet/"+hostName,"r") as f:
+            if f.read() != key: return False
+        global activeDnsConnections
+        activeDnsConnections[hostName] = websocket
+        return True
     else: return False
 
 apiCalls = {
