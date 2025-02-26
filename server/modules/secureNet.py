@@ -61,8 +61,10 @@ def registerStaticDNS(hostName): #register a static dns address
 
 def connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannelss = []): #register and connect temporary adress
     key = standard.randString(standard.settings["secureNetKeyLength"]) #gen a key
-    activeDnsConnections[hostName] = serverConnection(websocket,hostName,key,recieveBroadcasts,listeningChannelss) #connect
-    return key #return key
+    if hostName not in activeDnsConnections: 
+        activeDnsConnections[hostName] = serverConnection(websocket,hostName,key,recieveBroadcasts,listeningChannelss) #connect
+        return key #return key
+    else: return False
 
 def connectStaticDNS(hostName, key, websocket, recieveBroadcasts = True, listeningChannelss = []): #connect to a static dns address
     if hostName in os.listdir("moduleFiles/secureNet"): #if exists
@@ -81,6 +83,84 @@ def diconnectDNS(hostName,key): #disconnect dns adress
     else: return False #failure
 
 
+async def WSAPIRegisterStatic(args): #register static dns
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    hostName = await websocket.recv()
+    key = registerStaticDNS(hostName)
+    if key:
+        await websocket.send(key)
+        standard.prnt(f"registered static dns: {hostName}","norm", deviceName)
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to register static dns: {hostName}","err", deviceName)
+    
+
+async def WSAPIConnectTempDNS(args): #connect to temporary dns
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    key = connectTempDNS(message["hostName"],websocket,message["recieveBroadcasts"],message["channels"])
+    if key:
+        await websocket.send(key)
+        standard.prnt(f"registered and connected temporary dns: {message['hostName']}","spam", deviceName)
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to register and connect temporary dns: {message['hostName']}","err", deviceName)
+
+async def WSAPIConnectStaticDNS(args): #connect to static dns
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    success = connectStaticDNS(message["hostName"],message["key"],websocket,message["recieveBroadcasts"],message["channels"])
+    if success:
+        await websocket.send("success")
+        standard.prnt(f"connected to static dns: {message['hostName']}","spam", deviceName)
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to connected to static dns: {message['hostName']}","err", deviceName)
+    
+async def WSAPIDisconnect(args): #disconnect dns
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    success = diconnectDNS(message["hostName"],message["key"])
+    if success:
+        await websocket.send("success")
+        standard.prnt(f"disconnected from dns: {message['hostName']}","spam", deviceName)
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to disconnect from dns: {message['hostName']}","err", deviceName)
+
+async def WSAPISendMsg(args): #send message
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    if verifyDNS(message["hostName"],message["key"]): #if valid
+        success = await activeDnsConnections[message["hostName"]].sendMsg(message["message"],message["reciever"],channel=message["channel"])
+        if success: await websocket.send("success")
+        else: await websocket.send("failure")
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to send message from {message["hostName"]}","err", deviceName)
+
+async def WSAPIBroadcast(args): #broadcast message
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    if verifyDNS(message["hostName"],message["key"]): #if valid
+        success = await activeDnsConnections[message["hostName"]].broadcast(message["message"],channel=message["channel"])
+        if success: await websocket.send("success")
+        else: await websocket.send("failure")
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to broadcast message from {message["hostName"]}","err", deviceName)
 
 apiCalls = {
 }
