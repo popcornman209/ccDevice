@@ -163,6 +163,12 @@ async def WSAPIBroadcast(args): #broadcast message
         standard.prnt(f"failed to broadcast message from {message["hostName"]}","err", deviceName)
 
 apiCalls = {
+    "snet-registerStatic": WSAPIRegisterStatic,
+    "snet-connectTemp": WSAPIConnectTempDNS,
+    "snet-connectStatic": WSAPIConnectStaticDNS,
+    "snet-disconnect": WSAPIDisconnect,
+    "snet-sendMsg": WSAPISendMsg,
+    "snet-broadcast": WSAPIBroadcast
 }
 
 description = "INCOMPLETE - indirect replacement for rednet, no spoofing, cheaper without modems, and messages sent are private."
