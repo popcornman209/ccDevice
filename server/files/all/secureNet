@@ -1,0 +1,48 @@
+local function connectToWS(serverAddress)
+    if address == nil then
+        settings.load("data/serverData")
+        address = settings.get("servers").main
+    end
+    local ws = http.websocket(address)
+    if ws then
+        ws.send(os.getComputerLabel())
+        return ws
+    else
+        return false
+    end
+end
+
+local function registerStaticAdress(hostName,channels,recieveBroadcasts,serverAddress)
+    ws = connectToWS(serverAddress)
+    if ws then
+        ws.send("snet-registerStatic")
+        message = {
+            hostName = hostName,
+            channels = channels,
+            recieveBroadcasts = recieveBroadcasts
+        }
+        ws.send(textutils.serialiseJSON(hostName))
+        key = ws.receive()
+        ws.send("close")
+        ws.close()
+        if key ~= "failure" then return key
+        else return false end
+    end
+end
+
+local function connectTempAddress(hostName,serverAddress)
+    ws = connectToWS(serverAddress)
+    if ws then
+        ws.send("snet-connectTemp")
+        ws.send(hostName)
+        key = ws.receive()
+        ws.send("close")
+        ws.close()
+        if key ~= "failure" then return key
+        else return false end
+    end
+end
+
+return{
+    registerStaticAdress = registerStaticAdress
+}

@@ -1,4 +1,5 @@
 secureNet
+update update.lua and sha to be update.download instead od download
 accounts client
 notifications
 device remote/billystat
