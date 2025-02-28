@@ -14,7 +14,7 @@ each function must be an async function, with one argument. this argument is a d
 {
     "websocket": #websocket object, can run .send and .recive among others
     "deviceName": #name of device connected
-    "modules": #dictionary of all modules installed {"module1",moduleClass}, can be used to use other modules functions without importing
+    "modules": #dictionary of all modules installed {"module1",moduleObject}, can be used to use other modules functions without importing
 }
 ```
 
