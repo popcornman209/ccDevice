@@ -23,4 +23,4 @@ def randString(length):
 def prnt(message, type, device): #printing function for logs and stuff
     if type != "spam" or settings["showSpam"]:
         now = datetime.now()
-        print(f"{colors[type]}[{now.strftime("%H:%M:%S")}] {device}> message")
+        print(f"{colors[type]}[{now.strftime("%H:%M:%S")}] {device}> {message}")
