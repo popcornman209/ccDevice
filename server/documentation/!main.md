@@ -2,7 +2,7 @@
 
 ## modules
 ### making modules
-make a python file and put it in the modules folder
+make a python file and put it in the modules folder<br />
 the file must be 3 objects, listed below, formatted as
 ```python
 apiCalls = {"module-call1":function}
@@ -19,7 +19,7 @@ each function must be an async function, with one argument. this argument is a d
 ```
 
 ### importing other modules
-importing modules from the modules folder can be done by doing from modules import <module>
+importing modules from the modules folder can be done by doing from modules import [module] <br />
 thats about it.
 
 ## using standard.py
@@ -34,18 +34,18 @@ a dictionary generated from config.txt, "index: value" in the config file can be
 be careful about the values in here, it uses pythons eval() function, so theres a chance you could inject python commands into it. that being said, if someone has access to this file might as well just edit any of the other server files easier.
 
 ### prnt method
-as log function, prints time and different colors. would call it standard.log but this works just fine.
-called by doing standard.prnt(message, type, device)
-`message` the message or value to be printed
-`type` for the color, and if set to spam will only be printed if set to display spam in config.txt. colors are below
-`device` the device name, provided by the client.`
+as log function, prints time and different colors. would call it standard.log but this works just fine.<br />
+called by doing standard.prnt(message, type, device) <br />
+`message` the message or value to be printed <br />
+`type` for the color, and if set to spam will only be printed if set to display spam in config.txt. colors are below <br />
+`device` the device name, provided by the client.
 
 ### colors
-`err` red
-`con` yellow
-`spam` light gray, only printed if specified in config.txt
+`err` red <br />
+`con` yellow <br />
+`spam` light gray, only printed if specified in config.txt <br />
 `norm` white
 
 ### randString method
-used for generating random strings of numbers and letters, for keys and things.
+used for generating random strings of numbers and letters, for keys and things. <br />
 ran with standard.randString(length), length being the number of characters to be generated
