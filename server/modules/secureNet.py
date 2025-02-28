@@ -1,4 +1,4 @@
-import standard, os, random, json
+import standard, os, json
 
 if not os.path.isdir("moduleFiles/secureNet"): os.mkdir("moduleFiles/secureNet")
 
@@ -10,7 +10,7 @@ class connection:
         self.hName = hostName #hostname, can be used to index activeDnsConnections
         self.key = key #private key, used for authenticating that the sender is who they say they are
         self.rcvBroad = recieveBroadcasts #wehter to receive broadcasts or not, spam
-        self.channel = listeningChannels #wwhat channels to listen to
+        self.channels = listeningChannels #wwhat channels to listen to
     
     async def rcvMsg(self,sender,message,channel,broadcast): #recieve messages
         if self.ws.connected and channel in self.channels and (self.rcvBroad or broadcast == False): #if should be recieved, if connected, listening to provided channel, and if its broadcasted wether listening to that
@@ -35,7 +35,7 @@ class connection:
 
 class serverConnection(connection): #fake connection, cant recieve messages
     def __init__(self, hostName, key, messageRecievedMethod=None):
-        super().__init__(None,hostName,key,False,[""]) #initiate
+        super().__init__(None,hostName,key,False,[]) #initiate
         self.rcvMethod = messageRecievedMethod #sets the recieving message method
 
     def rcvMsg(self,sender,message,channel,broadcast): #recieve message
@@ -59,9 +59,17 @@ def registerStaticDNS(hostName): #register a static dns address
         return key #return the key
     else: return False #failure
 
+def removeStaticDNS(hostName, key): #remove static dns
+    if hostName in os.listdir("moduleFiles/secureNet"): #if exists
+        with open("moduleFiles/secureNet/"+hostName,"r") as f: #open file
+            if f.read() != key: return False #if invalid cancel
+        os.remove("moduleFiles/secureNet/"+hostName) #remove the file
+        return True #success
+    else: return False #failure
+
 def connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannelss = []): #register and connect temporary adress
     key = standard.randString(standard.settings["secureNetKeyLength"]) #gen a key
-    if hostName not in activeDnsConnections: 
+    if hostName not in activeDnsConnections and hostName not in os.listdir("moduleFiles/secureNet"): #if not already taken
         activeDnsConnections[hostName] = serverConnection(websocket,hostName,key,recieveBroadcasts,listeningChannelss) #connect
         return key #return key
     else: return False
@@ -83,6 +91,7 @@ def diconnectDNS(hostName,key): #disconnect dns adress
     else: return False #failure
 
 
+
 async def WSAPIRegisterStatic(args): #register static dns
     websocket = args["websocket"]
     deviceName = args["deviceName"]
@@ -95,7 +104,6 @@ async def WSAPIRegisterStatic(args): #register static dns
     else:
         await websocket.send("failure")
         standard.prnt(f"failed to register static dns: {hostName}","err", deviceName)
-    
 
 async def WSAPIConnectTempDNS(args): #connect to temporary dns
     websocket = args["websocket"]
@@ -136,6 +144,19 @@ async def WSAPIDisconnect(args): #disconnect dns
         await websocket.send("failure")
         standard.prnt(f"failed to disconnect from dns: {message['hostName']}","err", deviceName)
 
+async def WSAPIRemoveStatic(args): #remove static dns
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    message = json.loads(await websocket.recv())
+    success = removeStaticDNS(message["hostName"],message["key"])
+    if success:
+        await websocket.send("success")
+        standard.prnt(f"removed static dns: {message['hostName']}","spam", deviceName)
+    else:
+        await websocket.send("failure")
+        standard.prnt(f"failed to remove static dns: {message['hostName']}","err", deviceName)
+
 async def WSAPISendMsg(args): #send message
     websocket = args["websocket"]
     deviceName = args["deviceName"]
@@ -167,6 +188,7 @@ apiCalls = {
     "snet-connectTemp": WSAPIConnectTempDNS,
     "snet-connectStatic": WSAPIConnectStaticDNS,
     "snet-disconnect": WSAPIDisconnect,
+    "snet-removeStatic": WSAPIRemoveStatic,
     "snet-sendMsg": WSAPISendMsg,
     "snet-broadcast": WSAPIBroadcast
 }
