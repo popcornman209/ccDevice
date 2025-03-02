@@ -1,5 +1,5 @@
 {
-    "id": "update",
+    "id": "bootLoader",
     "files": [
         ["files/all/bootloader.lua","startup.lua"],
         ["files/all/fileSystem/programs/bootLoader","programs/bootLoader"]

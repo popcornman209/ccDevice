@@ -63,7 +63,7 @@ if choice == 1 then
         "appStore"
     }
     modules = {
-        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
+        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/update"},
         {"modules/sha","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
     }
     
@@ -126,7 +126,7 @@ elseif choice == 2 then
         "CraftOS"
     }
     modules = {
-        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/main/update.lua"},
+        {"modules/update","https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/update"},
         {"modules/sha","https://pastebin.com/raw/9c1h7812"} -- CREDIT: https://pastebin.com/9c1h7812 :)
     }
     

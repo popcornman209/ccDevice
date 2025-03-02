@@ -193,5 +193,5 @@ apiCalls = {
     "snet-broadcast": WSAPIBroadcast
 }
 
-description = "INCOMPLETE - indirect replacement for rednet, no spoofing, cheaper without modems, and messages sent are private."
+description = "UNTESTED - indirect replacement for rednet, no spoofing, cheaper without modems, and messages sent are private."
 documentation = "documentation/secureNet.txt"

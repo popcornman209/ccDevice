@@ -1,0 +1,10 @@
+{
+    "id": "secureNet",
+    "files": [
+        ["files/all/modules/secureNet","modules/secureNet"]
+    ],
+    "directories": [
+        "modules"
+    ],
+    "version": "1.0.0"
+}

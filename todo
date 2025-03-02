@@ -1,4 +1,6 @@
 secureNet
+have an autoBoot for bootloader
+apt for phones
 update update.lua and sha to be update.download instead od download
 accounts client
 notifications
