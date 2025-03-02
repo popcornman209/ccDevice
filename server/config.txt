@@ -1,7 +1,7 @@
 port: 42069
 
 showConnections: False
-showSpam: False
+showSpam: True
 
 currency: "minecraft:diamond"
 amountOfItem: 1

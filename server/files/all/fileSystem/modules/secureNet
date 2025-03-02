@@ -5,7 +5,7 @@ local function connectToWS(ws)
     end
 
     if type(ws) == "string" then
-        local ws = http.websocket(ws)
+        ws = http.websocket(ws)
         if ws then
             ws.send(os.getComputerLabel())
         else return false end
@@ -98,6 +98,7 @@ end
 
 local function send(hostName,key,reciever,message,channel,ws)
     ws = connectToWS(ws)
+    if channel == nil then channel = "" end
     if ws then
         ws.send("snet-sendMsg")
         message = {
@@ -116,6 +117,7 @@ end
 
 local function broadcast(hostName,key,message,channel,ws)
     ws = connectToWS(ws)
+    if channel == nil then channel = "" end
     if ws then
         ws.send("snet-broadcast")
         message = {
@@ -131,12 +133,20 @@ local function broadcast(hostName,key,message,channel,ws)
     return false
 end
 
+local function receive(ws,timeout)
+    message = ws.receive(timeout)
+    if message == nil then return false end
+    data = textutils.unserialiseJSON(message)
+    return data["sender"],data["message"],data["channel"],data["broadcasted"]
+end
+
 return{
-    registerStaticAdress = registerStaticAdress,
-    removeStaticAdress = removeStaticAdress,
-    connectTempAdress = connectTempAdress,
-    connectStaticAdress = connectStaticAdress,
-    disconnectAdress = disconnectAdress,
+    registerStaticAddress = registerStaticAddress,
+    removeStaticAddress = removeStaticAddress,
+    connectTempAddress = connectTempAddress,
+    connectStaticAddress = connectStaticAddress,
+    disconnectAddress = disconnectAddress,
     send = send,
-    broadcast = broadcast
+    broadcast = broadcast,
+    receive = receive
 }

@@ -13,7 +13,7 @@ class connection:
         self.channels = listeningChannels #wwhat channels to listen to
     
     async def rcvMsg(self,sender,message,channel,broadcast): #recieve messages
-        if self.ws.connected and channel in self.channels and (self.rcvBroad or broadcast == False): #if should be recieved, if connected, listening to provided channel, and if its broadcasted wether listening to that
+        if self.ws.state == 1 and channel in self.channels and (self.rcvBroad or broadcast == False): #if should be recieved, if connected, listening to provided channel, and if its broadcasted wether listening to that
             await self.ws.send(json.dumps({ #send the message
                 "sender": sender.hName,
                 "message": message,
@@ -67,19 +67,22 @@ def removeStaticDNS(hostName, key): #remove static dns
         return True #success
     else: return False #failure
 
-def connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannelss = []): #register and connect temporary adress
+def connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannels = []): #register and connect temporary adress
     key = standard.randString(standard.settings["secureNetKeyLength"]) #gen a key
-    if hostName not in activeDnsConnections and hostName not in os.listdir("moduleFiles/secureNet"): #if not already taken
-        activeDnsConnections[hostName] = serverConnection(websocket,hostName,key,recieveBroadcasts,listeningChannelss) #connect
+    if hostName in activeDnsConnections:
+        if activeDnsConnections[hostName].ws.state != 1:
+            del(activeDnsConnections[hostName])
+    if (hostName not in activeDnsConnections) and hostName not in os.listdir("moduleFiles/secureNet"): #if not already taken
+        activeDnsConnections[hostName] = connection(websocket,hostName,key,recieveBroadcasts,listeningChannels) #connect
         return key #return key
     else: return False
 
-def connectStaticDNS(hostName, key, websocket, recieveBroadcasts = True, listeningChannelss = []): #connect to a static dns address
+def connectStaticDNS(hostName, key, websocket, recieveBroadcasts = True, listeningChannels = []): #connect to a static dns address
     if hostName in os.listdir("moduleFiles/secureNet"): #if exists
         with open("moduleFiles/secureNet/"+hostName,"r") as f: #open file
             if f.read() != key: return False #if invalid cancel
         global activeDnsConnections
-        activeDnsConnections[hostName] = connection(websocket, hostName, key, recieveBroadcasts, listeningChannelss) #connect the address
+        activeDnsConnections[hostName] = connection(websocket, hostName, key, recieveBroadcasts, listeningChannels) #connect the address
         return True #success
     else: return False #failure
 

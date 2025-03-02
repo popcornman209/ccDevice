@@ -1,7 +1,7 @@
 {
     "id": "secureNet",
     "files": [
-        ["files/all/modules/secureNet","modules/secureNet"]
+        ["files/all/fileSystem/modules/secureNet","modules/secureNet"]
     ],
     "directories": [
         "modules"

@@ -32,7 +32,7 @@ for module in modules: #go through each module and get the api calls on each
 
 #█░█░█ █▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█
 #▀▄▀▄▀ ▄█   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
-async def echo(websocket):
+async def mainLoop(websocket):
     try:
         deviceName = await websocket.recv() #get device name
         if standard.settings["showConnections"]: standard.prnt("device connected. (%s)"%(deviceName),"con", deviceName)
@@ -80,7 +80,7 @@ async def main():
     for module in modules: print("{}:\n\t{} api calls\n\tdesc: {}\n\tdocs: {}".format(module,len(modules[module].apiCalls),modules[module].description,modules[module].documentation))
     print("-------------\n")
 
-    async with serve(echo, "", standard.settings["port"], compression=None):
+    async with serve(mainLoop, "", standard.settings["port"], compression=None):
         await asyncio.Future()
 
 asyncio.run(main())
