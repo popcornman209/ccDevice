@@ -1,4 +1,4 @@
-import standard, os, json, random
+import standard, os, json
 
 if not os.path.isdir("moduleFiles/bank"): os.mkdir("moduleFiles/bank")
 
@@ -31,8 +31,8 @@ def transferMoney(sId,sKey,rId,amount):
         return "no negative or zero amounts!"
     
 def createAccount(name):
-    id = str(random.randint(0,standard.settings["idMaxNumber"])) #generate random id
-    key = str(random.randint(0,standard.settings["keyMaxNumber"])) #generate random key, number should be large enough for no duplicates
+    id = str(standard.randString(standard.settings["idMaxNumber"])) #generate random id
+    key = str(standard.randString(standard.settings["keyMaxNumber"])) #generate random key, number should be large enough for no duplicates
     account = {"name":name,"key":key,"balance":0,"admin":False,"notifAccounts":[],"transactions":["created account"]}
     with open("moduleFiles/bank/"+id,"w") as f:
         json.dump(account,f) #saves it to account file

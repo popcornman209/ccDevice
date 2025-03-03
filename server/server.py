@@ -7,7 +7,7 @@ from datetime import datetime
 if not os.path.isdir("logs/"): os.mkdir("logs/")
 
 modules = {} #dictionary of modules "moduleName": class
-apiCallMethods = {} #dictionary of "apicall": moduleId
+apiCallMethods = {} #dictionary of "apicall": method()
 apiCallNames = {} #dictionary of "apicall": "module used"
 
 for file in os.listdir("modules"): #import all modules in modules folder
@@ -26,13 +26,10 @@ for module in modules: #go through each module and get the api calls on each
             print(standard.colors["err"]+"conflict between module '{}', and '{}', they both use the api call '{}'".format(module,apiCallNames[call],call))
             sys.exit(1)
 
-# standard.balls = 'no work' #shared variables
-# modules[0].testing()
-# print(standard.balls)
 
 #█░█░█ █▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█
 #▀▄▀▄▀ ▄█   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
-async def mainLoop(websocket):
+async def handler(websocket):
     try:
         deviceName = await websocket.recv() #get device name
         if standard.settings["showConnections"]: standard.prnt("device connected. (%s)"%(deviceName),"con", deviceName)
@@ -73,14 +70,14 @@ async def mainLoop(websocket):
 #█▀▄▀█ ▄▀█ █ █▄░█   █░░ █▀█ █▀█ █▀█
 #█░▀░█ █▀█ █ █░▀█   █▄▄ █▄█ █▄█ █▀▀
 async def main():
-    print("\033c\033[3J\033[95m----ccPhone server 3.0.0----")
+    print("\033c\033[3J\033[95m----ccPhone server 3.0.1----")
     for setting in standard.settings: print(str(setting)+": "+str(standard.settings[setting]))
 
     print("\n---modules---")
     for module in modules: print("{}:\n\t{} api calls\n\tdesc: {}\n\tdocs: {}".format(module,len(modules[module].apiCalls),modules[module].description,modules[module].documentation))
     print("-------------\n")
 
-    async with serve(mainLoop, "", standard.settings["port"], compression=None):
+    async with serve(handler, "", standard.settings["port"], compression=None):
         await asyncio.Future()
 
 asyncio.run(main())
