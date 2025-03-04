@@ -44,7 +44,7 @@
 
 
 ## steps to use ws as client:
-connect to websocket
+connect to websocket<br />
 send device name
 ### send "accounts-create"
 send JSON {"username":username, "password":password}<br />

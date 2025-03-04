@@ -37,7 +37,7 @@ returns account dictionary if success, otherwise returns nothing
 
 
 ## steps to use ws as client:
-connect to websocket
+connect to websocket<br />
 send device name
 ### send "bank-create"
 send account name

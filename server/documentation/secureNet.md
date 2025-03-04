@@ -1,29 +1,24 @@
---secureNet api documentation--
+# secureNet api documentation
 
-terms:
-    hostname/dns address: the name devices will get called by, like sNet.send("hostname", message), its address
+## terms:
+`hostname/dns address` the name devices will get called by, like sNet.send("hostname", message), its address<br />
+`static connection` registered once, key will never change. for reserving host names for specific people
+`temp/dynamic connection` registered at connection, and deleted after diconnecting.<br />
+`key` key used for authentication<br />
+`channel` channel to listen to, formatted as a list of strings, if a message is sent on a channel not being listened to it wont be recieved.<br />
+`recieveBroadcasts` wether to recieve broadcasts or not, if False broadcasts will be ignored and will only recieve direct messages<br />
+`activeDnsConnections` a dictionary of hostname: connection (the class)
 
-    static connection: registered once, key will never change. for reserving host names for specific people
-    temp/dynamic connection: registered at connection, and deleted after diconnecting.
+## api uses
+`snet-registerStatic` for registering a static dns address.<br />
+`snet-connectTemp` registering and connecting to a temporary dns address<br />
+`snet-connectStatic` connecting to a already registered static dns address<br />
+`snet-disconnect` disconnect a hostname connection<br />
+`snet-removeStatic` remove a static dns address<br />
+`snet-sendMsg` send a message to a hostname address on a channel<br />
+`snet-broadcast` broadcast a message to an entire channel
 
-    key: key used for authentication
-    channel: any string, what channel to listen to. messages sent will provide these, the standard is just "".
-        connections are able to listen to multible channels at a time, they are provided as ["c1","c2"]
-    recieveBroadcasts: to set wether able to recive broadcasts or not, an anti spam feature. setting this to False
-        will make you only able to send messages directly sent to an adress, and not all devices on a channel
-
-    activeDnsConnections: a dictionary of hostname: connection (the class)
-
-api uses:
-    snet-registerStatic: for registering a static dns address.
-    snet-connectTemp: registering and connecting to a temporary dns address
-    snet-connectStatic: connecting to a already registered static dns address
-    snet-disconnect: disconnect a hostname connection
-    snet-removeStatic: remove a static dns address
-    snet-sendMsg: send a message to a hostname address on a channel
-    snet-broadcast: broadcast a message to an entire channel
-
-classes for other modules:
+## classes for other modules:
     connection:
         a connection, put into the list activeDnsConnections
         .ws = the websocket connection to send to
