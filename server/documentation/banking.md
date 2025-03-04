@@ -24,42 +24,33 @@
 
 ## python library methods
 `transferMoney(senderId,senderKey,reciverId,amount)`<br />
-sends money between accounts
+sends money between accounts<br />
 returns "success" if worked, otherwise will return string of reason why
 
 `createAccount(name)`<br />
-creates bank account, name is the account display name
+creates bank account, name is the account display name<br />
 returns {"id":id,"key":key}
 
 `loadAccount(id,key)`<br />
-loads bank account information
+loads bank account information<br />
 returns account dictionary if success, otherwise returns nothing
 
 
-steps to use as client:
+## steps to use ws as client:
 connect to websocket
-    send "bank-create"
-        send account name
-        recieve JSON {"id":id, "key":key}
+send device name
+### send "bank-create"
+send account name
+recieve JSON {"id":id, "key":key}
 
-    send "bank-load"
-        send JSON {"id":id, "key":key}
-        if valid login
-            recieve JSON account dictionary
-        else
-            recieve "invalid login info!"
+### send "bank-load"
+send JSON {"id":id, "key":key}
+recieve JSON account dictionary if success, otherwise "invalid login info!"
 
-    send "bank-nameChange"
-        send JSON {"id":id, "key":key, "name":newName}
-        
-        if valid login 
-            recieve "success"
-        else
-            recieve "invalid login info!"
+### send "bank-nameChange"
+send JSON {"id":id, "key":key, "name":newName}
+recieve "success" or "invalid login info!"
 
-    send "bank-transfer"
-        send JSON {"id":senderId, "key":senderKey, "reciever":recieverId, "amount": amountToSend}
-        if all info valid:
-            recieve "success"
-        else
-            recieve reasoning behind failure (string)
+### send "bank-transfer"
+send JSON {"id":senderId, "key":senderKey, "reciever":recieverId, "amount": amountToSend}
+if all info valid recieve "success", otherwise recieve string for reason of failure
