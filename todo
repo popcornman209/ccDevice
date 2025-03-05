@@ -1,11 +1,17 @@
-secureNet
+finish testing secureNet
+update config file to toml
 have an autoBoot for bootloader
-apt for phones
-update update.lua and sha to be update.download instead od download
-accounts client
 notifications
+
 device remote/billystat
+atm's, stores
+accounts client
+casino/gambling app
+
+overhaul update to use json instead of 200 websocket messages
+dependancies for programs
 app store purchases
+update update.lua and sha to be update.download instead of download
 
 billies
 better mining program
