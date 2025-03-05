@@ -34,14 +34,13 @@ class connection:
         return True #success
 
 class serverConnection(connection): #fake connection, cant recieve messages
-    def __init__(self, hostName, key, messageRecievedMethod=None):
-        super().__init__(None,hostName,key,False,[]) #initiate
+    def __init__(self, hostName, key, recieveBroadcasts, listeningChannels, messageRecievedMethod=None):
+        super().__init__(None,hostName,key,recieveBroadcasts,listeningChannels) #initiate
         self.rcvMethod = messageRecievedMethod #sets the recieving message method
 
     def rcvMsg(self,sender,message,channel,broadcast): #recieve message
         if self.rcvMethod != None: #if able to recieve messages
-            self.rcvMethod(sender,message,channel,broadcast) #do so
-            return True #sucess
+            return self.rcvMethod(sender,message,channel,broadcast) #do so
         else: return False #failure
 
 

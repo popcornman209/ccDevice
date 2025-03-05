@@ -18,61 +18,96 @@
 `snet-sendMsg` send a message to a hostname address on a channel<br />
 `snet-broadcast` broadcast a message to an entire channel
 
-## classes for other modules:
-    connection:
-        a connection, put into the list activeDnsConnections
-        .ws = the websocket connection to send to
-        .hName = the hostname, a string and index in activeDnsConnections
-        .key = the key used for authenticating
-        .rcvBroad = wether to recieve broadcasts or not
-    
-    serverConnection:
-        a connection based class, same variable names. used for server based things, can only send and not recieve (for now).
-        .ws = None, no websocket to be sent to.
-        .rcvBroad = False, wont recieve any broadcasts.
-        .channels = [], will not recieve anything on any channel
+## classes:
+### connection(websocket, hostName, key, recieveBroadcasts, listeningChannels)
+a connection, put into the list activeDnsConnections<br />
+`.ws` = the websocket connection to send to<br />
+`.hName` = the hostname, a string and index in activeDnsConnections<br />
+`.key` = the key used for authenticating<br />
+`.rcvBroad` = wether to recieve broadcasts or not<br />
+`.channels` = channels to listen to<br />
+`.rcvMsg(self,sender,message,channel,broadcast)` for recieving messages<br />
+`.sendMsg(self,message,reciever,channel="")` for sending messages to other clients<br />
+`.broadcast(self,message,channel="")` broadcast message to entire channel
 
-functions for other modules:
-    verifyDNS(hostName, key):
-        validates a hostname and checks if its connected
-        returns True or False if the information is correct.
+### serverConnection(hostName, key, recieveBroadcasts, listeningChannels, messageRecievedMethod=None):
+a connection based class, same variable names. used for server based things.<br />
+`.ws` = None, no websocket to be sent to.<br />
+`.rcvMethod(sender,message,channel,broadcast)` if provided will handle incomming messages, is messageRecievedMethod in `__init__` arguments
 
-    registerStaticDNS(hostName):
-        registers a static hostname
-        returns validation key if successful, False if hostname already exists
+## python library methods
+`verifyDNS(hostName, key)`<br />
+validates a hostname and checks if its connected<br />
+returns True or False if the information is correct.
 
-    removeStaticDNS(hostName, key):
-        deletes a static ip address
-        returns True or False if successful
+`registerStaticDNS(hostName)`<br />
+    registers a static hostname<br />
+    returns validation key if successful, False if hostname already exists
 
-    connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannelss = []):
-        registers and connects to temp dynmaic hostname
-        returns authentication key if successful, False if failure
+`removeStaticDNS(hostName, key)`<br />
+    deletes a static address<br />
+    returns True or False if successful
 
-    connectStaticDNS(hostName, key, websocket, recieveBroadcasts = True, listeningChannelss = []):
-        connect to a static already existing hostname
-        returns True or False if successful
+`connectTempDNS(hostName, websocket, recieveBroadcasts = True, listeningChannelss = [])`<br />
+    registers and connects to temp dynmaic hostname<br />
+    returns authentication key if successful, False if failure
 
-    diconnectDNS(hostName,key):
-        disconnects a connected hostname
-        if said hostname is temporary, this removes its authentication key forever. hostname will have to be registered again.
-        returns True or False if successful
+`connectStaticDNS(hostName, key, websocket, recieveBroadcasts = True, listeningChannelss = [])`<br />
+    connect to a static already existing hostname<br />
+    returns True or False if successful
+
+`diconnectDNS(hostName,key)`<br />
+    disconnects a connected hostname<br />
+    if said hostname is temporary, this removes its authentication key forever. hostname will have to be registered again.<br />
+    returns True or False if successful
 
 
-steps to use as client:
-connect to websocket
-    send device name
-
-    send "snet-registerStatic"
-    
-    send "snet-connectTemp"
-    
-    send "snet-connectStatic"
-    
-    send "snet-disconnect"
-    
-    send "snet-removeStatic"
-    
-    send "snet-sendMsg"
-    
-    send "snet-broadcast"
+## steps to use as client:
+connect to websocket<br />
+send device name
+### send "snet-registerStatic"
+send hostname<br />
+recieve key or `"failure"`
+### send "snet-connectTemp"
+send hostname<br />
+recieve key or `"failure"`
+### send "snet-connectStatic"
+send json:
+```json
+{
+    "hostName": "hostName",
+    "key": "authKey",
+    "recieveBroadcasts": true/false,
+    "channels": ["channels","to","listen","to"]
+}
+```
+recieve `"success"` or `"failure"`
+### send "snet-disconnect"
+send json `{"hostName": hostName, "key": authKey}`<br />
+recieve `"success"` or `"failure"`
+### send "snet-removeStatic"
+send json `{"hostName": hostName, "key": authKey}`<br />
+recieve `"success"` or `"failure"`
+### send "snet-sendMsg"
+send json:
+```json
+{
+    "hostName": "hostName",
+    "key": "authKey",
+    "message": "messageToSend",
+    "reciever": "reciever hostName",
+    "channel": "channel"
+}
+```
+recieve `"success"` or `"failure"`
+### send "snet-broadcast"
+send json:
+```json
+{
+    "hostName": "hostName",
+    "key": "authKey",
+    "message": "messageToSend",
+    "channel": "channel"
+}
+```
+recieve `"success"` or `"failure"`
