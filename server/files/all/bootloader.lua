@@ -1,3 +1,17 @@
+binds = {
+    ["up"] = 265,
+    ["down"] = 264,
+    ["enter"] = 257
+}
+
+if os.about ~= nil then -- if using craft os pc emulator
+    binds = {
+        ["up"] = 200,
+        ["down"] = 208,
+        ["enter"] = 28
+    }
+end
+
 resX, resY = term.getSize()
 function clear()
     term.setBackgroundColor(colors.black)
@@ -8,6 +22,13 @@ function clear()
     term.setCursorPos(1,resY)
     term.setBackgroundColor(colors.black)
     term.write("(up/down/enter): navigate")
+end
+
+if settings.get("defaultBoot") ~= nil then
+    if fs.exists(settings.get("defaultBoot")) then
+        shell.run(settings.get("defaultBoot"))
+        return
+    end
 end
 
 if fs.exists("boot") then drives = {"boot"} else drives = {} end
@@ -49,19 +70,19 @@ while going do
     term.setCursorPos(2,cursorPos+2-scroll)
     print(">")
     event, key = os.pullEvent("key")
-    if key == 265 then
+    if key == binds["up"] then
         cursorPos = math.max(cursorPos-1,1)
         if cursorPos < 1+scroll then
             scroll = scroll-1
             drawBoot(scroll)
         end
-    elseif key == 264 then
+    elseif key == binds["down"] then
         cursorPos = math.min(cursorPos+1,#bootNames)
         if cursorPos > (resY-4)+scroll then
             scroll = scroll+1
             drawBoot(scroll)
         end
-    elseif key == 257 then
+    elseif key == binds["enter"] then
         going = false
     end
 end

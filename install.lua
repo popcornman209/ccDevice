@@ -92,7 +92,7 @@ if choice == 1 then
             print("could not connect!")
             os.sleep(2)
         else
-            ws.send("installingPhone")
+            ws.send("installer")
             ws.send("close")
             connecting = false
         end
@@ -155,7 +155,7 @@ elseif choice == 2 then
             print("could not connect!")
             os.sleep(2)
         else
-            ws.send("installingPhone")
+            ws.send("installer")
             ws.send("close")
             connecting = false
         end

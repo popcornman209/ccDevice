@@ -1,6 +1,6 @@
 finish testing secureNet
 update config file to toml
-have an autoBoot for bootloader
+settings page for bootloader
 notifications
 
 device remote/billystat
