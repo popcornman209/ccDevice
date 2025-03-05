@@ -48,6 +48,30 @@ function getChoice(choices)
     end
 end
 
+function selectWebsocket()
+    while true do
+        choice = getChoice({"default server adress","custom..."})
+        if choice == 2 then
+            clear("enter to continue.")
+            term.setCursorPos(1,2)
+            print("server ip: ")
+            address = read()
+        else address = "ws://127.0.0.1:42069/" end
+
+        ws = http.websocket(address)
+        if ws == false then
+            clear("wait 2 seconds...")
+            term.setCursorPos(1,2)
+            print("could not connect!")
+            os.sleep(2)
+        else
+            ws.send("installer")
+            ws.send("close")
+            ws.close()
+            return address
+        end
+    end
+end
 
 choice = getChoice({"phone","computer"})
 if choice == 1 then
@@ -75,28 +99,7 @@ if choice == 1 then
     print("phone name: ")
     os.setComputerLabel(read())
 
-    connecting = true
-    while connecting do
-        choice = getChoice({"default server adress","custom..."})
-        if choice == 2 then
-            clear("enter to continue.")
-            term.setCursorPos(1,2)
-            print("server ip: ")
-            address = read()
-        else address = "ws://127.0.0.1:42069/" end
-
-        ws = http.websocket(address)
-        if ws == false then
-            clear("wait 2 seconds...")
-            term.setCursorPos(1,2)
-            print("could not connect!")
-            os.sleep(2)
-        else
-            ws.send("installer")
-            ws.send("close")
-            connecting = false
-        end
-    end
+    address = selectWebsocket()
 
     settings.set("servers", {main=address})
     settings.set("device", "phone")
@@ -138,28 +141,7 @@ elseif choice == 2 then
     print("device name: ")
     os.setComputerLabel(read())
 
-    connecting = true
-    while connecting do
-        choice = getChoice({"default server adress","custom..."})
-        if choice == 2 then
-            clear("enter to continue.")
-            term.setCursorPos(1,2)
-            print("server ip: ")
-            address = read()
-        else address = "ws://127.0.0.1:42069/" end
-
-        ws = http.websocket(address)
-        if ws == false then
-            clear("wait 2 seconds...")
-            term.setCursorPos(1,2)
-            print("could not connect!")
-            os.sleep(2)
-        else
-            ws.send("installer")
-            ws.send("close")
-            connecting = false
-        end
-    end
+    address = selectWebsocket()
 
     settings.set("servers", {main=address})
     settings.set("device", "computer")

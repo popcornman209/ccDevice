@@ -2,6 +2,10 @@ update config file to toml
 settings page for bootloader
 notifications
 
+overhaul phone running programs system
+render function with submenues scrolling etc
+do things as renderLib.getChoice instead of just getChoice as a global variable
+
 device remote/billystat
 atm's, stores
 accounts client
