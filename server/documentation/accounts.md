@@ -52,11 +52,11 @@ recive "success" or failure reason
 
 ### send "accounts-load"
 send JSON {"username":username, "password":password}<br />
-recieve JSON account dictionary or "failed"
+receive JSON account dictionary or "failed"
 
 ### send "accounts-changePass"
 send JSON {"username":username, "password":password, "newPassword":newPass}<br />
-recieve "success" or "failed"
+receive "success" or "failed"
 
 ### send "accounts-sendNotif"
 send JSON {"username":username, "password":password,"notification":notification text, "app": app id or "none"}<br />
@@ -64,7 +64,7 @@ recive notification id or "failed"
 
 ### send "accounts-readNotif"
 send JSON {"username":username, "password":password,"notification":notification id}<br />
-recieve "success" or "failed"
+receive "success" or "failed"
 
 ### send "accounts-getNotifList"
 send JSON {"username":username, "password":password}

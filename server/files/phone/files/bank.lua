@@ -114,9 +114,9 @@ if ws ~= false then
                         term.clear()
                         term.setCursorPos(1,1)
                         term.write("$"..accountData["balance"])
-                        write("reciever id:", 2)
+                        write("receiver id:", 2)
                         term.setCursorPos(2,3)
-                        reciever = read()
+                        receiver = read()
                         term.clear()
                         term.setCursorPos(1,1)
                         term.write("$"..accountData["balance"])
@@ -128,7 +128,7 @@ if ws ~= false then
                         message = {
                             id=id,
                             key=key,
-                            reciever=reciever,
+                            receiver=receiver,
                             amount=tonumber(amount)
                         }
                         ws.send(textutils.serialiseJSON(message))
@@ -137,7 +137,7 @@ if ws ~= false then
                         if success == "success" then
                             term.setBackgroundColor(bgColor)
                             term.clear()
-                            write("sent $"..amount.." to "..reciever,2)
+                            write("sent $"..amount.." to "..receiver,2)
                             os.sleep(2)
                         else
                             term.setBackgroundColor(bgColor)

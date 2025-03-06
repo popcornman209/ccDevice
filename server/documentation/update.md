@@ -14,27 +14,27 @@ connect to websocket<br />
 send device name
 ### send "version"
 send app id, ex: all/apt<br />
-recieve version or "goodbye" if app doesnt exist
+receive version or "goodbye" if app doesnt exist
 ### send "download"
 send app id
 if app exists
     for each file:
         if file exists
-            recieve fileData
-            recieve fileSavePath
+            receive fileData
+            receive fileSavePath
         else
-            recieve "goodbye"
+            receive "goodbye"
             connection close
-    recieve "complete"
+    receive "complete"
 
     for each required directories
-        recieve folderPath
-    recieve "complete"
+        receive folderPath
+    receive "complete"
 
 ### send "store"
 send device
     for each app for device
-        recieve name
-        recieve id
-        recieve description
-    recieve "complete"
+        receive name
+        receive id
+        receive description
+    receive "complete"

@@ -16,7 +16,7 @@
 connect to websocket
 send device name
 ### send "currency-get"
-recieve currency, ei "minecraft:diamond"
+receive currency, ei "minecraft:diamond"
 
 ### send "convertTo"
 send amount of money to convert<br />

@@ -15,7 +15,7 @@ def transferMoney(sId,sKey,rId,amount):
                     with open("moduleFiles/bank/%s"%(sId),"w") as f:
                         json.dump(details,f) #save details
                     with open("moduleFiles/bank/%s"%(rId),"r") as f:
-                        details = json.load(f) #load reciever account
+                        details = json.load(f) #load receiver account
                     details["balance"] += amount #add money
                     details["transactions"].append("$%s from %s"%(amount,sId)) #add transaction
                     with open("moduleFiles/bank/%s"%(rId),"w") as f:
@@ -106,11 +106,11 @@ async def WSAPItransferMoney(args): #transfer money between accounts
     message = json.loads(await websocket.recv())
     id = message["id"] #id for sender
     key = message["key"] #key for sender
-    reciever = message["reciever"] #reciever of money
+    receiver = message["receiver"] #receiver of money
     amount = message["amount"] #amount of money to send
 
-    s = transferMoney(id,key,reciever,amount)
-    if s == "success": standard.prnt("sent $%s from %s to %s."%(str(amount),id,reciever),"norm", deviceName)
+    s = transferMoney(id,key,receiver,amount)
+    if s == "success": standard.prnt("sent $%s from %s to %s."%(str(amount),id,receiver),"norm", deviceName)
     else: standard.prnt("attemped send money: "+s,"err", deviceName)
     await websocket.send(s) #compelte transaction
 

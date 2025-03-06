@@ -41,16 +41,16 @@ connect to websocket<br />
 send device name
 ### send "bank-create"
 send account name
-recieve JSON {"id":id, "key":key}
+receive JSON {"id":id, "key":key}
 
 ### send "bank-load"
 send JSON {"id":id, "key":key}
-recieve JSON account dictionary if success, otherwise "invalid login info!"
+receive JSON account dictionary if success, otherwise "invalid login info!"
 
 ### send "bank-nameChange"
 send JSON {"id":id, "key":key, "name":newName}
-recieve "success" or "invalid login info!"
+receive "success" or "invalid login info!"
 
 ### send "bank-transfer"
-send JSON {"id":senderId, "key":senderKey, "reciever":recieverId, "amount": amountToSend}
-if all info valid recieve "success", otherwise recieve string for reason of failure
+send JSON {"id":senderId, "key":senderKey, "receiver":receiverId, "amount": amountToSend}
+if all info valid receive "success", otherwise receive string for reason of failure
