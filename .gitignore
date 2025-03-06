@@ -1,4 +1,5 @@
 server/moduleFiles/bank
 server/moduleFiles/accounts
+server/moduleFiles/secureNet
 server/logs
 venv/
