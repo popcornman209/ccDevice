@@ -24,13 +24,16 @@ class connection:
         else: return False #failure
     
     async def sendMsg(self,message,reciever,channel=""):
-        if type(reciever) == str: rcv = activeDnsConnections[reciever] #if hostname provided
+        if type(reciever) == str:
+            if reciever not in activeDnsConnections: return False
+            rcv = activeDnsConnections[reciever] #if hostname provided
         else: rcv = reciever #if connection object provided
         return await rcv.rcvMsg(self,message,channel,False) #send message
     
     async def broadcast(self,message,channel=""): #broadcast message
         for connection in activeDnsConnections: #go through all connections
-            await connection.rcvMsg(self,message,channel,True) #broadcast a message to them
+            if connection != self.hName: #if not the sender
+                await activeDnsConnections[connection].rcvMsg(self,message,channel,True) #broadcast a message to them
         return True #success
 
 class serverConnection(connection): #fake connection, cant recieve messages
@@ -165,12 +168,13 @@ async def WSAPISendMsg(args): #send message
 
     message = json.loads(await websocket.recv())
     if verifyDNS(message["hostName"],message["key"]): #if valid
-        success = await activeDnsConnections[message["hostName"]].sendMsg(message["message"],message["reciever"],channel=message["channel"])
-        if success: await websocket.send("success")
-        else: await websocket.send("failure")
-    else:
-        await websocket.send("failure")
-        standard.prnt(f"failed to send message from {message["hostName"]}","err", deviceName)
+        if message["hostName"] in activeDnsConnections:
+            success = await activeDnsConnections[message["hostName"]].sendMsg(message["message"],message["reciever"],channel=message["channel"])
+            if success:
+                await websocket.send("success")
+                return
+    await websocket.send("failure")
+    standard.prnt(f"failed to send message from {message["hostName"]}","err", deviceName)
 
 async def WSAPIBroadcast(args): #broadcast message
     websocket = args["websocket"]

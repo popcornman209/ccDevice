@@ -69,7 +69,13 @@ send device name
 send hostname<br />
 recieve key or `"failure"`
 ### send "snet-connectTemp"
-send hostname<br />
+```json
+{
+    "hostName": "hostName",
+    "recieveBroadcasts": true/false,
+    "channels": ["channels","to","listen","to"]
+}
+```
 recieve key or `"failure"`
 ### send "snet-connectStatic"
 send json:
