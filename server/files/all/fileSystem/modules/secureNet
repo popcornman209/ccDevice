@@ -13,16 +13,11 @@ local function connectToWS(ws)
     return ws
 end
 
-local function registerStaticAddress(hostName,channels,receiveBroadcasts,ws)
+local function registerStaticAddress(hostName, ws)
     ws = connectToWS(ws)
     if ws then
         ws.send("snet-registerStatic")
-        message = {
-            hostName = hostName,
-            channels = channels,
-            receiveBroadcasts = receiveBroadcasts
-        }
-        ws.send(textutils.serialiseJSON(message))
+        ws.send(hostName)
         key = ws.receive()
         ws.send("close")
         ws.close()
@@ -48,13 +43,13 @@ local function removeStaticAddress(hostName,key,ws)
     return false
 end
 
-local function connectTempAddress(hostName,receiveBroadcasts,channels,ws)
+local function connectTempAddress(hostName,recieveBroadcasts,channels,ws)
     ws = connectToWS(ws)
     if ws then
         ws.send("snet-connectTemp")
         message = {
             hostName = hostName,
-            receiveBroadcasts = receiveBroadcasts,
+            recieveBroadcasts = recieveBroadcasts,
             channels = channels
         }
         ws.send(textutils.serialiseJSON(message))
@@ -64,14 +59,14 @@ local function connectTempAddress(hostName,receiveBroadcasts,channels,ws)
     return false, nil
 end
 
-local function connectStaticAddress(hostName,key,receiveBroadcasts,channels,ws)
+local function connectStaticAddress(hostName,key,recieveBroadcasts,channels,ws)
     ws = connectToWS(ws)
     if ws then
         ws.send("snet-connectStatic")
         message = {
             hostName = hostName,
             key = key,
-            receiveBroadcasts = receiveBroadcasts,
+            recieveBroadcasts = recieveBroadcasts,
             channels = channels
         }
         ws.send(textutils.serialiseJSON(message))
@@ -96,7 +91,7 @@ local function disconnectAddress(hostName,key,ws)
     return false
 end
 
-local function send(hostName,key,receiver,message,channel,ws)
+local function send(hostName,key,reciever,message,channel,ws)
     ws = connectToWS(ws)
     if channel == nil then channel = "" end
     if ws then
@@ -104,7 +99,7 @@ local function send(hostName,key,receiver,message,channel,ws)
         message = {
             hostName = hostName,
             key = key,
-            receiver = receiver,
+            reciever = reciever,
             channel = channel,
             message = message
         }
@@ -133,13 +128,6 @@ local function broadcast(hostName,key,message,channel,ws)
     return false
 end
 
-local function receive(ws,timeout)
-    message = ws.receive(timeout)
-    if message == nil then return false end
-    data = textutils.unserialiseJSON(message)
-    return data["sender"],data["message"],data["channel"],data["broadcasted"]
-end
-
 return{
     registerStaticAddress = registerStaticAddress,
     removeStaticAddress = removeStaticAddress,
@@ -147,6 +135,5 @@ return{
     connectStaticAddress = connectStaticAddress,
     disconnectAddress = disconnectAddress,
     send = send,
-    broadcast = broadcast,
-    receive = receive
+    broadcast = broadcast
 }

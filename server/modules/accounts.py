@@ -3,8 +3,8 @@ import standard, os, json,random
 if not os.path.isdir("moduleFiles/accounts"): os.mkdir("moduleFiles/accounts")
 
 def createAccount(username,password): #creates account, returns nothing if account already exists
-    account = {"pass":password,"notifications":{},"ownedApps":[]}
-    if not os.path.exists("moduleFiles/accounts/"+username): #check if account doesnt already exist
+    account = {"pass":password,"notifications":{},"ownedApps":[]} #check if username is valid
+    if not os.path.exists("moduleFiles/accounts/"+username) and standard.usernameCheck(username): #check if account doesnt already exist
         saveAccount(username,account) #saves new account
         return True #return success
     else: return False
@@ -14,7 +14,7 @@ def saveAccount(username,account): #saves account file
         json.dump(account,f) #saves it to account file
     
 def loadAccount(username,password,byPassPassword = False): #load account info, returns nothing if login info incorrect
-    if os.path.exists("moduleFiles/accounts/"+username): #check if account exists
+    if os.path.exists("moduleFiles/accounts/"+username) and standard.usernameCheck(username): #check if account exists
         with open("moduleFiles/accounts/%s"%(username),"r") as f: #opens file
             account = json.load(f) #load account info
         if account["pass"] == password or byPassPassword: #check account password

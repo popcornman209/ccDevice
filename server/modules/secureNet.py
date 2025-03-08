@@ -54,7 +54,7 @@ def verifyDNS(hostName, key): #authenticate connection
     return False #failure
 
 def registerStaticDNS(hostName): #register a static dns address
-    if hostName not in os.listdir("moduleFiles/secureNet"): #if not already taken
+    if hostName not in os.listdir("moduleFiles/secureNet") and standard.usernameCheck(hostName): #if not already taken
         key = standard.randString(standard.settings["secureNetKeyLength"]) #generate a key
         with open("moduleFiles/secureNet/"+hostName,"w") as f: #save the data
             f.write(key) #write the key
@@ -62,7 +62,7 @@ def registerStaticDNS(hostName): #register a static dns address
     else: return False #failure
 
 def removeStaticDNS(hostName, key): #remove static dns
-    if hostName in os.listdir("moduleFiles/secureNet"): #if exists
+    if hostName in os.listdir("moduleFiles/secureNet") and standard.usernameCheck(hostName): #if exists
         with open("moduleFiles/secureNet/"+hostName,"r") as f: #open file
             if f.read() != key: return False #if invalid cancel
         os.remove("moduleFiles/secureNet/"+hostName) #remove the file
@@ -80,7 +80,7 @@ def connectTempDNS(hostName, websocket, receiveBroadcasts = True, listeningChann
     else: return False
 
 def connectStaticDNS(hostName, key, websocket, receiveBroadcasts = True, listeningChannels = []): #connect to a static dns address
-    if hostName in os.listdir("moduleFiles/secureNet"): #if exists
+    if hostName in os.listdir("moduleFiles/secureNet") and standard.usernameCheck(hostName): #if exists
         with open("moduleFiles/secureNet/"+hostName,"r") as f: #open file
             if f.read() != key: return False #if invalid cancel
         activeDnsConnections[hostName] = connection(websocket, hostName, key, receiveBroadcasts, listeningChannels) #connect the address

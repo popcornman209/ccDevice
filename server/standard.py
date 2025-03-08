@@ -1,5 +1,5 @@
 from datetime import datetime
-import string,random
+import string,random,re
 
 settings = {}
 with open("config.txt","r") as f:
@@ -19,6 +19,9 @@ colors = { #terminal colors
 def randString(length):
   characters = string.ascii_letters + string.digits
   return ''.join(random.choice(characters) for i in range(length))
+
+def usernameCheck(username):
+    return bool(re.fullmatch(r"[a-zA-Z0-9._]+", username))
 
 def prnt(message, type, device): #printing function for logs and stuff
     if type != "spam" or settings["showSpam"]:

@@ -4,7 +4,7 @@ if not os.path.isdir("moduleFiles/bank"): os.mkdir("moduleFiles/bank")
 
 def transferMoney(sId,sKey,rId,amount):
     if amount >= 0: #if sending something (no negative amounts)
-        if os.path.exists("moduleFiles/bank/%s"%(sId)) and os.path.exists("moduleFiles/bank/%s"%(rId)): #if both accounts exist
+        if os.path.exists("moduleFiles/bank/%s"%(sId)) and os.path.exists("moduleFiles/bank/%s"%(rId)) and standard.usernameCheck(sId) and standard.usernameCheck(rId): #if both accounts exist
             with open("moduleFiles/bank/%s"%(sId),"r") as f:
                 details = json.load(f) #load sender account info
             if details["key"] == sKey: #if key is valid
@@ -39,7 +39,7 @@ def createAccount(name):
     return {"id":id,"key":key}
 
 def loadAccount(id,key): #returns nothing if information invalid
-    if os.path.exists("moduleFiles/bank/%s"%(id)): #check if account exists
+    if os.path.exists("moduleFiles/bank/%s"%(id)) and standard.usernameCheck(id): #check if account exists
         with open("moduleFiles/bank/%s"%(id),"r") as f:
             details = json.load(f) #load account info
         if details["key"] == key: #check account id

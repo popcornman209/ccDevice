@@ -12,6 +12,10 @@ for file = 1,#startups do
     shell.run("craftOsStartup/"..startups[file])
 end
 
+settings.clear()
+if fs.exists(".settings") then
+    settings.load(".settings")
+end
 if settings.get("motd.enable") then -- motd
     shell.run("motd")
 end
