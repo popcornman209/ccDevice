@@ -43,13 +43,13 @@ local function removeStaticAddress(hostName,key,ws)
     return false
 end
 
-local function connectTempAddress(hostName,recieveBroadcasts,channels,ws)
+local function connectTempAddress(hostName,receiveBroadcasts,channels,ws)
     ws = connectToWS(ws)
     if ws then
         ws.send("snet-connectTemp")
         message = {
             hostName = hostName,
-            recieveBroadcasts = recieveBroadcasts,
+            receiveBroadcasts = receiveBroadcasts,
             channels = channels
         }
         ws.send(textutils.serialiseJSON(message))
@@ -59,14 +59,14 @@ local function connectTempAddress(hostName,recieveBroadcasts,channels,ws)
     return false, nil
 end
 
-local function connectStaticAddress(hostName,key,recieveBroadcasts,channels,ws)
+local function connectStaticAddress(hostName,key,receiveBroadcasts,channels,ws)
     ws = connectToWS(ws)
     if ws then
         ws.send("snet-connectStatic")
         message = {
             hostName = hostName,
             key = key,
-            recieveBroadcasts = recieveBroadcasts,
+            receiveBroadcasts = receiveBroadcasts,
             channels = channels
         }
         ws.send(textutils.serialiseJSON(message))
@@ -91,7 +91,7 @@ local function disconnectAddress(hostName,key,ws)
     return false
 end
 
-local function send(hostName,key,reciever,message,channel,ws)
+local function send(hostName,key,receiver,message,channel,ws)
     ws = connectToWS(ws)
     if channel == nil then channel = "" end
     if ws then
@@ -99,7 +99,7 @@ local function send(hostName,key,reciever,message,channel,ws)
         message = {
             hostName = hostName,
             key = key,
-            reciever = reciever,
+            receiver = receiver,
             channel = channel,
             message = message
         }
@@ -128,6 +128,13 @@ local function broadcast(hostName,key,message,channel,ws)
     return false
 end
 
+local function receive(ws,timeout)
+    message = ws.receive(timeout)
+    if message == nil then return false end
+    data = textutils.unserialiseJSON(message)
+    return data["sender"],data["message"],data["channel"],data["broadcasted"]
+end
+
 return{
     registerStaticAddress = registerStaticAddress,
     removeStaticAddress = removeStaticAddress,
@@ -135,5 +142,6 @@ return{
     connectStaticAddress = connectStaticAddress,
     disconnectAddress = disconnectAddress,
     send = send,
-    broadcast = broadcast
+    broadcast = broadcast,
+    receive = receive
 }

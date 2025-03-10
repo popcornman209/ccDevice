@@ -21,7 +21,19 @@ def randString(length):
   return ''.join(random.choice(characters) for i in range(length))
 
 def usernameCheck(username):
-    return bool(re.fullmatch(r"[a-zA-Z0-9._]+", username))
+    if not (3 <= len(username) <= 32):
+        return False
+
+    # Match allowed pattern
+    pattern = r"^[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?$"
+    if not re.fullmatch(pattern, username):
+        return False
+
+    # Prevent consecutive special characters
+    if re.search(r"[._-]{2,}", username):
+        return False
+
+    return True
 
 def prnt(message, type, device): #printing function for logs and stuff
     if type != "spam" or settings["showSpam"]:
