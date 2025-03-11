@@ -1,0 +1,9 @@
+{
+    name = "deviceController",
+    files = {
+        "bin/DVCTRLSettings",
+        "boot/deviceController",
+        "programs/deviceController",
+        "uninstall/deviceController",
+    },
+}

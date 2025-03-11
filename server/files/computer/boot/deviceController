@@ -1,0 +1,70 @@
+sNet = require("/modules/secureNet")
+
+print("booting...")
+
+settingsToCheck = {
+    "hostName",
+    'key',
+    "dispName",
+    "password",
+    "channel",
+    "redstone side",
+    "mode"
+}
+
+settings.clear()
+if fs.exists("data/deviceController") then
+    settings.load("data/deviceController")
+    for i = 1,#settingsToCheck do
+        if settings.get(settingsToCheck[i]) == nil then
+            print("missing setting: "..settingsToCheck[i])
+            print("some settings are not set, please restart and run DVCTRLSettings in craftOS")
+            return
+        end
+    end
+else
+    print("settings are not set, please restart and run DVCTRLSettings in craftOS")
+    return
+end
+
+print("--device controller--")
+print("hostName: "..settings.get("hostName"))
+print("dispName: "..settings.get("dispName"))
+print("channel: "..settings.get("channel"))
+print("redstone side: "..settings.get("redstone side"))
+print("mode: "..settings.get("mode"))
+print("password: "..settings.get("password"))
+print("\nif you want to change settings, please restart and run DVCTRLSettings in craftOS")
+
+success, ws = sNet.connectStaticAddress(settings.get("hostName"),settings.get("key"),settings.get("channel") ~= "",{settings.get("channel")})
+if success then
+    print("connected to server")
+    while true do
+        sender, message, channel, broadcasted = sNet.receive(ws)
+        if sender then
+            if message == "ping" and broadcasted then
+                print("pinged by "..sender)
+                sNet.send(settings.get("hostName"),settings.get("key"),sender,settings.get("dispName"),settings.get("channel"),ws)
+            elseif message == settings.get("password") then
+                print("activated by "..sender)
+                if settings.get("mode") == "toggle" then
+                    redstone.setOutput(settings.get("redstone side"), not redstone.getOutput(settings.get("redstone side")))
+                else
+                    redstone.setOutput(settings.get("redstone side"), true)
+                    os.sleep(settings.get("mode"))
+                    redstone.setOutput(settings.get("redstone side"), false)
+                end
+            end
+        else
+            print("failed to receive message, server might have shut off.")
+            print("restarting in 5 seconds...")
+            os.sleep(5)
+            os.reboot()
+        end
+    end
+else
+    print("failed to connect to static address, credentials could be wrong or severs off.")
+    print("restarting in 5 seconds...")
+    os.sleep(5)
+    os.reboot()
+end
