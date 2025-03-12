@@ -57,7 +57,7 @@ function getChoice(choices)
                 scroll = scroll+1
                 drawChoices(scroll,choices)
             end
-        elseif key == ["up"] then
+        elseif key == binds["enter"] then
             going = false
             return cursorPos
         end
