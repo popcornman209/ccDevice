@@ -1,5 +1,5 @@
 {
-    "name": "device controller",
-    "id": "deviceController",
+    "name": "device receiver",
+    "id": "deviceReceiver",
     "desc": "can toggle or temporaily activate redstone connections wirelessly through secureNet"
 }

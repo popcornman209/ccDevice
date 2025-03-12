@@ -1,0 +1,11 @@
+{
+    "id": "deviceReceiver",
+    "files": [
+        ["files/computer/boot/deviceReceiver","boot/deviceReceiver"],
+        ["files/computer/bin/deviceReceiverSettings","bin/deviceReceiverSettings"],
+        ["files/computer/programs/deviceReceiver","programs/deviceReceiver"],
+        ["files/computer/uninstall/deviceReceiver","uninstall/deviceReceiver"]
+    ],
+    "directories": ["data"],
+    "version": "1.0.0"
+}

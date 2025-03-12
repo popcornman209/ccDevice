@@ -13,28 +13,25 @@ settingsToCheck = {
 }
 
 settings.clear()
-if fs.exists("data/deviceController") then
-    settings.load("data/deviceController")
+if fs.exists("data/deviceReceiver") then
+    settings.load("data/deviceReceiver")
     for i = 1,#settingsToCheck do
         if settings.get(settingsToCheck[i]) == nil then
             print("missing setting: "..settingsToCheck[i])
-            print("some settings are not set, please restart and run DVCTRLSettings in craftOS")
+            print("some settings are not set, please restart and run deviceReceiverSettings in craftOS")
             return
         end
     end
 else
-    print("settings are not set, please restart and run DVCTRLSettings in craftOS")
+    print("settings are not set, please restart and run deviceReceiverSettings in craftOS")
     return
 end
 
-print("--device controller--")
-print("hostName: "..settings.get("hostName"))
-print("dispName: "..settings.get("dispName"))
-print("channel: "..settings.get("channel"))
-print("redstone side: "..settings.get("redstone side"))
-print("mode: "..settings.get("mode"))
-print("password: "..settings.get("password"))
-print("\nif you want to change settings, please restart and run DVCTRLSettings in craftOS")
+print("--device reciever--")
+for i = 1,#settingsToCheck do
+    print(settingsToCheck[i]..": "..settings.get(settingsToCheck[i]))
+end
+print("\nif you want to change settings, please restart and run deviceReceiverSettings in craftOS")
 
 success, ws = sNet.connectStaticAddress(settings.get("hostName"),settings.get("key"),settings.get("channel") ~= "",{settings.get("channel")})
 if success then
@@ -47,6 +44,7 @@ if success then
                 sNet.send(settings.get("hostName"),settings.get("key"),sender,settings.get("dispName"),settings.get("channel"),ws)
             elseif message == settings.get("password") then
                 print("activated by "..sender)
+                sNet.send(settings.get("hostName"),settings.get("key"),sender,"success",settings.get("channel"),ws)
                 if settings.get("mode") == "toggle" then
                     redstone.setOutput(settings.get("redstone side"), not redstone.getOutput(settings.get("redstone side")))
                 else

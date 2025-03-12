@@ -1,0 +1,5 @@
+{
+    "name": "device remote",
+    "id": "deviceRemote",
+    "desc": "activates device receievers with a redstone input"
+}

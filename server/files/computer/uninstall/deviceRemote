@@ -1,0 +1,9 @@
+{
+    name = "deviceRemote",
+    files = {
+        "bin/deviceRemoteSettings",
+        "boot/deviceRemote",
+        "programs/deviceRemote",
+        "uninstall/deviceRemote",
+    },
+}

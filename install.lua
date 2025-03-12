@@ -89,6 +89,26 @@ function selectWebsocket()
     end
 end
 
+function removeInstall()
+    if fs.exists("install.lua") then
+        choice = getChoice({"remove install file","keep it"})
+        if choice == 1 then
+            fs.delete("install.lua")
+            clear("wait 2 seconds.")
+            term.setCursorPos(1,2)
+            print("restarting...")
+            os.sleep(2)
+            os.reboot()
+        else
+            clear("wait 2 seconds.")
+            term.setCursorPos(1,2)
+            print("restarting...")
+            os.sleep(2)
+            os.reboot()
+        end
+    end
+end
+
 choice = getChoice({"phone","computer"})
 if choice == 1 then
     term.clear()
@@ -117,6 +137,7 @@ if choice == 1 then
 
     address = selectWebsocket()
 
+    settings.clear()
     settings.set("servers", {main=address})
     settings.set("device", "phone")
     settings.save("data/serverData")
@@ -127,11 +148,7 @@ if choice == 1 then
         download(programs[i],"nil",true)
     end
 
-    clear("wait 2 seconds...")
-    term.setCursorPos(1,2)
-    print("restarting...")
-    os.sleep(2)
-    os.reboot()
+    removeInstall()
 elseif choice == 2 then
     term.clear()
     term.setCursorPos(1,1)
@@ -159,6 +176,7 @@ elseif choice == 2 then
 
     address = selectWebsocket()
 
+    settings.clear()
     settings.set("servers", {main=address})
     settings.set("device", "computer")
     settings.save("data/serverData")
@@ -174,9 +192,5 @@ elseif choice == 2 then
     file.write(settingData)
     file.close()
 
-    clear("wait 2 seconds...")
-    term.setCursorPos(1,2)
-    print("restarting...")
-    os.sleep(2)
-    os.reboot()
+    removeInstall()
 end

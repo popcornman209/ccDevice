@@ -1,0 +1,9 @@
+{
+    name = "deviceReceiver",
+    files = {
+        "bin/deviceReceiverSettings",
+        "boot/deviceReceiver",
+        "programs/deviceReceiver",
+        "uninstall/deviceReceiver",
+    },
+}

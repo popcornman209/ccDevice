@@ -8,7 +8,7 @@ function clear(text)
     term.write(text)
     paintutils.drawBox(1,1,resX,1,colors.gray)
     term.setCursorPos(resX/2-9,1)
-    term.write("CCDevice installer")
+    term.write("Device Remote Setttings")
     term.setBackgroundColor(colors.black)
 end
 
@@ -72,36 +72,29 @@ function changeHostname()
     settings.set("hostName",hostname)
     settings.set("key",key)
 end
-function changeDispName() settings.set("dispName",input('display name: ',"type a string")) end
+function changeReceiver() settings.set("receiver",input('receiver: ',"type a string")) end
 function changePassword() settings.set("password",input('password ("" for none): ',"type a string")) end
 function changeChannel() settings.set("channel",input('channel ("" for private): ',"type a string")) end
 function changeSide() settings.set("redstone side",input("side to activate: ","type a string")) end
-function changeMode()
-    mode = input("mode ('toggle' or #secs to hold>):","type a 'toggle' or a number")
-    if mode ~= "toggle" then mode = tonumber(mode) end
-    settings.set("mode",mode)
-end
 
 settingsList = {
     "hostName",
-    "dispName",
+    "receiver",
     "password",
     "channel",
-    "redstone side",
-    "mode"
+    "redstone side"
 }
 functionList = {
     changeHostname,
-    changeDispName,
+    changeReceiver,
     changePassword,
     changeChannel,
-    changeSide,
-    changeMode
+    changeSide
 }
 
 settings.clear()
-if fs.exists("data/deviceController") then
-    settings.load("data/deviceController")
+if fs.exists("data/deviceRemote") then
+    settings.load("data/deviceRemote")
 end
 
 for i = 1,#settingsList do
@@ -110,11 +103,11 @@ for i = 1,#settingsList do
     end
 end
 
+table.insert(settingsList,1,"save and reboot")
 while true do
-    table.insert(settingsList,1,"save and reboot")
     choice = getChoice(settingsList)
     if choice == 1 then
-        settings.save("data/deviceController")
+        settings.save("data/deviceRemote")
         os.reboot()
     else
         functionList[choice-1]()

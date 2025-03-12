@@ -1,0 +1,11 @@
+{
+    "id": "deviceRemote",
+    "files": [
+        ["files/computer/boot/deviceRemote","boot/deviceRemote"],
+        ["files/computer/bin/deviceRemoteSettings","bin/deviceRemoteSettings"],
+        ["files/computer/programs/deviceRemote","programs/deviceRemote"],
+        ["files/computer/uninstall/deviceRemote","uninstall/deviceRemote"]
+    ],
+    "directories": ["data"],
+    "version": "1.0.0"
+}
