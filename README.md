@@ -33,5 +33,6 @@ python server.py
 
 # photos
 ![rando image](photos/phone1.png)
-![other rando image](photos/phone2.png)
 ![another rando image](photos/bank.png)
+![other rando image](photos/server.png)
+![rando image 2](photos/bootLoader.png)
