@@ -94,7 +94,7 @@ elseif option == "search" then
     if program == nil then program = "" end
     ws = http.websocket(servers[server])
     if ws then
-        ws.send(os.getComputerLabel)
+        ws.send(os.getComputerLabel())
         ws.send("store")
         ws.send(device)
         names = {}
