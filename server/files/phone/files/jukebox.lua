@@ -1,4 +1,4 @@
-disks = {"13","cat","blocks","chirp","far","mall","mellohi","stal","strad","ward","11","wait","otherside","5","pigstep"}
+disks = {"13","cat","blocks","chirp","far","mall","mellohi","stal","strad","ward","11","wait","otherside","5","pigstep","relic"}
 
 speaker = peripheral.wrap("back")
 quit = false

@@ -7,5 +7,6 @@
         ["files/computer/uninstall/deviceRemote","uninstall/deviceRemote"]
     ],
     "directories": ["data"],
+    "requirements": ["all/secureNet"],
     "version": "1.0.0"
 }
