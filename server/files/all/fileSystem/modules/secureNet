@@ -1,147 +1,172 @@
-local function connectToWS(ws)
-    if ws == nil then
-        settings.load("data/serverData")
-        ws = settings.get("servers").main
-    end
+-- vim: ft=lua
+---@diagnostic disable: undefined-global, undefined-field
 
-    if type(ws) == "string" then
-        ws = http.websocket(ws)
-        if ws then
-            ws.send(os.getComputerLabel())
-        else return false end
-    end
-    return ws
+local function connectToWS(ws)
+	if ws == nil then
+		settings.load("data/serverData")
+		ws = settings.get("servers").main
+	end
+
+	if type(ws) == "string" then
+		ws = http.websocket(ws)
+		if ws then
+			ws.send(os.getComputerLabel())
+		else
+			return false
+		end
+	end
+	return ws
 end
 
 local function registerStaticAddress(hostName, ws)
-    ws = connectToWS(ws)
-    if ws then
-        ws.send("snet-registerStatic")
-        ws.send(hostName)
-        key = ws.receive()
-        ws.send("close")
-        ws.close()
-        if key ~= "failure" then return key end
-    end
-    return false
+	ws = connectToWS(ws)
+	if ws then
+		ws.send("snet-registerStatic")
+		ws.send(hostName)
+		local key = ws.receive()
+		ws.send("close")
+		ws.close()
+		if key ~= "failure" then
+			return key
+		end
+	end
+	return false
 end
 
-local function removeStaticAddress(hostName,key,ws)
-    ws = connectToWS(ws)
-    if ws then
-        ws.send("snet-removeStatic")
-        message = {
-            hostName = hostName,
-            key = key
-        }
-        ws.send(textutils.serialiseJSON(message))
-        result = ws.receive()
-        ws.send("close")
-        ws.close()
-        if result == "success" then return true end
-    end
-    return false
+local function removeStaticAddress(hostName, key, ws)
+	ws = connectToWS(ws)
+	if ws then
+		ws.send("snet-removeStatic")
+		local message = {
+			hostName = hostName,
+			key = key,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local result = ws.receive()
+		ws.send("close")
+		ws.close()
+		if result == "success" then
+			return true
+		end
+	end
+	return false
 end
 
-local function connectTempAddress(hostName,receiveBroadcasts,channels,ws)
-    ws = connectToWS(ws)
-    if ws then
-        ws.send("snet-connectTemp")
-        message = {
-            hostName = hostName,
-            receiveBroadcasts = receiveBroadcasts,
-            channels = channels
-        }
-        ws.send(textutils.serialiseJSON(message))
-        key = ws.receive()
-        if key ~= "failure" then return key, ws end
-    end
-    return false, nil
+local function connectTempAddress(hostName, receiveBroadcasts, channels, ws)
+	ws = connectToWS(ws)
+	if ws then
+		ws.send("snet-connectTemp")
+		local message = {
+			hostName = hostName,
+			receiveBroadcasts = receiveBroadcasts,
+			channels = channels,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local key = ws.receive()
+		if key ~= "failure" then
+			return key, ws
+		end
+	end
+	return false, nil
 end
 
-local function connectStaticAddress(hostName,key,receiveBroadcasts,channels,ws)
-    ws = connectToWS(ws)
-    if ws then
-        ws.send("snet-connectStatic")
-        message = {
-            hostName = hostName,
-            key = key,
-            receiveBroadcasts = receiveBroadcasts,
-            channels = channels
-        }
-        ws.send(textutils.serialiseJSON(message))
-        result = ws.receive()
-        if result == "success" then return true, ws end
-    end
-    return false, nil
+local function connectStaticAddress(hostName, key, receiveBroadcasts, channels, ws)
+	ws = connectToWS(ws)
+	if ws then
+		ws.send("snet-connectStatic")
+		local message = {
+			hostName = hostName,
+			key = key,
+			receiveBroadcasts = receiveBroadcasts,
+			channels = channels,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local result = ws.receive()
+		if result == "success" then
+			return true, ws
+		end
+	end
+	return false, nil
 end
 
-local function disconnectAddress(hostName,key,ws)
-    ws = connectToWS(ws)
-    if ws then
-        ws.send("snet-disconnect")
-        message = {
-            hostName = hostName,
-            key = key
-        }
-        ws.send(textutils.serialiseJSON(message))
-        result = ws.receive()
-        if result == "success" then return true end
-    end
-    return false
+local function disconnectAddress(hostName, key, ws)
+	ws = connectToWS(ws)
+	if ws then
+		ws.send("snet-disconnect")
+		local message = {
+			hostName = hostName,
+			key = key,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local result = ws.receive()
+		if result == "success" then
+			return true
+		end
+	end
+	return false
 end
 
-local function send(hostName,key,receiver,message,channel,ws)
-    ws = connectToWS(ws)
-    if channel == nil then channel = "" end
-    if ws then
-        ws.send("snet-sendMsg")
-        message = {
-            hostName = hostName,
-            key = key,
-            receiver = receiver,
-            channel = channel,
-            message = message
-        }
-        ws.send(textutils.serialiseJSON(message))
-        result = ws.receive()
-        if result == "success" then return true end
-    end
-    return false
+local function send(hostName, key, receiver, message, channel, ws)
+	ws = connectToWS(ws)
+	if channel == nil then
+		channel = ""
+	end
+	if ws then
+		ws.send("snet-sendMsg")
+		message = {
+			hostName = hostName,
+			key = key,
+			receiver = receiver,
+			channel = channel,
+			message = message,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local result = ws.receive()
+		if result == "success" then
+			return true
+		end
+	end
+	return false
 end
 
-local function broadcast(hostName,key,message,channel,ws)
-    ws = connectToWS(ws)
-    if channel == nil then channel = "" end
-    if ws then
-        ws.send("snet-broadcast")
-        message = {
-            hostName = hostName,
-            key = key,
-            channel = channel,
-            message = message
-        }
-        ws.send(textutils.serialiseJSON(message))
-        result = ws.receive()
-        if result == "success" then return true end
-    end
-    return false
+local function broadcast(hostName, key, message, channel, ws)
+	ws = connectToWS(ws)
+	if channel == nil then
+		channel = ""
+	end
+	if ws then
+		ws.send("snet-broadcast")
+		message = {
+			hostName = hostName,
+			key = key,
+			channel = channel,
+			message = message,
+		}
+		ws.send(textutils.serialiseJSON(message))
+		local result = ws.receive()
+		if result == "success" then
+			return true
+		end
+	end
+	return false
 end
 
-local function receive(ws,timeout)
-    message = ws.receive(timeout)
-    if message == nil then return false end
-    data = textutils.unserialiseJSON(message)
-    return data["sender"],data["message"],data["channel"],data["broadcasted"]
+local function receive(ws, timeout)
+	local message = ws.receive(timeout)
+	if message == nil then
+		return false
+	end
+	local data = textutils.unserialiseJSON(message)
+	return data["sender"], data["message"], data["channel"], data["broadcasted"]
 end
 
-return{
-    registerStaticAddress = registerStaticAddress,
-    removeStaticAddress = removeStaticAddress,
-    connectTempAddress = connectTempAddress,
-    connectStaticAddress = connectStaticAddress,
-    disconnectAddress = disconnectAddress,
-    send = send,
-    broadcast = broadcast,
-    receive = receive
+return {
+	registerStaticAddress = registerStaticAddress,
+	removeStaticAddress = removeStaticAddress,
+	connectTempAddress = connectTempAddress,
+	connectStaticAddress = connectStaticAddress,
+	disconnectAddress = disconnectAddress,
+	send = send,
+	broadcast = broadcast,
+	receive = receive,
 }

@@ -1,21 +1,24 @@
+-- vim: ft=lua
+---@diagnostic disable: undefined-global, undefined-field
+
 term.clear()
 term.setTextColor(colors.yellow)
-term.setCursorPos(1,1)
+term.setCursorPos(1, 1)
 print(os.version())
 term.setTextColor(colors.white) -- draw the logo
 
-local completion = require "cc.shell.completion"
-shell.setPath(shell.path()..":/bin") -- autocompletes all files in /bin
+local completion = require("cc.shell.completion")
+shell.setPath(shell.path() .. ":/bin") -- autocompletes all files in /bin
 
-startups = fs.list("craftOsStartup")
-for file = 1,#startups do
-    shell.run("craftOsStartup/"..startups[file])
+local startups = fs.list("craftOsStartup")
+for file = 1, #startups do
+	shell.run("craftOsStartup/" .. startups[file])
 end
 
 settings.clear()
 if fs.exists(".settings") then
-    settings.load(".settings")
+	settings.load(".settings")
 end
 if settings.get("motd.enable") then -- motd
-    shell.run("motd")
+	shell.run("motd")
 end

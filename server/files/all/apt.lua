@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global, undefined-field
+
 args = { ... }
 
 aptVersion = "1.0.0"
@@ -180,4 +182,3 @@ elseif option == "search" then
 else
 	error("no choice given!")
 end
-
