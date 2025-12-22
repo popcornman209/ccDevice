@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global, undefined-field
 
-binds = {
+local binds = {
 	["up"] = 265,
 	["down"] = 264,
 	["enter"] = 257,
@@ -16,7 +16,7 @@ if os.about ~= nil then -- if using craft os pc emulator
 	}
 end
 
-function bootFile(path) -- runs a boot file
+local function bootFile(path) -- runs a boot file
 	settings.clear()
 	if fs.exists(".settings") then
 		settings.load(".settings")
@@ -26,8 +26,8 @@ function bootFile(path) -- runs a boot file
 	shell.run(path)
 end
 
-resX, resY = term.getSize()
-function clear(title) -- clear screen function, draws bars
+local resX, resY = term.getSize()
+local function clear(title) -- clear screen function, draws bars
 	term.setBackgroundColor(colors.black)
 	term.clear()
 	paintutils.drawBox(1, 1, resX, 1, colors.gray)
@@ -37,7 +37,8 @@ function clear(title) -- clear screen function, draws bars
 	term.setBackgroundColor(colors.black)
 	term.write("(up/down/enter/backspace): navigate")
 end
-function drawChoices(choices, choiceDetails, scroll, title) -- draws a list of choices, bout it
+
+local function drawChoices(choices, choiceDetails, scroll, title) -- draws a list of choices, bout it
 	clear(title)
 	for i = 1 + scroll, math.min(#choices, (resY - 4) + scroll) do
 		term.setCursorPos(4, i + 2 - scroll)
@@ -48,15 +49,16 @@ function drawChoices(choices, choiceDetails, scroll, title) -- draws a list of c
 		end
 	end
 end
-function getChoice(choices, choiceDetails, title) -- gets user inputs and lets you select different choices
-	cursorPos = 1
-	scroll = 0
+
+local function getChoice(choices, choiceDetails, title) -- gets user inputs and lets you select different choices
+	local cursorPos = 1
+	local scroll = 0
 	drawChoices(choices, choiceDetails, scroll, title)
 	while true do
 		paintutils.drawBox(2, 3, 2, resY - 2)
 		term.setCursorPos(2, cursorPos + 2 - scroll)
 		print(">")
-		event, key = os.pullEvent("key")
+		local _, key = os.pullEvent("key")
 		if key == binds["up"] then
 			cursorPos = math.max(cursorPos - 1, 1)
 			if cursorPos < 1 + scroll then
@@ -95,7 +97,7 @@ if settings.get("defaultBoot") ~= "" then -- if default boot setting
 		term.write("press backspace to cancel")
 		os.startTimer(settings.get("defaultBootDelay"))
 		while true do
-			event, detail = os.pullEventRaw()
+			local event, detail = os.pullEventRaw()
 			if event == "timer" then
 				bootFile(settings.get("defaultBoot"))
 				return
@@ -108,23 +110,22 @@ if settings.get("defaultBoot") ~= "" then -- if default boot setting
 	end
 end
 
+local drives = {}
 if fs.exists("boot") then
 	drives = { "boot" }
-else
-	drives = {}
-end -- set /boot as default mount point
+end
 
-peripherals = peripheral.getNames() -- peripherals
+local peripherals = peripheral.getNames() -- peripherals
 for i = 1, #peripherals do
 	if peripheral.getType(peripherals[i]) == "drive" then -- if its a drive
 		table.insert(drives, disk.getMountPath(peripherals[i])) -- add it as a valid mount point
 	end
 end
 
-mountPoints = {} -- path to file
-bootNames = {} -- name of the boot files
+local mountPoints = {} -- path to file
+local bootNames = {} -- name of the boot files
 for drive = 1, #drives do
-	mounts = fs.list(drives[drive]) -- list of files in the drive
+	local mounts = fs.list(drives[drive]) -- list of files in the drive
 	for mount = 1, #mounts do
 		table.insert(mountPoints, drives[drive] .. "/" .. mounts[mount])
 		table.insert(bootNames, mounts[mount])
@@ -132,10 +133,10 @@ for drive = 1, #drives do
 end
 
 while true do
-	bootChoice = getChoice(bootNames, mountPoints, "CCDevice Bootloader")
+	local bootChoice = getChoice(bootNames, mountPoints, "CCDevice Bootloader")
 	if bootChoice == nil then -- if backspace, settings menu
-		settingOptions = { "defaultBoot", "defaultBootDelay" }
-		choice = getChoice(settingOptions, nil, "Settings")
+		local settingOptions = { "defaultBoot", "defaultBootDelay" }
+		local choice = getChoice(settingOptions, nil, "Settings")
 		if choice == 1 then -- if default boot selected
 			table.insert(mountPoints, 1, "Custom...")
 			choice = getChoice(mountPoints, nil, "sel defaultBoot")

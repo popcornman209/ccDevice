@@ -1,5 +1,5 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field
+---@diagnostic disable: undefined-global, undefined-field, deprecated
 
 local function prnt(str, log)
 	if log then

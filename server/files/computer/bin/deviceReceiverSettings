@@ -1,125 +1,135 @@
 -- vim: ft=lua
 ---@diagnostic disable: undefined-global, undefined-field
 
-sNet = require("/modules/secureNet")
-resX, resY = term.getSize()
+local sNet = require("/modules/secureNet")
+local resX, resY = term.getSize()
 
-function clear(text)
-    term.setBackgroundColor(colors.black)
-    term.clear()
-    term.setCursorPos(1,resY)
-    term.write(text)
-    paintutils.drawBox(1,1,resX,1,colors.gray)
-    term.setCursorPos(resX/2-9,1)
-    term.write("Device Receiver Setttings")
-    term.setBackgroundColor(colors.black)
+local function clear(text)
+	term.setBackgroundColor(colors.black)
+	term.clear()
+	term.setCursorPos(1, resY)
+	term.write(text)
+	paintutils.drawBox(1, 1, resX, 1, colors.gray)
+	term.setCursorPos(resX / 2 - 9, 1)
+	term.write("Device Receiver Setttings")
+	term.setBackgroundColor(colors.black)
 end
 
-function drawChoices(scroll,choices)
-    clear("(up/down/enter): navigate")
-    for i = 1+scroll,math.min(#choices,(resY-4)+scroll) do
-        term.setCursorPos(4,i+2-scroll)
-        print(choices[i])
-    end
+local function drawChoices(scroll, choices)
+	clear("(up/down/enter): navigate")
+	for i = 1 + scroll, math.min(#choices, (resY - 4) + scroll) do
+		term.setCursorPos(4, i + 2 - scroll)
+		print(choices[i])
+	end
 end
 
 function getChoice(choices)
-    cursorPos = 1
-    scroll = 0
-    drawChoices(scroll,choices)
-    going = true
-    while going do
-        paintutils.drawBox(2,3,2,resY-2)
-        term.setCursorPos(2,cursorPos+2-scroll)
-        print(">")
-        event, key = os.pullEvent("key")
-        if key == 265 then
-            cursorPos = math.max(cursorPos-1,1)
-            if cursorPos < 1+scroll then
-                scroll = scroll-1
-                drawChoices(scroll,choices)
-            end
-        elseif key == 264 then
-            cursorPos = math.min(cursorPos+1,#choices)
-            if cursorPos > (resY-4)+scroll then
-                scroll = scroll+1
-                drawChoices(scroll,choices)
-            end
-        elseif key == 257 then
-            going = false
-            return cursorPos
-        end
-    end
+	cursorPos = 1
+	scroll = 0
+	drawChoices(scroll, choices)
+	going = true
+	while going do
+		paintutils.drawBox(2, 3, 2, resY - 2)
+		term.setCursorPos(2, cursorPos + 2 - scroll)
+		print(">")
+		event, key = os.pullEvent("key")
+		if key == 265 then
+			cursorPos = math.max(cursorPos - 1, 1)
+			if cursorPos < 1 + scroll then
+				scroll = scroll - 1
+				drawChoices(scroll, choices)
+			end
+		elseif key == 264 then
+			cursorPos = math.min(cursorPos + 1, #choices)
+			if cursorPos > (resY - 4) + scroll then
+				scroll = scroll + 1
+				drawChoices(scroll, choices)
+			end
+		elseif key == 257 then
+			going = false
+			return cursorPos
+		end
+	end
 end
 
-function input(text,bottomText)
-    clear(bottomText)
-    term.setCursorPos(2,3)
-    print(text)
-    term.setCursorPos(2,4)
-    return read()
+function input(text, bottomText)
+	clear(bottomText)
+	term.setCursorPos(2, 3)
+	print(text)
+	term.setCursorPos(2, 4)
+	return read()
 end
 
 function changeHostname()
-    key = false
-    while key == false do
-        hostname = input("hostname: ","type a string")
-        key, ws = sNet.registerStaticAddress(hostname)
-        if key == false then
-            clear("wait 3 seconds...")
-            term.setCursorPos(2,3)
-            print("failed, hostname already in use or invalid?")
-            os.sleep(3)
-        end
-    end
-    settings.set("hostName",hostname)
-    settings.set("key",key)
+	key = false
+	while key == false do
+		hostname = input("hostname: ", "type a string")
+		key, ws = sNet.registerStaticAddress(hostname)
+		if key == false then
+			clear("wait 3 seconds...")
+			term.setCursorPos(2, 3)
+			print("failed, hostname already in use or invalid?")
+			os.sleep(3)
+		end
+	end
+	settings.set("hostName", hostname)
+	settings.set("key", key)
 end
-function changeDispName() settings.set("dispName",input('display name: ',"type a string")) end
-function changePassword() settings.set("password",input('password ("" for none): ',"type a string")) end
-function changeChannel() settings.set("channel",input('channel ("" for private): ',"type a string")) end
-function changeSide() settings.set("redstone side",input("side to activate: ","type a string")) end
+function changeDispName()
+	settings.set("dispName", input("display name: ", "type a string"))
+end
+function changePassword()
+	settings.set("password", input('password ("" for none): ', "type a string"))
+end
+function changeChannel()
+	settings.set("channel", input('channel ("" for private): ', "type a string"))
+end
+function changeSide()
+	settings.set("redstone side", input("side to activate: ", "type a string"))
+end
 function changeMode()
-    mode = input("mode ('toggle' or #secs to hold>):","type a 'toggle' or a number")
-    if mode ~= "toggle" then mode = tonumber(mode) end
-    settings.set("mode",mode)
+	mode = input("mode ('toggle' or #secs to hold>):", "type a 'toggle' or a number")
+	if mode ~= "toggle" then
+		mode = tonumber(mode)
+	end
+	settings.set("mode", mode)
 end
 
 settingsList = {
-    "hostName",
-    "dispName",
-    "password",
-    "channel",
-    "redstone side",
-    "mode"
+	"hostName",
+	"dispName",
+	"password",
+	"channel",
+	"redstone side",
+	"mode",
 }
 functionList = {
-    changeHostname,
-    changeDispName,
-    changePassword,
-    changeChannel,
-    changeSide,
-    changeMode
+	changeHostname,
+	changeDispName,
+	changePassword,
+	changeChannel,
+	changeSide,
+	changeMode,
 }
 
 settings.clear()
 if fs.exists("data/deviceReceiver") then
-    settings.load("data/deviceReceiver")
+	settings.load("data/deviceReceiver")
 end
 
-for i = 1,#settingsList do
-    if settings.get(settingsList[i]) == nil then
-        functionList[i]()
-    end
+for i = 1, #settingsList do
+	if settings.get(settingsList[i]) == nil then
+		functionList[i]()
+	end
 end
 
-table.insert(settingsList,1,"save and reboot")
+table.insert(settingsList, 1, "save and reboot")
 while true do
-    choice = getChoice(settingsList)
-    if choice == 1 then
-        settings.save("data/deviceReceiver")
-        os.reboot()
-    else
-        functionList[choice-1]()
-    end
+	choice = getChoice(settingsList)
+	if choice == 1 then
+		settings.save("data/deviceReceiver")
+		os.reboot()
+	else
+		functionList[choice - 1]()
+	end
 end
