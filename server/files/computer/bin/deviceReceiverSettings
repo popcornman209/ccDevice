@@ -23,7 +23,7 @@ local function drawChoices(scroll, choices)
 	end
 end
 
-function getChoice(choices)
+local function getChoice(choices)
 	cursorPos = 1
 	scroll = 0
 	drawChoices(scroll, choices)
