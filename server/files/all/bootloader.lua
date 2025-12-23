@@ -1,4 +1,4 @@
-local sTui = require("/modules/simpleui")
+local sTui = require("/modules/simpleTui")
 
 local function bootFile(path) -- runs a boot file
 	settings.clear()
