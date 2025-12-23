@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global, undefined-field, deprecated
-
 local binds = {
 	["up"] = 265,
 	["down"] = 264,
@@ -7,6 +5,7 @@ local binds = {
 	["back"] = 259,
 }
 
+---@diagnostic disable-next-line: undefined-field
 if os.about ~= nil then -- if using craft os pc emulator
 	binds = {
 		["up"] = 200,
@@ -69,7 +68,7 @@ end
 local function selectWebsocket()
 	while true do
 		local choice = getChoice({ "default server adress", "custom..." })
-		local address = ""
+		local address = nil
 		if choice == 2 then
 			clear("enter to continue.")
 			term.setCursorPos(1, 2)
@@ -79,17 +78,19 @@ local function selectWebsocket()
 			address = "ws://127.0.0.1:42069/"
 		end
 
-		local ws = http.websocket(address)
-		if ws == false then
-			clear("wait 2 seconds...")
-			term.setCursorPos(1, 2)
-			print("could not connect!")
-			os.sleep(2)
-		else
-			ws.send("installer")
-			ws.send("close")
-			ws.close()
-			return address
+		if address ~= nil then
+			local ws = http.websocket(address)
+			if ws == false then
+				clear("wait 2 seconds...")
+				term.setCursorPos(1, 2)
+				print("could not connect!")
+				os.sleep(2)
+			else
+				ws.send("installer")
+				ws.send("close")
+				ws.close()
+				return address
+			end
 		end
 	end
 end
@@ -154,10 +155,10 @@ if choice == 1 then
 	settings.set("device", "phone")
 	settings.save("data/serverData")
 
-	require("modules/update")
+	local update = require("modules/update")
 
 	for i = 1, #programs do
-		download(programs[i], "nil", true)
+		update.Download(programs[i], "nil", true)
 	end
 
 	removeInstall()
@@ -204,16 +205,18 @@ elseif choice == 2 then
 	settings.set("device", "computer")
 	settings.save("data/serverData")
 
-	require("modules/update")
+	local update = require("modules/update")
 
 	for i = 1, #programs do
-		download(programs[i], "nil", true, address, "all")
+		update.Download(programs[i], "nil", true, address, "all")
 	end
 
 	local settingData = '{\n\t[ "shell.allow_disk_startup" ] = false,\n}'
 	local file = fs.open(".settings", "w")
-	file.write(settingData)
-	file.close()
+	if file ~= nil then
+		file.write(settingData)
+		file.close()
+	end
 
 	removeInstall()
 end
