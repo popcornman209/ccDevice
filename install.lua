@@ -181,7 +181,7 @@ elseif choice == 2 then
 		},
 		{
 			"modules/simpleui",
-			"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/simpleTui",
+			"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/fileSystem/modules/simpleTui",
 		},
 		{ "modules/sha", "https://pastebin.com/raw/9c1h7812" }, -- CREDIT: https://pastebin.com/9c1h7812 :)
 	}
