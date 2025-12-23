@@ -1,5 +1,4 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field, deprecated
 
 local function prnt(str, log)
 	if log then
@@ -64,7 +63,7 @@ function Download(fileId, currentVersion, log, address, device)
 				end
 				prnt("installing...", log)
 
-				for i = 1, table.getn(paths) do
+				for i = 1, #paths do
 					local file = fs.open(paths[i], "w")
 					if file ~= nil then
 						file.write(data[i])
@@ -98,3 +97,7 @@ function Download(fileId, currentVersion, log, address, device)
 		return false, "couldnt connect to server"
 	end
 end
+
+return {
+	Download = Download,
+}

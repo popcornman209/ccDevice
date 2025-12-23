@@ -84,3 +84,11 @@ function Input(text, bottomText, title)
 	term.setCursorPos(2, 4)
 	return read()
 end
+
+return {
+	Binds = Binds,
+	Clear = Clear,
+	DrawChoices = DrawChoices,
+	GetChoice = GetChoice,
+	Input = Input,
+}

@@ -205,7 +205,7 @@ elseif choice == 2 then
 	settings.set("device", "computer")
 	settings.save("data/serverData")
 
-	local update = require("modules/update")
+	local update = require("/modules/update")
 
 	for i = 1, #programs do
 		update.Download(programs[i], "nil", true, address, "all")
