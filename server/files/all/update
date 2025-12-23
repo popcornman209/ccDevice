@@ -7,7 +7,7 @@ local function prnt(str, log)
 	end
 end
 
-function download(fileId, currentVersion, log, address, device)
+function Download(fileId, currentVersion, log, address, device)
 	prnt("id: " .. fileId, log)
 	if fileId == "update" then
 		device = "all"
@@ -66,9 +66,14 @@ function download(fileId, currentVersion, log, address, device)
 
 				for i = 1, table.getn(paths) do
 					local file = fs.open(paths[i], "w")
-					file.write(data[i])
-					file.close()
-					prnt("installed " .. paths[i], log)
+					if file ~= nil then
+						file.write(data[i])
+						file.close()
+						prnt("installed " .. paths[i], log)
+					else
+						prnt("file was nil, folder doesnt exist?", log)
+						return false, "file returned nil"
+					end
 				end
 				settings.clear()
 				settings.load("data/mirrors")

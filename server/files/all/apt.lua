@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global, undefined-field, deprecated
-
 local args = { ... }
 
 settings.clear()
@@ -56,7 +54,7 @@ for arg = 1, #args do
 	end
 end
 
-require("/modules/update")
+local update = require("/modules/update")
 
 if Option == "install" then
 	if program ~= nil then
@@ -68,7 +66,7 @@ if Option == "install" then
 			end
 		end
 		if confirmed then
-			download(program, "nil", true, servers[server], device)
+			update.Download(program, "nil", true, servers[server], device)
 		end
 	else
 		error("no program given!")
@@ -91,7 +89,7 @@ elseif Option == "update" then
 				if forceDevice == false and settings.get("device") ~= nil then
 					tempDevice = settings.get("device")
 				end
-				download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
+				update.Download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
 			end
 		end
 	else
@@ -110,7 +108,7 @@ elseif Option == "update" then
 				if forceDevice == false and settings.get("device") ~= nil then
 					tempDevice = settings.get("device")
 				end
-				download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
+				update.Download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
 			end
 		else
 			error(program .. " wasnt found.")
@@ -130,7 +128,7 @@ elseif Option == "remove" then
 				settings.clear()
 				settings.load("uninstall/" .. program)
 				local files = settings.get("files")
-				for i = 1, table.getn(files) do
+				for i = 1, #files do
 					fs.delete(files[i])
 				end
 			end

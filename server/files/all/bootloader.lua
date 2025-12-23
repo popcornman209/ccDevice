@@ -1,6 +1,4 @@
----@diagnostic disable: undefined-global, undefined-field
-
-local sUI = require("/modules/simpleui")
+local sTui = require("/modules/simpleui")
 
 local function bootFile(path) -- runs a boot file
 	settings.clear()
@@ -23,7 +21,7 @@ end
 
 if settings.get("defaultBoot") ~= "" then -- if default boot setting
 	if fs.exists(settings.get("defaultBoot")) then -- check if valid
-		sUI.Clear("CCDevice Bootloader")
+		sTui.Clear("CCDevice Bootloader")
 		term.setCursorPos(2, 3)
 		term.write("booting " .. settings.get("defaultBoot") .. " in " .. settings.get("defaultBootDelay") .. "s")
 		term.setCursorPos(2, 4)
@@ -35,7 +33,7 @@ if settings.get("defaultBoot") ~= "" then -- if default boot setting
 				bootFile(settings.get("defaultBoot"))
 				return
 			elseif event == "key" then
-				if detail == binds["back"] then
+				if detail == sTui.Binds["back"] then
 					break
 				end
 			end
@@ -66,32 +64,38 @@ for drive = 1, #drives do
 end
 
 while true do
-	local bootChoice = sUI.GetChoice(bootNames, mountPoints, "CCDevice Bootloader")
+	local bootChoice = sTui.GetChoice(bootNames, mountPoints, "CCDevice Bootloader")
 	if bootChoice == nil then -- if backspace, settings menu
 		local settingOptions = { "defaultBoot", "defaultBootDelay" }
-		local choice = sUI.GetChoice(settingOptions, nil, "Settings")
+		local choice = sTui.GetChoice(settingOptions, nil, "Settings")
 		if choice == 1 then -- if default boot selected
 			table.insert(mountPoints, 1, "Custom...")
-			choice = sUI.GetChoice(mountPoints, nil, "sel defaultBoot")
+			choice = sTui.GetChoice(mountPoints, nil, "sel defaultBoot")
 
 			if choice == 1 then -- custom...
-				sUI.Clear("Settings")
+				sTui.Clear("Settings")
 				term.setCursorPos(1, 2)
 				term.write("default boot path:")
 				term.setCursorPos(1, 3)
-				settings.set("defaultBoot", read())
+				local path = read()
+				if path ~= nil then
+					settings.set("defaultBoot", path)
+				end
 			else
 				settings.set("defaultBoot", mountPoints[choice])
 			end
 			settings.save("data/bootLoader")
 			table.remove(mountPoints, 1)
 		elseif choice == 2 then -- if default boot delay selected
-			sUI.Clear("Settings")
+			sTui.Clear("Settings")
 			term.setCursorPos(1, 2)
 			term.write("default boot delay:")
 			term.setCursorPos(1, 3)
-			settings.set("defaultBootDelay", tonumber(read()))
-			settings.save("data/bootLoader")
+			local delay = tonumber(read())
+			if delay ~= nil then
+				settings.set("defaultBootDelay", delay)
+				settings.save("data/bootLoader")
+			end
 		end
 	else -- boot
 		bootFile(mountPoints[bootChoice])

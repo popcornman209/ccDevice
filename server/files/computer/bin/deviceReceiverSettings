@@ -1,17 +1,16 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field
 
 local title = "Device Receiver Setttings"
 
 local sNet = require("/modules/secureNet")
 local sTui = require("/modules/simpleTui")
 
-local hostname = nil
+local hostname = ""
 
 local function changeHostname()
 	local key = false
 	while key == false do
-		hostname = sTui.Input("hostname: ", "type a string")
+		hostname = sTui.Input("hostname: ", "type a string", title)
 		key, _ = sNet.registerStaticAddress(hostname)
 		if key == false then
 			sTui.Clear("wait 3 seconds...")
@@ -40,7 +39,9 @@ local function changeMode()
 	if mode ~= "toggle" then
 		mode = tonumber(mode)
 	end
-	settings.set("mode", mode)
+	if mode ~= nil then
+		settings.set("mode", mode)
+	end
 end
 
 local settingsList = {

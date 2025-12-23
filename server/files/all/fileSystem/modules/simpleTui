@@ -1,14 +1,15 @@
 -- vim: ft=lua
 
-local binds = {
+Binds = {
 	["up"] = 265,
 	["down"] = 264,
 	["enter"] = 257,
 	["back"] = 259,
 }
 
+---@diagnostic disable-next-line: undefined-field
 if os.about ~= nil then -- if using craft os pc emulator
-	binds = {
+	Binds = {
 		["up"] = 200,
 		["down"] = 208,
 		["enter"] = 28,
@@ -22,6 +23,7 @@ function Clear(title, bottomText) -- clear screen function, draws bars
 	end
 
 	local resX, resY = term.getSize()
+
 	term.setBackgroundColor(colors.black)
 	term.clear()
 	paintutils.drawBox(1, 1, resX, 1, colors.gray)
@@ -34,6 +36,7 @@ end
 
 function DrawChoices(choices, choiceDetails, scroll, title) -- draws a list of choices, bout it
 	Clear(title)
+	local resX, resY = term.getSize()
 	for i = 1 + scroll, math.min(#choices, (resY - 4) + scroll) do
 		term.setCursorPos(4, i + 2 - scroll)
 		print(choices[i])
@@ -48,33 +51,34 @@ function GetChoice(choices, choiceDetails, title) -- gets user inputs and lets y
 	local cursorPos = 1
 	local scroll = 0
 	DrawChoices(choices, choiceDetails, scroll, title)
+	local _, resY = term.getSize()
 	while true do
 		paintutils.drawBox(2, 3, 2, resY - 2)
 		term.setCursorPos(2, cursorPos + 2 - scroll)
 		print(">")
 		local _, key = os.pullEvent("key")
-		if key == binds["up"] then
+		if key == Binds["up"] then
 			cursorPos = math.max(cursorPos - 1, 1)
 			if cursorPos < 1 + scroll then
 				scroll = scroll - 1
 				DrawChoices(choices, choiceDetails, scroll, title)
 			end
-		elseif key == binds["down"] then
+		elseif key == Binds["down"] then
 			cursorPos = math.min(cursorPos + 1, #choices)
 			if cursorPos > (resY - 4) + scroll then
 				scroll = scroll + 1
 				DrawChoices(choices, choiceDetails, scroll, title)
 			end
-		elseif key == binds["enter"] then
+		elseif key == Binds["enter"] then
 			return cursorPos
-		elseif key == binds["back"] then
+		elseif key == Binds["back"] then
 			return nil
 		end
 	end
 end
 
-function Input(text, bottomText)
-	clear(bottomText)
+function Input(text, bottomText, title)
+	Clear(title, bottomText)
 	term.setCursorPos(2, 3)
 	print(text)
 	term.setCursorPos(2, 4)

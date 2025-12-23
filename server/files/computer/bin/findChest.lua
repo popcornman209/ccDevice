@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global, undefined-field
-
 local chests = { peripheral.find("inventory") }
 
 term.clear()
@@ -7,6 +5,7 @@ term.setCursorPos(1, 1)
 
 local values = {}
 for i, chest in pairs(chests) do
+	---@diagnostic disable-next-line: undefined-field
 	values[i] = #chest.list()
 end
 
@@ -14,9 +13,10 @@ print("move an item in/out of the main chest and press enter...")
 read()
 
 local id = nil
-local name = nil
+local name = ""
 
 for i, chest in pairs(chests) do
+	---@diagnostic disable-next-line: undefined-field
 	if values[i] ~= #chest.list() then
 		id = i
 		name = peripheral.getName(chest)

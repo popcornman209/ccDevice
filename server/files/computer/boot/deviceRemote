@@ -1,60 +1,68 @@
 -- vim: ft=lua
 ---@diagnostic disable: undefined-global, undefined-field
 
-sNet = require("/modules/secureNet")
+local sNet = require("/modules/secureNet")
 
 print("booting...")
 
-settingsToCheck = {
-    "hostName",
-    'key',
-    'receiver',
-    "password",
-    "channel",
-    "redstone side",
+local settingsToCheck = {
+	"hostName",
+	"key",
+	"receiver",
+	"password",
+	"channel",
+	"redstone side",
 }
 
 settings.clear()
 if fs.exists("data/deviceRemote") then
-    settings.load("data/deviceRemote")
-    for i = 1,#settingsToCheck do
-        if settings.get(settingsToCheck[i]) == nil then
-            print("missing setting: "..settingsToCheck[i])
-            print("some settings are not set, please restart and run deviceRemoteSettings in craftOS")
-            return
-        end
-    end
+	settings.load("data/deviceRemote")
+	for i = 1, #settingsToCheck do
+		if settings.get(settingsToCheck[i]) == nil then
+			print("missing setting: " .. settingsToCheck[i])
+			print("some settings are not set, please restart and run deviceRemoteSettings in craftOS")
+			return
+		end
+	end
 else
-    print("settings are not set, please restart and run deviceRemoteSettings in craftOS")
-    return
+	print("settings are not set, please restart and run deviceRemoteSettings in craftOS")
+	return
 end
 
 print("--device remote--")
-for i = 1,#settingsToCheck do
-    print(settingsToCheck[i]..": "..settings.get(settingsToCheck[i]))
+for i = 1, #settingsToCheck do
+	print(settingsToCheck[i] .. ": " .. settings.get(settingsToCheck[i]))
 end
 print("\nif you want to change settings, please restart and run deviceRemoteSettings in craftOS")
 
-success, ws = sNet.connectStaticAddress(settings.get("hostName"),settings.get("key"),false,{settings.get("channel")})
+local success, ws =
+	sNet.connectStaticAddress(settings.get("hostName"), settings.get("key"), false, { settings.get("channel") })
 if success then
-    print("connected to server")
-    while true do
-        event, detail = os.pullEventRaw()
-        if event == "websocket_closed" or event == "websocket_failure" then
-            print("server connection failed.")
-            print("restarting in 5 seconds...")
-            os.sleep(5)
-            os.reboot()
-        elseif event == "redstone" then
-            if redstone.getInput(settings.get("redstone side")) then
-                print("redstone signal received")
-                sNet.send(settings.get("hostName"),settings.get("key"),settings.get("receiver"),settings.get("password"),settings.get("channel"),ws)
-            end
-        end
-    end
+	print("connected to server")
+	while true do
+		local event, _ = os.pullEventRaw()
+		if event == "websocket_closed" or event == "websocket_failure" then
+			print("server connection failed.")
+			print("restarting in 5 seconds...")
+			os.sleep(5)
+			os.reboot()
+		elseif event == "redstone" then
+			if redstone.getInput(settings.get("redstone side")) then
+				print("redstone signal received")
+				sNet.send(
+					settings.get("hostName"),
+					settings.get("key"),
+					settings.get("receiver"),
+					settings.get("password"),
+					settings.get("channel"),
+					ws
+				)
+			end
+		end
+	end
 else
-    print("failed to connect to static address, credentials could be wrong or severs off.")
-    print("restarting in 5 seconds...")
-    os.sleep(5)
-    os.reboot()
+	print("failed to connect to static address, credentials could be wrong or severs off.")
+	print("restarting in 5 seconds...")
+	os.sleep(5)
+	os.reboot()
 end

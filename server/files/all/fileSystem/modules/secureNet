@@ -1,5 +1,4 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field
 
 local function connectToWS(ws)
 	if ws == nil then
@@ -157,6 +156,9 @@ local function receive(ws, timeout)
 		return false
 	end
 	local data = textutils.unserialiseJSON(message)
+	if data == nil then
+		return nil
+	end
 	return data["sender"], data["message"], data["channel"], data["broadcasted"]
 end
 

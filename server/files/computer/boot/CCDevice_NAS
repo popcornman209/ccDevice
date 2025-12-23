@@ -33,7 +33,7 @@ for _, ignore in pairs(ignoreChests) do
 	removeChest(chests, ignore)
 end
 
-require("/modules/nasFunctions")
+local nasF = require("/modules/nasFunctions")
 local sTui = require("/modules/simpleTui")
 
 while 1 do
@@ -42,39 +42,37 @@ while 1 do
 		sTui.Clear("enter to continue...", "Deposit")
 		term.setCursorPos(2, 3)
 		print("put items in the chest and press enter...")
-		EnterToContinue()
+		nasF.EnterToContinue()
 		sTui.Clear("wait...", "Withdraw")
 		term.setCursorPos(2, 3)
 		print("loading...")
+		---@diagnostic disable-next-line: need-check-nil
 		for i, item in pairs(mainChest.list()) do
 			local count = item["count"]
 			local chest = 1
 			while count > 0 and chest <= #chests do
+				---@diagnostic disable-next-line: undefined-field
 				count = count - chests[chest].pullItems(mainChestName, i)
 				chest = chest + 1
 			end
 		end
 	elseif menuChoice == 2 then
-		items = getItems()
-		clear("enter to continue...", "Withdraw")
-		term.setCursorPos(2, 3)
-		print("search for item:")
-		term.setCursorPos(2, 4)
-		search = read()
-		results = {}
-		for item, val in pairs(items) do
-			if string.find(item, search) then
+		local items = nasF.getItems()
+		local search = sTui.Input("search for item:", "enter to continue...", "withdraw")
+		local results = {}
+		for item, _ in pairs(items) do
+			if search ~= nil and string.find(item, search) then
 				table.insert(results, item)
 			end
 		end
 		if #results > 0 then
-			choice = getChoice(results, true, "Withdraw")
+			local choice = getChoice(results, true, "Withdraw")
 			if choice then
-				clear("enter to continue...", "Withdraw")
+				sTui.Clear("enter to continue...", "Withdraw")
 				term.setCursorPos(2, 3)
 				print("choose amount to withdraw (max: " .. items[results[choice]] .. ")")
 				term.setCursorPos(2, 4)
-				amount = tonumber(read())
+				local amount = tonumber(read())
 				if amount == nil then
 					amount = 0
 				end
@@ -83,15 +81,16 @@ while 1 do
 				elseif amount > items[results[choice]] then
 					amount = items[results[choice]]
 				end
-				chest = 1
-				clear("wait...", "Withdraw")
+				local chest = 1
+				sTui.Clear("wait...", "Withdraw")
 				term.setCursorPos(2, 3)
 				print("loading...")
-				chestContents = getChestContents()
+				local chestContents = nasF.GetChestContents()
 				while amount > 0 do
-					chestContent = chestContents[chest]
+					local chestContent = chestContents[chest]
 					for i, item in pairs(chestContent) do
 						if item["name"] == results[choice] then
+							---@diagnostic disable-next-line: undefined-field
 							amount = amount - chests[chest].pushItems(mainChestName, i, amount)
 						end
 					end
@@ -99,53 +98,53 @@ while 1 do
 				end
 			end
 		else
-			clear("wait...", "Withdraw")
+			sTui.Clear("wait...", "Withdraw")
 			term.setCursorPos(2, 3)
 			print("no items found!")
 			os.sleep(1)
 		end
 	elseif menuChoice == 3 then
-		itemList = {}
-		items = getItems()
-		for item, val in pairs(items) do
+		local itemList = {}
+		local items = nasF.GetItems()
+		for item, _ in pairs(items) do
 			table.insert(itemList, item)
 		end
 		repeat
-			choice = getChoice(itemList, true, "item list")
+			local choice = sTui.GetChoice(itemList, true, "item list")
 			if choice then
-				clear("enter to continue...", "item list")
+				sTui.Clear("enter to continue...", "item list")
 				term.setCursorPos(2, 3)
 				print("item name: " .. itemList[choice])
 				print(" item count: " .. items[itemList[choice]])
-				enterToContinue()
+				nasF.EnterToContinue()
 			end
 		until choice == false
 	elseif menuChoice == 4 then
-		items = getItems()
+		local items = nasF.GetItems()
 		repeat
-			clear("enter to continue...", "Search")
+			sTui.Clear("enter to continue...", "Search")
 			term.setCursorPos(2, 3)
 			print("search for item ('quit' to leave):")
 			term.setCursorPos(2, 4)
-			search = read()
+			local search = read()
 			if search ~= "quit" then
-				results = {}
-				for item, val in pairs(items) do
+				local results = {}
+				for item, _ in pairs(items) do
 					if string.find(item, search) then
 						table.insert(results, item)
 					end
 				end
 				if #results > 0 then
-					choice = getChoice(results, true, "Search")
+					local choice = getChoice(results, true, "Search")
 					if choice then
-						clear("enter to continue...", "item list")
+						sTui.Clear("enter to continue...", "item list")
 						term.setCursorPos(2, 3)
 						print("item name: " .. results[choice])
 						print(" item count: " .. items[results[choice]])
-						enterToContinue()
+						nasF.EnterToContinue()
 					end
 				else
-					clear("wait...", "Search")
+					sTui.Clear("wait...", "Search")
 					term.setCursorPos(2, 3)
 					print("no items found!")
 					os.sleep(1)

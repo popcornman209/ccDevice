@@ -1,8 +1,8 @@
----@diagnostic disable: undefined-global, undefined-field
-
 local wrappers = {}
+---@diagnostic disable-next-line: undefined-global
 for i, _ in pairs(chests) do
 	table.insert(wrappers, function()
+		---@diagnostic disable-next-line: undefined-global
 		contents[i] = chests[i].list()
 	end)
 end
