@@ -1,5 +1,4 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field, deprecated
 
 local binds = {
 	["up"] = 265,
@@ -17,7 +16,11 @@ if os.about ~= nil then -- if using craft os pc emulator
 	}
 end
 
-function Clear(title) -- clear screen function, draws bars
+function Clear(title, bottomText) -- clear screen function, draws bars
+	if bottomText == nil then
+		bottomText = "(up/down/enter/backspace): navigate"
+	end
+
 	local resX, resY = term.getSize()
 	term.setBackgroundColor(colors.black)
 	term.clear()
@@ -26,7 +29,7 @@ function Clear(title) -- clear screen function, draws bars
 	term.write(title)
 	term.setCursorPos(1, resY)
 	term.setBackgroundColor(colors.black)
-	term.write("(up/down/enter/backspace): navigate")
+	term.write(bottomText)
 end
 
 function DrawChoices(choices, choiceDetails, scroll, title) -- draws a list of choices, bout it
@@ -68,4 +71,12 @@ function GetChoice(choices, choiceDetails, title) -- gets user inputs and lets y
 			return nil
 		end
 	end
+end
+
+function Input(text, bottomText)
+	clear(bottomText)
+	term.setCursorPos(2, 3)
+	print(text)
+	term.setCursorPos(2, 4)
+	return read()
 end

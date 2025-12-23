@@ -1,118 +1,71 @@
 -- vim: ft=lua
 ---@diagnostic disable: undefined-global, undefined-field
 
-sNet = require("/modules/secureNet")
-resX, resY = term.getSize()
+local sNet = require("/modules/secureNet")
+local sTui = require("/modules/simpleTui")
 
-function clear(text)
-    term.setBackgroundColor(colors.black)
-    term.clear()
-    term.setCursorPos(1,resY)
-    term.write(text)
-    paintutils.drawBox(1,1,resX,1,colors.gray)
-    term.setCursorPos(resX/2-9,1)
-    term.write("Device Remote Setttings")
-    term.setBackgroundColor(colors.black)
+local function changeHostname()
+	local key = false
+	local hostname = nil
+	while key == false do
+		hostname = sTui.Input("hostname: ", "type a string")
+		key, _ = sNet.registerStaticAddress(hostname)
+		if key == false then
+			sTui.Clear("wait 3 seconds...")
+			term.setCursorPos(2, 3)
+			print("failed, hostname already in use or invalid?")
+			os.sleep(3)
+		end
+	end
+	settings.set("hostName", hostname)
+	settings.set("key", key)
+end
+local function changeReceiver()
+	settings.set("receiver", sTui.Input("receiver: ", "type a string"))
+end
+local function changePassword()
+	settings.set("password", sTui.Input('password ("" for none): ', "type a string"))
+end
+local function changeChannel()
+	settings.set("channel", sTui.Input('channel ("" for private): ', "type a string"))
+end
+local function changeSide()
+	settings.set("redstone side", sTui.Input("side to activate: ", "type a string"))
 end
 
-function drawChoices(scroll,choices)
-    clear("(up/down/enter): navigate")
-    for i = 1+scroll,math.min(#choices,(resY-4)+scroll) do
-        term.setCursorPos(4,i+2-scroll)
-        print(choices[i])
-    end
-end
-
-function getChoice(choices)
-    cursorPos = 1
-    scroll = 0
-    drawChoices(scroll,choices)
-    going = true
-    while going do
-        paintutils.drawBox(2,3,2,resY-2)
-        term.setCursorPos(2,cursorPos+2-scroll)
-        print(">")
-        event, key = os.pullEvent("key")
-        if key == 265 then
-            cursorPos = math.max(cursorPos-1,1)
-            if cursorPos < 1+scroll then
-                scroll = scroll-1
-                drawChoices(scroll,choices)
-            end
-        elseif key == 264 then
-            cursorPos = math.min(cursorPos+1,#choices)
-            if cursorPos > (resY-4)+scroll then
-                scroll = scroll+1
-                drawChoices(scroll,choices)
-            end
-        elseif key == 257 then
-            going = false
-            return cursorPos
-        end
-    end
-end
-
-function input(text,bottomText)
-    clear(bottomText)
-    term.setCursorPos(2,3)
-    print(text)
-    term.setCursorPos(2,4)
-    return read()
-end
-
-function changeHostname()
-    key = false
-    while key == false do
-        hostname = input("hostname: ","type a string")
-        key, ws = sNet.registerStaticAddress(hostname)
-        if key == false then
-            clear("wait 3 seconds...")
-            term.setCursorPos(2,3)
-            print("failed, hostname already in use or invalid?")
-            os.sleep(3)
-        end
-    end
-    settings.set("hostName",hostname)
-    settings.set("key",key)
-end
-function changeReceiver() settings.set("receiver",input('receiver: ',"type a string")) end
-function changePassword() settings.set("password",input('password ("" for none): ',"type a string")) end
-function changeChannel() settings.set("channel",input('channel ("" for private): ',"type a string")) end
-function changeSide() settings.set("redstone side",input("side to activate: ","type a string")) end
-
-settingsList = {
-    "hostName",
-    "receiver",
-    "password",
-    "channel",
-    "redstone side"
+local settingsList = {
+	"hostName",
+	"receiver",
+	"password",
+	"channel",
+	"redstone side",
 }
-functionList = {
-    changeHostname,
-    changeReceiver,
-    changePassword,
-    changeChannel,
-    changeSide
+local functionList = {
+	changeHostname,
+	changeReceiver,
+	changePassword,
+	changeChannel,
+	changeSide,
 }
 
 settings.clear()
 if fs.exists("data/deviceRemote") then
-    settings.load("data/deviceRemote")
+	settings.load("data/deviceRemote")
 end
 
-for i = 1,#settingsList do
-    if settings.get(settingsList[i]) == nil then
-        functionList[i]()
-    end
+for i = 1, #settingsList do
+	if settings.get(settingsList[i]) == nil then
+		functionList[i]()
+	end
 end
 
-table.insert(settingsList,1,"save and reboot")
+table.insert(settingsList, 1, "save and reboot")
 while true do
-    choice = getChoice(settingsList)
-    if choice == 1 then
-        settings.save("data/deviceRemote")
-        os.reboot()
-    else
-        functionList[choice-1]()
-    end
+	local choice = sTui.GetChoice(settingsList)
+	if choice == 1 then
+		settings.save("data/deviceRemote")
+		os.reboot()
+	else
+		functionList[choice - 1]()
+	end
 end
