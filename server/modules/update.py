@@ -33,7 +33,6 @@ async def sendProgram(appId, websocket, deviceName, first=False, sendFileComplet
             for requirement in info["requirements"]:
                 await sendProgram(requirement, websocket, deviceName, sendFileComplete=(requirement==info["requirements"][-1] and sendFileComplete))
         elif sendFileComplete:
-            print("asdkljdsakljkjljdasjkldaskjl")
             await websocket.send("complete")
 
         for directory in info["directories"]: #send directories needed for app
