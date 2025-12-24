@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global, undefined-field
-
 function getSetting(name, defVal)
 	out = settings.get(name)
 	if out == nil then
@@ -9,7 +7,7 @@ function getSetting(name, defVal)
 	return out
 end
 
-version = "1.4.4"
+version = "1.5.0"
 updateVersion = "3.0.0"
 
 settings.clear()
@@ -26,207 +24,14 @@ pass = getSetting("pass", false)
 passType = getSetting("passType", "none")
 settings.save("data/main")
 
-require("/modules/update")
-require("/modules/sha")
+local update = require("/modules/update")
+local sha = require("/modules/sha")
+local sGui = require("/modules/simpleGui")
 
 if autoUpdate then
 	download("update", updateVersion, true)
 	if download("os", version, true) then
 		os.reboot()
-	end
-end
-
-function write(text, y)
-	if #text <= 26 then
-		term.setCursorPos(14 - #text / 2, y)
-		term.write(text)
-	else
-		current = text
-		for i = 0, math.ceil(#text / 26) - 1 do
-			temp = string.sub(current, i * 26 + 1, math.min(26, #current) + i * 26)
-			term.setCursorPos(14 - #temp / 2, y + i)
-			term.write(temp)
-		end
-	end
-end
-
-function enterPass(pass, passType)
-	if passType == "pin" then
-		input = enterNum("enter pin:", true, false)
-		if digestStr(input) == pass then
-			return true
-		else
-			return false
-		end
-	elseif passType == "pass" then
-		term.setBackgroundColor(bgColor)
-		term.clear()
-		write("enter pass:", 2)
-		term.setCursorPos(1, 3)
-		if digestStr(read("*")) == pass then
-			return true
-		else
-			return false
-		end
-	elseif passType == "none" then
-		return true
-	end
-end
-
-function enterNum(text, blur, decimal)
-	term.setBackgroundColor(bgColor)
-	term.setTextColor(txtColor)
-	term.clear()
-	write(text, 3)
-	term.setBackgroundColor(buttonColor)
-
-	term.setCursorPos(11, 6)
-	term.write("1")
-	term.setCursorPos(13, 6)
-	term.write("2")
-	term.setCursorPos(15, 6)
-	term.write("3")
-	term.setCursorPos(11, 8)
-	term.write("4")
-	term.setCursorPos(13, 8)
-	term.write("5")
-	term.setCursorPos(15, 8)
-	term.write("6")
-	term.setCursorPos(11, 10)
-	term.write("7")
-	term.setCursorPos(13, 10)
-	term.write("8")
-	term.setCursorPos(15, 10)
-	term.write("9")
-	term.setCursorPos(13, 12)
-	term.write("0")
-	if decimal then
-		term.setCursorPos(11, 12)
-		term.write(".")
-	end
-
-	term.setBackgroundColor(colors.red)
-	if bgColor == colors.red then
-		term.setBackgroundColor(colors.brown)
-	end
-	term.setCursorPos(17, 6)
-	term.write("<-")
-	term.setBackgroundColor(colors.lime)
-	if bgColor == colors.lime then
-		term.setBackgroundColor(colors.green)
-	end
-	term.setCursorPos(15, 12)
-	term.write(">")
-
-	input = ""
-	term.setBackgroundColor(bgColor)
-	going = true
-	while going do
-		paintutils.drawBox(1, 4, 26, 4, bgColor)
-		term.setCursorPos(14 - string.len(input) / 2, 4)
-		if blur then
-			for i = 1, string.len(input) do
-				term.write("*")
-			end
-		else
-			term.write(input)
-		end
-		event, button, x, y = os.pullEventRaw()
-		if event == "mouse_click" then
-			if x == 11 and y == 6 then
-				input = input .. 1
-			elseif x == 13 and y == 6 then
-				input = input .. 2
-			elseif x == 15 and y == 6 then
-				input = input .. 3
-			elseif x == 11 and y == 8 then
-				input = input .. 4
-			elseif x == 13 and y == 8 then
-				input = input .. 5
-			elseif x == 15 and y == 8 then
-				input = input .. 6
-			elseif x == 11 and y == 10 then
-				input = input .. 7
-			elseif x == 13 and y == 10 then
-				input = input .. 8
-			elseif x == 15 and y == 10 then
-				input = input .. 9
-			elseif x == 11 and y == 12 and decimal then
-				input = input .. "."
-			elseif x == 13 and y == 12 then
-				input = input .. 0
-			elseif x == 15 and y == 12 then
-				going = false
-			elseif (x == 17 or x == 18) and y == 6 then
-				input = input:sub(1, -2)
-			end
-		elseif event == "key" then
-			if button == 257 then
-				going = false
-			elseif button == 259 then
-				input = input:sub(1, -2)
-			elseif button >= 48 and button <= 57 then
-				input = input .. button - 48
-			elseif button == 46 and decimal then
-				input = input .. "."
-			end
-		end
-	end
-	return input
-end
-
-function getChoice(choices, text, clickable, back, add)
-	scroll = 1
-	going = true
-	while going do
-		term.setBackgroundColor(bgColor)
-		term.setTextColor(txtColor)
-		term.clear()
-		write(text, 2)
-		for i = scroll / 2, math.min(#choices, scroll / 2 + 8) do
-			if clickable then
-				paintutils.drawBox(6, math.ceil(i) * 2 + 3 - scroll, 20, math.ceil(i) * 2 + 3 - scroll, buttonColor)
-			end
-			write(choices[math.ceil(i)], math.ceil(i) * 2 + 3 - scroll)
-		end
-		if back then
-			term.setBackgroundColor(colors.red)
-			if bgColor == colors.red then
-				term.setBackgroundColor(colors.brown)
-			end
-			term.setCursorPos(1, 1)
-			term.write(back)
-		end
-		if add then
-			term.setBackgroundColor(colors.lime)
-			if bgColor == colors.lime then
-				term.setBackgroundColor(colors.green)
-			end
-			term.setCursorPos(26, 1)
-			term.write(add)
-		end
-		event, button, x, y = os.pullEventRaw()
-		if event == "mouse_scroll" then
-			scroll = scroll + button
-			if scroll < 1 then
-				scroll = 1
-			elseif scroll > math.max(1, #choices * 2 - 16) then
-				scroll = math.max(1, #choices * 2 - 16)
-			end
-		elseif event == "mouse_click" then
-			if x == 1 and y == 1 and back then
-				return "back"
-			elseif x == 26 and y == 1 and add then
-				return "add"
-			elseif x >= 6 and x <= 20 and clickable then
-				choice = (y + scroll - 3) / 2
-				if choice == math.ceil(choice) and choice >= 1 and choice <= #choices then
-					return choice
-				end
-			end
-		elseif event == "terminate" and back then
-			return "back"
-		end
 	end
 end
 
@@ -339,4 +144,3 @@ while true do
 		os.sleep(1)
 	end
 end
-

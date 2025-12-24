@@ -1,7 +1,7 @@
 {
     "id": "CraftOS",
     "files": [
-        ["files/all/fileSystem/boot/CraftOS","boot/CraftOS.lua"]
+        ["files/all/boot/CraftOS","boot/CraftOS.lua"]
     ],
     "directories": [
         "boot",

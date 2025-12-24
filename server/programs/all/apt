@@ -1,9 +1,9 @@
 {
     "id": "apt",
     "files": [
-        ["files/all/apt.lua","bin/apt.lua"],
-        ["files/all/fileSystem/programs/apt","programs/apt"],
-        ["files/all/fileSystem/craftOsStartup/apt.lua","craftOsStartup/apt.lua"]
+        ["files/all/bin/apt.lua","bin/apt.lua"],
+        ["files/all/programs/apt","programs/apt"],
+        ["files/all/craftOsStartup/apt.lua","craftOsStartup/apt.lua"]
     ],
     "directories": [
         "versions",
@@ -12,5 +12,6 @@
         "bin",
         "craftOsStartup"
     ],
+    "requirements": ["all/update"],
     "version": "1.0.0"
 }

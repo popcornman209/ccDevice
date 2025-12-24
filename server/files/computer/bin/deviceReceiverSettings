@@ -23,19 +23,19 @@ local function changeHostname()
 	settings.set("key", key)
 end
 local function changeDispName()
-	settings.set("dispName", sTui.Input("display name: ", "type a string"))
+	settings.set("dispName", sTui.Input("display name: ", "type a string", title))
 end
 local function changePassword()
-	settings.set("password", sTui.Input('password ("" for none): ', "type a string"))
+	settings.set("password", sTui.Input('password ("" for none): ', "type a string", title))
 end
 local function changeChannel()
-	settings.set("channel", sTui.Input('channel ("" for private): ', "type a string"))
+	settings.set("channel", sTui.Input('channel ("" for private): ', "type a string", title))
 end
 local function changeSide()
-	settings.set("redstone side", sTui.Input("side to activate: ", "type a string"))
+	settings.set("redstone side", sTui.Input("side to activate: ", "type a string", title))
 end
 local function changeMode()
-	local mode = sTui.Input("mode ('toggle' or #secs to hold>):", "type a 'toggle' or a number")
+	local mode = sTui.Input("mode ('toggle' or #secs to hold>):", "type a 'toggle' or a number", title)
 	if mode ~= "toggle" then
 		mode = tonumber(mode)
 	end
@@ -74,7 +74,7 @@ end
 
 table.insert(settingsList, 1, "save and reboot")
 while true do
-	local choice = sTui.GetChoice(settingsList)
+	local choice = sTui.GetChoice(settingsList, nil, title)
 	if choice == 1 then
 		settings.save("data/deviceReceiver")
 		os.reboot()

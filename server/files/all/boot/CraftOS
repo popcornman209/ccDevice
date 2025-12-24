@@ -11,9 +11,8 @@ term.setTextColor(colors.white) -- draw the logo
 --local completion = require("cc.shell.completion")
 shell.setPath(shell.path() .. ":/bin") -- autocompletes all files in /bin
 
-local startups = fs.list("craftOsStartup")
-for file = 1, #startups do
-	shell.run("craftOsStartup/" .. startups[file])
+for _, startup in pairs(fs.list("craftOsStartup")) do
+	shell.run("craftOsStartup/" .. startup)
 end
 
 settings.clear()

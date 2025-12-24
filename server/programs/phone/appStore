@@ -5,5 +5,6 @@
         ["files/phone/apps/appStore","apps/appStore"]
     ],
     "directories": [],
+    "requirements": ["all/update"],
     "version": "2.0.0"
 }

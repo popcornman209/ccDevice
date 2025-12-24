@@ -1,8 +1,11 @@
 {
     "id": "update",
     "files": [
-        ["files/all/update","modules/update"]
+        ["files/all/lib/update","lib/update"],
+        ["files/all/programs/update","programs/update"]
     ],
-    "directories": [],
+    "directories": [
+        "lib"
+    ],
     "version": "3.0.0"
 }

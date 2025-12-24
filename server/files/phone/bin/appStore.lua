@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global, undefined-field
-
 server = "main"
 quit = false
 while quit == false do
@@ -78,4 +76,3 @@ while quit == false do
 		quit = true
 	end
 end
-

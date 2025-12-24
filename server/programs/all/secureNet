@@ -1,11 +1,11 @@
 {
     "id": "secureNet",
     "files": [
-        ["files/all/fileSystem/modules/secureNet","modules/secureNet"],
-        ["files/all/fileSystem/programs/secureNet","programs/secureNet"]
+        ["files/all/lib/secureNet","lib/secureNet"],
+        ["files/all/programs/secureNet","programs/secureNet"]
     ],
     "directories": [
-        "modules"
+        "lib"
     ],
-    "version": "1.0.0"
+    "version": "1.1.0"
 }

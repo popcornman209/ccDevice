@@ -17,7 +17,7 @@ end
 
 local resX, resY = term.getSize()
 
-local function clear(text)
+local function clear(text) -- clear screen with title at top and text at bottom
 	term.setBackgroundColor(colors.black)
 	term.clear()
 	term.setCursorPos(1, resY)
@@ -28,7 +28,7 @@ local function clear(text)
 	term.setBackgroundColor(colors.black)
 end
 
-local function drawChoices(scroll, choices)
+local function drawChoices(scroll, choices) -- draws a list of items with scrolling
 	clear("(up/down/enter): navigate")
 	for i = 1 + scroll, math.min(#choices, (resY - 4) + scroll) do
 		term.setCursorPos(4, i + 2 - scroll)
@@ -36,7 +36,7 @@ local function drawChoices(scroll, choices)
 	end
 end
 
-local function getChoice(choices)
+local function getChoice(choices) -- lets user select an item in a list
 	local cursorPos = 1
 	local scroll = 0
 	drawChoices(scroll, choices)
@@ -47,47 +47,47 @@ local function getChoice(choices)
 		print(">")
 		local _, key = os.pullEvent("key")
 		if key == binds["up"] then
-			cursorPos = math.max(cursorPos - 1, 1)
-			if cursorPos < 1 + scroll then
+			cursorPos = math.max(cursorPos - 1, 1) -- clamp cursor pos and move up
+			if cursorPos < 1 + scroll then -- scrolling up
 				scroll = scroll - 1
-				drawChoices(scroll, choices)
+				drawChoices(scroll, choices) -- redraw
 			end
 		elseif key == binds["down"] then
-			cursorPos = math.min(cursorPos + 1, #choices)
-			if cursorPos > (resY - 4) + scroll then
+			cursorPos = math.min(cursorPos + 1, #choices) -- clamp cursor pos and move down
+			if cursorPos > (resY - 4) + scroll then -- scrolling down
 				scroll = scroll + 1
-				drawChoices(scroll, choices)
+				drawChoices(scroll, choices) -- redraw
 			end
-		elseif key == binds["enter"] then
+		elseif key == binds["enter"] then -- item selected
 			going = false
-			return cursorPos
+			return cursorPos -- return index
 		end
 	end
 end
 
-local function selectWebsocket()
+local function selectWebsocket() -- select websocket address
 	while true do
 		local choice = getChoice({ "default server adress", "custom..." })
 		local address = nil
-		if choice == 2 then
+		if choice == 2 then -- if "custom..." was selected
 			clear("enter to continue.")
 			term.setCursorPos(1, 2)
 			print("server ip: ")
-			address = read()
+			address = read() -- read text input
 		else
-			address = "ws://127.0.0.1:42069/"
+			address = "ws://127.0.0.1:42069/" -- default address
 		end
 
-		if address ~= nil then
-			local ws = http.websocket(address)
-			if ws == false then
+		if address ~= nil then -- if one was set (not sure of a case it wouldnt be, but lua-ls was yelling at me for this)
+			local ws = http.websocket(address) -- attempt to connect
+			if ws == false then -- if connection failed
 				clear("wait 2 seconds...")
 				term.setCursorPos(1, 2)
-				print("could not connect!")
-				os.sleep(2)
-			else
-				ws.send("installer")
-				ws.send("close")
+				print("could not connect!") -- display warning
+				os.sleep(2) -- wait 2 seconds
+			else -- if successful
+				ws.send("installer") -- send name
+				ws.send("close") --  properly close connection
 				ws.close()
 				return address
 			end
@@ -95,128 +95,99 @@ local function selectWebsocket()
 	end
 end
 
-local function removeInstall()
-	if fs.exists("install.lua") then
+local function removeInstall() -- removes install file
+	if fs.exists("install.lua") then -- if it exists
 		local choice = getChoice({ "remove install file", "keep it" })
-		if choice == 1 then
-			fs.delete("install.lua")
-			clear("wait 2 seconds.")
-			term.setCursorPos(1, 2)
-			print("restarting...")
-			os.sleep(2)
-			os.reboot()
-		else
-			clear("wait 2 seconds.")
-			term.setCursorPos(1, 2)
-			print("restarting...")
-			os.sleep(2)
-			os.reboot()
+		if choice == 1 then -- if remove was selected
+			fs.delete("install.lua") -- remove file
 		end
+		clear("wait 2 seconds.") -- reboot
+		term.setCursorPos(1, 2)
+		print("restarting...")
+		os.sleep(2)
+		os.reboot()
 	end
 end
 
-local choice = getChoice({ "phone", "computer" })
-if choice == 1 then
+local dirs = { -- list of directories required for install
+	"lib",
+}
+local programs = { -- list of programs needed
+	{ "sha", "all" },
+}
+local libs = { -- list of libraries that need to be downloaded prior to install
+	{
+		"lib/update",
+		"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/lib/update",
+	},
+}
+
+local function install()
 	term.clear()
 	term.setCursorPos(1, 1)
 
-	local dirs = {
-		"modules",
-	}
-	local programs = {
-		"os",
-		"settings",
-		"appStore",
-	}
-	local modules = {
-		{
-			"modules/update",
-			"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/update",
-		},
-		{ "modules/sha", "https://pastebin.com/raw/9c1h7812" }, -- CREDIT: https://pastebin.com/9c1h7812 :)
-	}
-
-	for i = 1, #dirs do
-		fs.makeDir(dirs[i])
+	for _, dir in pairs(dirs) do -- create needed directories
+		fs.makeDir(dir)
 	end
-	for i = 1, #modules do
-		shell.run("wget", modules[i][2], modules[i][1])
+	for _, lib in pairs(libs) do -- wget needed libraries
+		shell.run("wget", lib[2], lib[1])
 	end
 
-	clear("enter to continue.")
-	term.setCursorPos(1, 2)
-	print("phone name: ")
-	os.setComputerLabel(read())
-
-	local address = selectWebsocket()
-
-	settings.clear()
-	settings.set("servers", { main = address })
-	settings.set("device", "phone")
-	settings.save("data/serverData")
-
-	local update = require("modules/update")
-
-	for i = 1, #programs do
-		update.Download(programs[i], "nil", true)
-	end
-
-	removeInstall()
-elseif choice == 2 then
-	term.clear()
-	term.setCursorPos(1, 1)
-
-	local dirs = {
-		"modules",
-	}
-	local programs = {
-		"bootLoader",
-		"apt",
-		"CraftOS",
-	}
-	local modules = {
-		{
-			"modules/update",
-			"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/update",
-		},
-		{
-			"modules/simpleTui",
-			"https://raw.githubusercontent.com/popcornman209/ccDevice/refs/heads/main/server/files/all/fileSystem/modules/simpleTui",
-		},
-		{ "modules/sha", "https://pastebin.com/raw/9c1h7812" }, -- CREDIT: https://pastebin.com/9c1h7812 :)
-	}
-
-	for i = 1, #dirs do
-		fs.makeDir(dirs[i])
-	end
-	for i = 1, #modules do
-		shell.run("wget", modules[i][2], modules[i][1])
-	end
-
+	-- get device name
 	clear("enter to continue.")
 	term.setCursorPos(1, 2)
 	print("device name: ")
 	os.setComputerLabel(read())
 
+	-- select an address
 	local address = selectWebsocket()
 
+	-- set required serverData settings
 	settings.clear()
 	settings.set("servers", { main = address })
-	settings.set("device", "computer")
+	if choice == 1 then
+		settings.set("device", "phone")
+	elseif choice == 2 then
+		settings.set("device", "computer")
+	elseif choice == 3 then
+		settings.set("device", "turtle")
+	end
 	settings.save("data/serverData")
 
-	local update = require("/modules/update")
+	-- load update library
+	local update = require("modules/update")
 
-	for i = 1, #programs do
-		update.Download(programs[i], "nil", true, address, "all")
+	-- install needed requirements
+	for _, program in pairs(programs) do
+		update.Download(program[1], "nil", true, nil, program[2])
 	end
+end
 
+local choice = getChoice({ "phone", "computer", "turtle" })
+if choice == 1 then -- if phone was selected
+	table.insert(programs, {
+		{ "os" },
+		{ "settings" },
+		{ "appStore" },
+		{ "simpleGui" },
+	})
+elseif choice == 2 or choice == 3 then
+	table.insert(programs, {
+		{ "bootLoader", "all" },
+		{ "apt", "all" },
+		{ "CraftOS", "all" },
+		{ "simpleTui", "all" },
+	})
+
+	-- disable booting from disks, boot loader should handle that
 	local settingData = '{\n\t[ "shell.allow_disk_startup" ] = false,\n}'
 	local file = fs.open(".settings", "w")
 	if file ~= nil then
 		file.write(settingData)
 		file.close()
 	end
-
-	removeInstall()
 end
+
+-- run actual install process
+install()
+removeInstall()

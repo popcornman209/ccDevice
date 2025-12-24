@@ -1,0 +1,11 @@
+{
+    "id": "sha",
+    "files": [
+        ["files/all/lib/sha","lib/sha"],
+        ["files/all/programs/sha","programs/sha"]
+    ],
+    "directories": [
+        "lib"
+    ],
+    "version": "1.0.0"
+}

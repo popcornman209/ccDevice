@@ -50,7 +50,7 @@ for arg = 1, #args do
 			end
 		end
 	else
-		skip = true
+		skip = false
 	end
 end
 
