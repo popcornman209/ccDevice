@@ -1,5 +1,5 @@
 {
     id = "update",
     version = "3.0.0",
-    device = "all",
+    device = "lib",
 }

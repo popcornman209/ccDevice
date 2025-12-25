@@ -12,6 +12,6 @@
         "bin",
         "craftOsStartup"
     ],
-    "requirements": ["all/update"],
+    "requirements": ["lib/update"],
     "version": "1.0.0"
 }

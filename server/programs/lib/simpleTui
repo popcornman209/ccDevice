@@ -1,0 +1,11 @@
+{
+    "id": "simpleTui",
+    "files": [
+        ["files/all/lib/simpleTui","lib/simpleTui"],
+        ["files/all/programs/simpleTui","programs/simpleTui"]
+    ],
+    "directories": [
+        "lib"
+    ],
+    "version": "1.0.0"
+}

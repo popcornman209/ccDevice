@@ -1,5 +1,5 @@
 {
-    id = "sha",
+    id = "simpleTui",
     version = "1.0.0",
     device = "lib",
 }

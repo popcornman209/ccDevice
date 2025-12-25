@@ -66,18 +66,14 @@ end
 while true do
 	local bootChoice = sTui.getChoice(bootNames, mountPoints, "CCDevice Bootloader")
 	if bootChoice == nil then -- if backspace, settings menu
-		local settingOptions = { "defaultBoot", "defaultBootDelay" }
+		local settingOptions = { "defaultBoot", "defaultBootDelay", "wipe drive" }
 		local choice = sTui.getChoice(settingOptions, nil, "Settings")
 		if choice == 1 then -- if default boot selected
 			table.insert(mountPoints, 1, "Custom...")
 			choice = sTui.getChoice(mountPoints, nil, "sel defaultBoot")
 
 			if choice == 1 then -- custom...
-				sTui.clear("Settings")
-				term.setCursorPos(1, 2)
-				term.write("default boot path:")
-				term.setCursorPos(1, 3)
-				local path = read()
+				local path = tonumber(sTui.input("default boot path:", "enter to continue...", "Settings")) -- get input
 				if path ~= nil then
 					settings.set("defaultBoot", path)
 				end
@@ -87,14 +83,24 @@ while true do
 			settings.save("data/bootLoader")
 			table.remove(mountPoints, 1)
 		elseif choice == 2 then -- if default boot delay selected
-			sTui.clear("Settings")
-			term.setCursorPos(1, 2)
-			term.write("default boot delay:")
-			term.setCursorPos(1, 3)
-			local delay = tonumber(read())
+			local delay = tonumber(sTui.input("default boot delay:", "enter to continue...", "Settings")) -- get input
 			if delay ~= nil then
 				settings.set("defaultBootDelay", delay)
 				settings.save("data/bootLoader")
+			end
+		elseif choice == 3 then -- wipe drive selected
+			local confirmation = sTui.input('type "wipe drive" to confirm', "enter to continue...", "Settings")
+			if confirmation == "wipe drive" then
+				for _, file in pairs(fs.list("/")) do
+					if file ~= "rom" then
+						fs.delete(file)
+					end
+				end
+				sTui.clear("Settings")
+				term.setCursorPos(1, 2)
+				term.write("drive fully wiped, restarting (3s)")
+				os.sleep(3)
+				os.reboot()
 			end
 		end
 	else -- boot

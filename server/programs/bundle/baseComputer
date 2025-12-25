@@ -1,0 +1,11 @@
+{
+    "id": "baseComputer",
+    "files": [],
+    "directories": [],
+    "requirements": [
+    	"all/bootLoader",
+	    "all/apt",
+	    "all/CraftOS",
+	],
+    "version": "1.0.0"
+}

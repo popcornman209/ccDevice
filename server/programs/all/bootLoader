@@ -8,5 +8,6 @@
         "versions",
         "boot"
     ],
+    "requirements": ["lib/simpleTui"],
     "version": "1.0.0"
 }

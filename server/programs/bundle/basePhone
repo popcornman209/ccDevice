@@ -1,0 +1,13 @@
+{
+    "id": "basePhone",
+    "files": [],
+    "directories": [],
+    "requirements": [
+    	"phone/os",
+	    "phone/settings",
+	    "phone/appStore",
+	    "lib/simpleGui",
+        "lib/sha"
+	],
+    "version": "1.0.0"
+}
