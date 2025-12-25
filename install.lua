@@ -112,9 +112,7 @@ end
 local dirs = { -- list of directories required for install
 	"lib",
 }
-local programs = { -- list of programs needed
-	{ "sha", "all" },
-}
+local programs = {} -- list of programs needed
 local libs = { -- list of libraries that need to be downloaded prior to install
 	{
 		"lib/update",
@@ -159,25 +157,27 @@ local function install()
 
 	-- install needed requirements
 	for _, program in pairs(programs) do
-		update.Download(program[1], "nil", true, nil, program[2])
+		update.download(program[1], "nil", true, nil, program[2])
 	end
 end
 
 local choice = getChoice({ "phone", "computer", "turtle" })
 if choice == 1 then -- if phone was selected
-	table.insert(programs, {
+	programs = {
 		{ "os" },
 		{ "settings" },
 		{ "appStore" },
 		{ "simpleGui" },
-	})
+		{ "sha", "all" },
+	}
 elseif choice == 2 or choice == 3 then
-	table.insert(programs, {
+	programs = {
 		{ "bootLoader", "all" },
 		{ "apt", "all" },
 		{ "CraftOS", "all" },
 		{ "simpleTui", "all" },
-	})
+		{ "sha", "all" },
+	}
 
 	-- disable booting from disks, boot loader should handle that
 	local settingData = '{\n\t[ "shell.allow_disk_startup" ] = false,\n}'
