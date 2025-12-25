@@ -1,7 +1,7 @@
 -- vim: ft=lua
 ---@diagnostic disable: undefined-global, undefined-field
 
-local sNet = require("/modules/secureNet")
+local sNet = require("/lib/secureNet")
 
 print("booting...")
 

@@ -155,7 +155,7 @@ local function install()
 	settings.save("data/serverData")
 
 	-- load update library
-	local update = require("modules/update")
+	local update = require("lib/update")
 
 	-- install needed requirements
 	for _, program in pairs(programs) do

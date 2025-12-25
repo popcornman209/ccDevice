@@ -2,17 +2,17 @@
 
 local title = "Device Receiver Setttings"
 
-local sNet = require("/modules/secureNet")
-local sTui = require("/modules/simpleTui")
+local sNet = require("/lib/secureNet")
+local sTui = require("/lib/simpleTui")
 
 local function changeHostname()
 	local key = false
 	local hostname = ""
 	while key == false do
-		hostname = sTui.Input("hostname: ", "type a string", title)
+		hostname = sTui.input("hostname: ", "type a string", title)
 		key, _ = sNet.registerStaticAddress(hostname)
 		if key == false then
-			sTui.Clear(title, "wait 3 seconds...")
+			sTui.clear(title, "wait 3 seconds...")
 			term.setCursorPos(2, 3)
 			print("failed, hostname already in use or invalid?")
 			os.sleep(3)
@@ -22,16 +22,16 @@ local function changeHostname()
 	settings.set("key", key)
 end
 local function changeReceiver()
-	settings.set("receiver", sTui.Input("receiver: ", "type a string", title))
+	settings.set("receiver", sTui.input("receiver: ", "type a string", title))
 end
 local function changePassword()
-	settings.set("password", sTui.Input('password ("" for none): ', "type a string", title))
+	settings.set("password", sTui.input('password ("" for none): ', "type a string", title))
 end
 local function changeChannel()
-	settings.set("channel", sTui.Input('channel ("" for private): ', "type a string", title))
+	settings.set("channel", sTui.input('channel ("" for private): ', "type a string", title))
 end
 local function changeSide()
-	settings.set("redstone side", sTui.Input("side to activate: ", "type a string", title))
+	settings.set("redstone side", sTui.input("side to activate: ", "type a string", title))
 end
 
 local settingsList = {
@@ -62,7 +62,7 @@ end
 
 table.insert(settingsList, 1, "save and reboot")
 while true do
-	local choice = sTui.GetChoice(settingsList, nil, title)
+	local choice = sTui.getChoice(settingsList, nil, title)
 	if choice == 1 then
 		settings.save("data/deviceRemote")
 		os.reboot()

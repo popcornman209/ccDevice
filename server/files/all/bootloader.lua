@@ -21,7 +21,7 @@ end
 
 if settings.get("defaultBoot") ~= "" then -- if default boot setting
 	if fs.exists(settings.get("defaultBoot")) then -- check if valid
-		sTui.Clear("CCDevice Bootloader")
+		sTui.clear("CCDevice Bootloader")
 		term.setCursorPos(2, 3)
 		term.write("booting " .. settings.get("defaultBoot") .. " in " .. settings.get("defaultBootDelay") .. "s")
 		term.setCursorPos(2, 4)
@@ -33,7 +33,7 @@ if settings.get("defaultBoot") ~= "" then -- if default boot setting
 				bootFile(settings.get("defaultBoot"))
 				return
 			elseif event == "key" then
-				if detail == sTui.Binds["back"] then
+				if detail == sTui.binds["back"] then
 					break
 				end
 			end
@@ -64,16 +64,16 @@ for drive = 1, #drives do
 end
 
 while true do
-	local bootChoice = sTui.GetChoice(bootNames, mountPoints, "CCDevice Bootloader")
+	local bootChoice = sTui.getChoice(bootNames, mountPoints, "CCDevice Bootloader")
 	if bootChoice == nil then -- if backspace, settings menu
 		local settingOptions = { "defaultBoot", "defaultBootDelay" }
-		local choice = sTui.GetChoice(settingOptions, nil, "Settings")
+		local choice = sTui.getChoice(settingOptions, nil, "Settings")
 		if choice == 1 then -- if default boot selected
 			table.insert(mountPoints, 1, "Custom...")
-			choice = sTui.GetChoice(mountPoints, nil, "sel defaultBoot")
+			choice = sTui.getChoice(mountPoints, nil, "sel defaultBoot")
 
 			if choice == 1 then -- custom...
-				sTui.Clear("Settings")
+				sTui.clear("Settings")
 				term.setCursorPos(1, 2)
 				term.write("default boot path:")
 				term.setCursorPos(1, 3)
@@ -87,7 +87,7 @@ while true do
 			settings.save("data/bootLoader")
 			table.remove(mountPoints, 1)
 		elseif choice == 2 then -- if default boot delay selected
-			sTui.Clear("Settings")
+			sTui.clear("Settings")
 			term.setCursorPos(1, 2)
 			term.write("default boot delay:")
 			term.setCursorPos(1, 3)

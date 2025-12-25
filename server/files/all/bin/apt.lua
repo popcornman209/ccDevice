@@ -54,7 +54,7 @@ for arg = 1, #args do
 	end
 end
 
-local update = require("/modules/update")
+local update = require("/lib/update")
 
 if Option == "install" then
 	if program ~= nil then
@@ -66,7 +66,7 @@ if Option == "install" then
 			end
 		end
 		if confirmed then
-			update.Download(program, "nil", true, servers[server], device)
+			update.download(program, "nil", true, servers[server], device)
 		end
 	else
 		error("no program given!")
@@ -89,7 +89,7 @@ elseif Option == "update" then
 				if forceDevice == false and settings.get("device") ~= nil then
 					tempDevice = settings.get("device")
 				end
-				update.Download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
+				update.download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
 			end
 		end
 	else
@@ -108,7 +108,7 @@ elseif Option == "update" then
 				if forceDevice == false and settings.get("device") ~= nil then
 					tempDevice = settings.get("device")
 				end
-				update.Download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
+				update.download(settings.get("id"), settings.get("version"), true, servers[server], tempDevice)
 			end
 		else
 			error(program .. " wasnt found.")

@@ -6,7 +6,7 @@ local function prnt(str, log)
 	end
 end
 
-function Download(fileId, currentVersion, log, address, device)
+local function download(fileId, currentVersion, log, address, device)
 	prnt("id: " .. fileId, log)
 	if fileId == "update" then
 		device = "all"
@@ -99,5 +99,5 @@ function Download(fileId, currentVersion, log, address, device)
 end
 
 return {
-	Download = Download,
+	download = download,
 }

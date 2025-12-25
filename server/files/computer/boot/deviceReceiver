@@ -1,6 +1,6 @@
 -- vim: ft=lua
 
-local sNet = require("/modules/secureNet")
+local sNet = require("/lib/secureNet")
 
 print("booting...")
 
