@@ -5,7 +5,7 @@
     "requirements": [
     	"all/bootLoader",
 	    "all/apt",
-	    "all/CraftOS",
+	    "all/CraftOS"
 	],
     "version": "1.0.0"
 }

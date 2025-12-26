@@ -1,6 +1,6 @@
 port: 42069
 
-showConnections: False
+showConnections: True
 showSpam: True
 
 currency: "minecraft:diamond"

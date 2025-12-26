@@ -14,10 +14,17 @@ async def version(args): #get app version
         standard.prnt("%s does not exsist, disconnecting"%("programs/"+message),"err", deviceName)
         return -1
 
-async def sendProgram(appId, websocket, deviceName, first=False, sendFileComplete=False):
+
+async def download(args): #download app files
+    websocket = args["websocket"]
+    deviceName = args["deviceName"]
+
+    appId = await websocket.recv() #get app id
     if os.path.exists("programs/"+appId): #if app exists
         with open("programs/"+appId) as f:
             info = json.load(f) #get app information
+            data = f.read()
+        await websocket.send(data)
         for file in info["files"]: #sends all files of an app
             if os.path.exists(file[0]):
                 with open(file[0]) as f:
@@ -29,27 +36,11 @@ async def sendProgram(appId, websocket, deviceName, first=False, sendFileComplet
                 standard.prnt("File: %s does not exist!"%(file[0]),"err", deviceName)
                 return -1 #file does not exists
 
-        if "requirements" in info:
-            for requirement in info["requirements"]:
-                await sendProgram(requirement, websocket, deviceName, sendFileComplete=(requirement==info["requirements"][-1] and sendFileComplete))
-        elif sendFileComplete:
-            await websocket.send("complete")
-
-        for directory in info["directories"]: #send directories needed for app
-            await websocket.send(directory)
-            standard.prnt("sending directory "+directory,"spam", deviceName)
+        await websocket.send("complete")
         standard.prnt("updated "+appId,"norm", deviceName)
-        if first: await websocket.send("complete")
     else:
         standard.prnt("%s does not exsist, disconnecting"%("programs/"+appId),"err", deviceName)
         return -1
-
-async def download(args): #download app files
-    websocket = args["websocket"]
-    deviceName = args["deviceName"]
-
-    message = await websocket.recv() #get app id
-    return await sendProgram(message, websocket, deviceName, True, sendFileComplete=True)
 
 async def store(args): #check app store
     websocket = args["websocket"]

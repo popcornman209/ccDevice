@@ -8,10 +8,6 @@ end
 
 local function download(fileId, currentVersion, log, address, device)
 	prnt("id: " .. fileId, log)
-	if fileId == "update" then
-		device = "all"
-		currentVersion = "3.0.0"
-	end
 	prnt("current version: " .. currentVersion, log)
 
 	if address == nil then
@@ -23,13 +19,20 @@ local function download(fileId, currentVersion, log, address, device)
 		device = settings.get("device")
 	end
 
+	local fullFileId = ""
+	if device == "" then
+		fullFileId = fileId
+	else
+		fullFileId = device .. "/" .. fileId
+	end
+
 	prnt("connecting...", log)
 	local ws = http.websocket(address)
 
 	if ws then
 		ws.send(os.getComputerLabel())
 		ws.send("version")
-		ws.send(device .. "/" .. fileId)
+		ws.send(fullFileId)
 		prnt("getting newest version...", log)
 		local version = ws.receive()
 		if version ~= "goodbye" then
@@ -37,28 +40,35 @@ local function download(fileId, currentVersion, log, address, device)
 			if version ~= currentVersion then
 				ws.send("download")
 				ws.send(device .. "/" .. fileId)
+
+				local message = ws.receive()
+				if message == nil then
+					return false, "info json nil"
+				end
+
+				local info = textutils.unserialiseJSON(message, { parse_null = true })
+				if info == nil then
+					return false, "info json nil"
+				end
+
 				local paths = {}
 				local data = {}
-				local receiving = true
-				while receiving do
-					local message = ws.receive()
+				while true do
+					message = ws.receive()
 					if message ~= "complete" then
 						table.insert(data, message)
 						local path = ws.receive()
 						table.insert(paths, path)
 						prnt("downloaded " .. path, log)
 					else
-						receiving = false
+						break
 					end
 				end
-				receiving = true
-				while receiving do
-					local message = ws.receive()
-					if message ~= "complete" then
-						fs.makeDir(message)
-						prnt("making dir " .. message, log)
-					else
-						receiving = false
+
+				if info["directories"] ~= nil then
+					for _, path in pairs(info["directories"]) do
+						fs.makeDir(path)
+						prnt("making dir " .. path, log)
 					end
 				end
 				prnt("installing...", log)
@@ -81,6 +91,17 @@ local function download(fileId, currentVersion, log, address, device)
 				prnt("completed.", log)
 				ws.send("close")
 				prnt("disconnected", log)
+
+				if info["requirements"] ~= nil then
+					for _, req in pairs(info["requirements"]) do
+						prnt("installing requirement " .. req, log)
+						local success, reason = download(req, "nil", true, address)
+						if success == false then
+							return false, reason
+						end
+					end
+				end
+
 				return true, "success"
 			else
 				prnt("up to date.", log)
