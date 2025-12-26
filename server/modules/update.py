@@ -21,10 +21,10 @@ async def download(args): #download app files
 
     appId = await websocket.recv() #get app id
     if os.path.exists("programs/"+appId): #if app exists
-        with open("programs/"+appId) as f:
-            info = json.load(f) #get app information
-            data = f.read()
+        with open("programs/"+appId) as f: 
+            data = f.read() # get app info
         await websocket.send(data)
+        info = json.loads(data)
         for file in info["files"]: #sends all files of an app
             if os.path.exists(file[0]):
                 with open(file[0]) as f:

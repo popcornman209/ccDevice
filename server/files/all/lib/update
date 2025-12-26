@@ -95,7 +95,7 @@ local function download(fileId, currentVersion, log, address, device)
 				if info["requirements"] ~= nil then
 					for _, req in pairs(info["requirements"]) do
 						prnt("installing requirement " .. req, log)
-						local success, reason = download(req, "nil", true, address)
+						local success, reason = download(req, "nil", true, address, "")
 						if success == false then
 							return false, reason
 						end
