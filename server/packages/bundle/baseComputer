@@ -4,7 +4,7 @@
     "directories": [],
     "requirements": [
     	"all/bootLoader",
-	    "all/apt",
+	    "all/cpm",
 	    "all/CraftOS"
 	],
     "version": "1.0.0"

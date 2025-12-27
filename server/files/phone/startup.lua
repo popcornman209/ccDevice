@@ -1,12 +1,3 @@
-function getSetting(name, defVal)
-	out = settings.get(name)
-	if out == nil then
-		out = defVal
-		settings.set(name, defVal)
-	end
-	return out
-end
-
 version = "1.5.0"
 updateVersion = "3.0.0"
 

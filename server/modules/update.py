@@ -5,9 +5,9 @@ async def version(args): #get app version
     deviceName = args["deviceName"]
 
     message = await websocket.recv() #get app to check
-    if os.path.exists("programs/"+message):
+    if os.path.exists("packages/"+message):
         standard.prnt("sending %s version"%(message),"spam", deviceName)
-        with open("programs/"+message) as f:
+        with open("packages/"+message) as f:
             info = json.load(f) #get app information
         await websocket.send(info["version"]) #send app version
     else:
@@ -20,8 +20,8 @@ async def download(args): #download app files
     deviceName = args["deviceName"]
 
     appId = await websocket.recv() #get app id
-    if os.path.exists("programs/"+appId): #if app exists
-        with open("programs/"+appId) as f: 
+    if os.path.exists("packages/"+appId): #if app exists
+        with open("packages/"+appId) as f: 
             data = f.read() # get app info
         await websocket.send(data)
         info = json.loads(data)
@@ -39,7 +39,7 @@ async def download(args): #download app files
         await websocket.send("complete")
         standard.prnt("updated "+appId,"norm", deviceName)
     else:
-        standard.prnt("%s does not exsist, disconnecting"%("programs/"+appId),"err", deviceName)
+        standard.prnt("%s does not exsist, disconnecting"%("packages/"+appId),"err", deviceName)
         return -1
 
 async def store(args): #check app store

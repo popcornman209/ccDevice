@@ -3,9 +3,11 @@
     "files": [
         ["files/all/lib/sha","lib/sha"],
         ["files/all/programs/sha","programs/sha"]
+        ["files/all/uninstall/sha","uninstall/sha"]
     ],
     "directories": [
-        "lib"
+        "lib",
+        "uninstall"
     ],
     "version": "1.0.0"
 }

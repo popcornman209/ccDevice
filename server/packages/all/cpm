@@ -1,0 +1,17 @@
+{
+    "id": "cpm",
+    "files": [
+        ["files/all/bin/cpm.lua","bin/cpm.lua"],
+        ["files/all/programs/cpm","programs/cpm"],
+        ["files/all/craftOsStartup/cpm.lua","craftOsStartup/cpm.lua"]
+    ],
+    "directories": [
+        "versions",
+        "uninstall",
+        "packages",
+        "bin",
+        "craftOsStartup"
+    ],
+    "requirements": ["lib/update"],
+    "version": "1.0.0"
+}

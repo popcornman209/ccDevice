@@ -1,0 +1,8 @@
+{
+    name = "sha",
+    files = {
+        "lib/sha",
+	"packages/sha"
+        "uninstall/sha",
+    },
+}

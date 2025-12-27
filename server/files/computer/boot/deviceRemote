@@ -1,5 +1,4 @@
 -- vim: ft=lua
----@diagnostic disable: undefined-global, undefined-field
 
 local sNet = require("/lib/secureNet")
 

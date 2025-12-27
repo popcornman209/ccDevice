@@ -1,0 +1,8 @@
+{
+    name = "secureNet",
+    files = {
+        "lib/secureNet",
+	"packages/secureNet"
+        "uninstall/secureNet",
+    },
+}
