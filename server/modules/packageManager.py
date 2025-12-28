@@ -1,17 +1,17 @@
 import standard, os, json
 
-async def version(args): #get app version
+async def fetchData(args): #get app version
     websocket = args["websocket"]
     deviceName = args["deviceName"]
 
-    message = await websocket.recv() #get app to check
-    if os.path.exists("packages/"+message):
-        standard.prnt("sending %s version"%(message),"spam", deviceName)
-        with open("packages/"+message) as f:
-            info = json.load(f) #get app information
-        await websocket.send(info["version"]) #send app version
+    appId = await websocket.recv().replace("%","/") #get app to check
+    if os.path.exists("packages/"+appId):
+        standard.prnt("sending %s version"%(appId),"spam", deviceName)
+        with open("packages/"+appId) as f:
+            info = f.read() #get app information
+        await websocket.send(info) #send app version
     else:
-        standard.prnt("%s does not exsist, disconnecting"%("programs/"+message),"err", deviceName)
+        standard.prnt("%s does not exsist, disconnecting"%("programs/"+appId),"err", deviceName)
         return -1
 
 
@@ -19,24 +19,29 @@ async def download(args): #download app files
     websocket = args["websocket"]
     deviceName = args["deviceName"]
 
-    appId = await websocket.recv() #get app id
+    appId = await websocket.recv().replace("%","/") #get app id
     if os.path.exists("packages/"+appId): #if app exists
         with open("packages/"+appId) as f: 
-            data = f.read() # get app info
-        await websocket.send(data)
-        info = json.loads(data)
-        for file in info["files"]: #sends all files of an app
+            rawData = f.read() # get app info
+        await websocket.send(rawData)
+        data = json.loads(rawData)
+        for file in data["files"]: #sends all files of an app
             if os.path.exists(file[0]):
                 with open(file[0]) as f:
-                    data = f.read()
-                await websocket.send(data) #send file data
-                await websocket.send(file[1]) #send file location
+                    fileData = f.read()
+                await websocket.send(json.dumps({
+                    "message": "file",
+                    "fileName": file[1],
+                    "data": fileData
+                }))
                 standard.prnt("sending "+file[0],"spam", deviceName)
             else:
                 standard.prnt("File: %s does not exist!"%(file[0]),"err", deviceName)
                 return -1 #file does not exists
 
-        await websocket.send("complete")
+        await websocket.send(json.dumps({
+            "message": "complete"
+        }))
         standard.prnt("updated "+appId,"norm", deviceName)
     else:
         standard.prnt("%s does not exsist, disconnecting"%("packages/"+appId),"err", deviceName)
@@ -61,9 +66,9 @@ async def store(args): #check app store
         return -1
     
 apiCalls = {
-    "version": version,
-    "download": download,
-    "store": store
+    "package-fetchData": fetchData,
+    "package-download": download,
+    "package-store": store
 }
 description = "for updating & installing files along with app store support"
 documentation = "documentation/update.txt"

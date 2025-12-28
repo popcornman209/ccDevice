@@ -6,25 +6,14 @@ local function prnt(str, log)
 	end
 end
 
-local function download(fileId, currentVersion, log, address, device)
+local function install(fileId, currentVersion, log, address, device)
 	prnt("id: " .. fileId, log)
 	prnt("current version: " .. currentVersion, log)
 
-	if address == nil then
-		settings.load("data/serverData")
-		address = settings.get("servers").main
-	end
-	if device == nil then
-		settings.load("data/serverData")
-		device = settings.get("device")
-	end
+	settings.clear()
+	settings.load("data/serverData")
 
-	local fullFileId = ""
-	if device == "" then
-		fullFileId = fileId
-	else
-		fullFileId = device .. "/" .. fileId
-	end
+	address = address or settings.get("servers").main
 
 	prnt("connecting...", log)
 	local ws = http.websocket(address)
